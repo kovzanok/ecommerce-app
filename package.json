@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "prettier": "prettier src test --check",
+    "prettier:fix": "npm run prettier -- --write",
     "test": "jest"
   },
   "dependencies": {
