@@ -22,3 +22,14 @@ An important aspect of our application is that it's responsive, ensuring it look
 ## Other information
 
 The application is powered by CommerceTools, a leading provider of commerce solutions for B2C and B2B enterprises. CommerceTools offers a cloud-native, microservices-based commerce platform that enables brands to create unique and engaging digital commerce experiences.
+
+# Technology stack
+- eCommerceTools
+- Vite
+- React
+- TypeScript
+- ESLint
+- Prettier
+- Husky
+- Jest
+- Lint-staged
