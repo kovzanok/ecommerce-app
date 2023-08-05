@@ -33,3 +33,50 @@ The application is powered by CommerceTools, a leading provider of commerce solu
 - Husky
 - Jest
 - Lint-staged
+
+# Scripts available in the project:
+- ## "dev": "vite"
+  ```git
+  $ npm run dev
+  ```
+  Start Vite dev server in the current directory, aliases: `vite dev` , `vite serve`
+
+- ## "build": "tsc && vite build"
+  ```git
+  $ npm run build
+  ```
+  Run a compile based on a backwards look through the fs for a tsconfig.json and build for production
+
+- ## "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  ```git
+  $ npm run lint
+  ```
+  ESLint uses .ts, .tsx file extensions when looking for target files in the project directory (eslint . --ext ts,tsx).
+
+  ESLint report directive comments like // eslint-disable-line when no errors would have been reported on that line anyway (--report-unused-disable-directives).
+
+  ESLint is forced to exit with an error status if your project has warning-level rule violations in your project (--max-warnings 0).
+
+- ## "lint:fix": "eslint . --ext ts,tsx --fix --report-unused-disable-directives --max-warnings 0"
+  ```git
+  $ npm run lint:fix
+  ```
+  ESLint uses .ts, .tsx file extensions when looking for target files in the project directory (eslint . --ext ts,tsx).
+
+  ESLint try to fix as many issues as possible. The fixes are made to the actual files themselves and only the remaining unfixed issues are output (--fix).
+
+  ESLint report directive comments like // eslint-disable-line when no errors would have been reported on that line anyway (--report-unused-disable-directives).
+
+  ESLint is forced to exit with an error status if your project has warning-level rule violations in your project (--max-warnings 0).
+
+- ## "test": "jest"
+  ```git
+  $ npm run test
+  ```
+  Run all tests created in the project
+
+- ## "prepare": "husky install"
+  ```git
+  $ npm run prepare
+  ```
+  Install Husky in the current directory
