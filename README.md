@@ -92,3 +92,21 @@ The application is powered by CommerceTools, a leading provider of commerce solu
   $ npm run prepare
   ```
   Install Husky in the current directory
+
+# Getting Started
+1. Clone the repository
+```git
+$ git clone 'https://github.com/kovzanok/ecommerce-app.git'
+```
+2. Go to development folder
+```git
+$ cd 'ecommerce-app'
+```
+3. Install development packages
+```git
+$ npm install
+```
+4. Start Vite dev server
+```git
+$ npm run dev
+```
