@@ -33,3 +33,80 @@ The application is powered by CommerceTools, a leading provider of commerce solu
 - Husky
 - Jest
 - Lint-staged
+
+# Scripts available in the project:
+- ## "dev": "vite"
+  ```git
+  $ npm run dev
+  ```
+  Start Vite dev server in the current directory, aliases: `vite dev` , `vite serve`
+
+- ## "build": "tsc && vite build"
+  ```git
+  $ npm run build
+  ```
+  Run a compile based on a backwards look through the fs for a tsconfig.json and build for production
+
+- ## "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  ```git
+  $ npm run lint
+  ```
+  ESLint uses .ts, .tsx file extensions when looking for target files in the project directory (`eslint . --ext ts,tsx`).
+
+  ESLint report directive comments like // eslint-disable-line when no errors would have been reported on that line anyway (`--report-unused-disable-directives`).
+
+  ESLint is forced to exit with an error status if your project has warning-level rule violations in your project (`--max-warnings 0`).
+
+- ## "lint:fix": "eslint . --ext ts,tsx --fix --report-unused-disable-directives --max-warnings 0"
+  ```git
+  $ npm run lint:fix
+  ```
+  ESLint uses .ts, .tsx file extensions when looking for target files in the project directory (`eslint . --ext ts,tsx`).
+
+  ESLint try to fix as many issues as possible. The fixes are made to the actual files themselves and only the remaining unfixed issues are output (`--fix`).
+
+  ESLint report directive comments like // eslint-disable-line when no errors would have been reported on that line anyway (`--report-unused-disable-directives`).
+
+  ESLint is forced to exit with an error status if your project has warning-level rule violations in your project (`--max-warnings 0`).
+
+- ## "prettier": "prettier src test --check",
+  ```git
+  $ npm run prettier
+  ```
+  Check if your files are formatted. This will output a human-friendly message and a list of unformatted files, if any.
+
+- ## "prettier:fix": "npm run prettier -- --write",
+  ```git
+  $ npm run prettier:fix
+  ```
+  This rewrites all processed files in place. This is comparable to the eslint --fix workflow. You can also use -w alias.
+
+- ## "test": "jest"
+  ```git
+  $ npm run test
+  ```
+  Run all tests created in the project
+
+- ## "prepare": "husky install"
+  ```git
+  $ npm run prepare
+  ```
+  Install Husky in the current directory
+
+# Getting Started
+1. Clone the repository
+```git
+$ git clone 'https://github.com/kovzanok/ecommerce-app.git'
+```
+2. Go to development folder
+```git
+$ cd 'ecommerce-app'
+```
+3. Install development packages
+```git
+$ npm install
+```
+4. Start Vite dev server
+```git
+$ npm run dev
+```
