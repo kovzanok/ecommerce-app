@@ -11,7 +11,7 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "ignorePatterns": ["dist", ".eslintrc", "vite.config.ts", ""],
+  "ignorePatterns": ["dist", ".eslintrc", "vite.config.ts", "setupTest.ts"],
   "parser": "@typescript-eslint/parser",
   "plugins": ["react-refresh"],
   "rules": {
