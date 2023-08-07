@@ -10,7 +10,7 @@
     "lint:fix": "eslint . --ext ts,tsx --fix --report-unused-disable-directives --max-warnings 0",
     "prettier": "prettier src test --check",
     "prettier:fix": "npm run prettier -- --write",
-    "test": "jest",
+    "test": "vitest",
     "prepare": "husky install"
   },
   "dependencies": {
