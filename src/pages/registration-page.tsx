@@ -1,4 +1,5 @@
 import {
+  Switch,
   Button,
   Box,
   Title,
@@ -26,7 +27,7 @@ function Registration() {
       password: '',
       dateOfBirthday: '',
 
-      address: {
+      shippingAddress: {
         country: '',
         postalCode: '',
         city: '',
@@ -77,30 +78,34 @@ function Registration() {
 
           <Box>
             <Title mt="xl" order={3} size="h3">
-              Address
+              Shipping address
             </Title>
             <Paper mt="xs" shadow="xs" p="xs">
-              <TextInput
-                placeholder="Lenin st. 12-01"
-                label="Street"
-                {...form.getInputProps('address.street')}
-              />
-              <TextInput
-                placeholder="Minsk"
-                label="City"
-                {...form.getInputProps('address.city')}
-              />
-              <TextInput
-                placeholder="AF-35A"
-                label="Postal code"
-                {...form.getInputProps('address.postalCode')}
-              />
-              <Select
-                placeholder="Belarus"
-                label="Country"
-                data={[]}
-                {...form.getInputProps('address.country')}
-              />
+              <Flex direction="column" gap={10}>
+                <TextInput
+                  placeholder="Lenin st. 12-01"
+                  label="Street"
+                  {...form.getInputProps('address.street')}
+                />
+                <TextInput
+                  placeholder="Minsk"
+                  label="City"
+                  {...form.getInputProps('address.city')}
+                />
+                <TextInput
+                  placeholder="AF-35A"
+                  label="Postal code"
+                  {...form.getInputProps('address.postalCode')}
+                />
+                <Select
+                  placeholder="Belarus"
+                  label="Country"
+                  data={[]}
+                  {...form.getInputProps('address.country')}
+                />
+
+                <Switch label="Set shipping address as default" />
+              </Flex>
             </Paper>
           </Box>
 
@@ -115,27 +120,31 @@ function Registration() {
               Billing address
             </Title>
             <Paper mt="xs" shadow="xs" p="xs">
-              <TextInput
-                placeholder="Billing st. 12-01"
-                label="Street"
-                {...form.getInputProps('billingAddress.street')}
-              />
-              <TextInput
-                placeholder="Minsk"
-                label="City"
-                {...form.getInputProps('billingAddress.city')}
-              />
-              <TextInput
-                placeholder="AF-35A"
-                label="Postal code"
-                {...form.getInputProps('billingAddress.postalCode')}
-              />
-              <Select
-                placeholder="Belarus"
-                label="Country"
-                data={[]}
-                {...form.getInputProps('billingAddress.country')}
-              />
+              <Flex direction="column" gap={10}>
+                <TextInput
+                  placeholder="Billing st. 12-01"
+                  label="Street"
+                  {...form.getInputProps('billingAddress.street')}
+                />
+                <TextInput
+                  placeholder="Minsk"
+                  label="City"
+                  {...form.getInputProps('billingAddress.city')}
+                />
+                <TextInput
+                  placeholder="AF-35A"
+                  label="Postal code"
+                  {...form.getInputProps('billingAddress.postalCode')}
+                />
+                <Select
+                  placeholder="Belarus"
+                  label="Country"
+                  data={[]}
+                  {...form.getInputProps('billingAddress.country')}
+                />
+
+                <Switch label="Set billing address as default" />
+              </Flex>
             </Paper>
           </Collapse>
 
