@@ -7,7 +7,7 @@ import {
   Title,
 } from '@mantine/core';
 
-export default function drawLoginPage() {
+export default function LoginPage() {
   return (
     <Center h="100vh">
       <Flex direction="column" gap="lg">
