@@ -15,9 +15,12 @@ import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconMail } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
+import { React, useState } from 'react';
 
 function Registration() {
   const [opened, { toggle }] = useDisclosure(true);
+
+  const [isBillingAddressChecked, setIsBillingAddressChecked] = useState<boolean>(false);
 
   const form = useForm({
     initialValues: {
@@ -109,6 +112,16 @@ function Registration() {
                 />
 
                 <Switch label="Set as default shipping address" />
+
+                {!opened ? (
+                  <Switch
+                    onChange={() => {
+                      setIsBillingAddressChecked(!isBillingAddressChecked);
+                    }}
+                    checked={isBillingAddressChecked}
+                    label="Set as default billing address"
+                  />
+                ) : null}
               </Flex>
             </Paper>
           </Box>
@@ -144,10 +157,20 @@ function Registration() {
                   data={[]}
                   {...form.getInputProps('billingAddress.country')}
                 />
+
+                {opened ? (
+                  <Switch
+                    onChange={() => {
+                      setIsBillingAddressChecked(!isBillingAddressChecked);
+                    }}
+                    checked={isBillingAddressChecked}
+                    label="Set as default billing address"
+                  />
+                ) : null}
               </Flex>
             </Paper>
           </Collapse>
-          <Switch label="Set as default billing address" />
+
           <Button type="submit" m="auto" w="40%" color="orange" size="md">
             Sign up
           </Button>
