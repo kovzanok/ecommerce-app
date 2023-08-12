@@ -46,6 +46,16 @@ function Registration() {
     },
   });
 
+  const billingSwitch = (
+    <Switch
+      onChange={() => {
+        setIsBillingAddressChecked(!isBillingAddressChecked);
+      }}
+      checked={isBillingAddressChecked}
+      label="Set as default billing address"
+    />
+  );
+
   return (
     <Paper
       mt="xs"
@@ -110,18 +120,10 @@ function Registration() {
                   data={[]}
                   {...form.getInputProps('address.country')}
                 />
-
-                <Switch label="Set as default shipping address" />
-
-                {!opened ? (
-                  <Switch
-                    onChange={() => {
-                      setIsBillingAddressChecked(!isBillingAddressChecked);
-                    }}
-                    checked={isBillingAddressChecked}
-                    label="Set as default billing address"
-                  />
-                ) : null}
+                <Flex justify="space-between">
+                  <Switch label="Set as default shipping address" />
+                  {!opened && billingSwitch}
+                </Flex>
               </Flex>
             </Paper>
           </Box>
@@ -158,15 +160,7 @@ function Registration() {
                   {...form.getInputProps('billingAddress.country')}
                 />
 
-                {opened ? (
-                  <Switch
-                    onChange={() => {
-                      setIsBillingAddressChecked(!isBillingAddressChecked);
-                    }}
-                    checked={isBillingAddressChecked}
-                    label="Set as default billing address"
-                  />
-                ) : null}
+                {opened && billingSwitch}
               </Flex>
             </Paper>
           </Collapse>
