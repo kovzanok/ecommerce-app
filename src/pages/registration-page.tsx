@@ -67,7 +67,6 @@ function Registration() {
             label="Last name"
             {...form.getInputProps('lastName')}
           />
-
           <TextInput
             placeholder="example@gmail.com"
             label="Email"
@@ -75,14 +74,12 @@ function Registration() {
             {...form.getInputProps('email')}
           />
           <PasswordInput label="Password" {...form.getInputProps('password')} />
-
           <DateInput
             valueFormat="DD/MM/YY"
             label="Birthday"
             placeholder="01/01/1974"
             {...form.getInputProps('dateOfBirthday')}
           />
-
           <Box>
             <Title mt="xl" order={3} size="h3">
               Shipping address
@@ -115,13 +112,11 @@ function Registration() {
               </Flex>
             </Paper>
           </Box>
-
           <Checkbox
             mt="xs"
-            label="Stay the same address for billing"
+            label="Use the same address for billing"
             onChange={toggle}
           />
-
           <Collapse in={opened}>
             <Title mt="xl" order={3} size="h3">
               Billing address
@@ -149,12 +144,10 @@ function Registration() {
                   data={[]}
                   {...form.getInputProps('billingAddress.country')}
                 />
-
-                <Switch label="Set billing address as default" />
+                <Switch label="Set as default shipping address" />
               </Flex>
             </Paper>
           </Collapse>
-
           <Button type="submit" m="auto" w="40%" color="orange" size="md">
             Sign up
           </Button>
