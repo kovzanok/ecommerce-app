@@ -111,7 +111,7 @@ function Registration() {
                   {...form.getInputProps('address.country')}
                 />
 
-                <Switch label="Set shipping address as default" />
+                <Switch label="Set as default shipping address" />
               </Flex>
             </Paper>
           </Box>
