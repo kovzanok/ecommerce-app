@@ -44,8 +44,15 @@ function Registration() {
   });
 
   return (
-    <Paper mt="xs" shadow="xs" p="xs" maw={600} mx="auto">
-      <Title align="center" order={1} size="h1">
+    <Paper
+      mt="xs"
+      shadow="xs"
+      style={{ border: '1px solid orange' }}
+      p="xs"
+      maw={600}
+      mx="auto"
+    >
+      <Title align="center" color="orange" order={1} size="h1">
         Registration
       </Title>
       <form>
@@ -148,7 +155,9 @@ function Registration() {
             </Paper>
           </Collapse>
 
-          <Button type="submit">Sign up</Button>
+          <Button type="submit" m="auto" w="40%" color="orange" size="md">
+            Sign up
+          </Button>
         </Flex>
       </form>
     </Paper>
