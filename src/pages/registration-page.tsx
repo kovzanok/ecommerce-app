@@ -114,7 +114,7 @@ function Registration() {
           </Box>
           <Checkbox
             mt="xs"
-            label="Stay the same address for billing"
+            label="Use the same address for billing"
             onChange={toggle}
           />
           <Collapse in={opened}>
