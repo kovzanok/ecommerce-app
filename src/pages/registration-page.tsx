@@ -13,7 +13,7 @@ import {
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
-import { IconAt } from '@tabler/icons-react';
+import { IconMail } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 
 function Registration() {
@@ -71,7 +71,7 @@ function Registration() {
           <TextInput
             placeholder="example@gmail.com"
             label="Email"
-            icon={<IconAt size="1rem" />}
+            icon={<IconMail size="1rem" />}
             {...form.getInputProps('email')}
           />
           <PasswordInput label="Password" {...form.getInputProps('password')} />
