@@ -144,10 +144,10 @@ function Registration() {
                   data={[]}
                   {...form.getInputProps('billingAddress.country')}
                 />
-                <Switch label="Set as default shipping address" />
               </Flex>
             </Paper>
           </Collapse>
+          <Switch label="Set as default shipping address" />
           <Button type="submit" m="auto" w="40%" color="orange" size="md">
             Sign up
           </Button>
