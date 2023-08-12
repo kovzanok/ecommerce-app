@@ -109,7 +109,6 @@ export default class AuthModule {
         throw new Error(err.message);
       }
     }
-    return undefined;
   }
 
   static async login({
@@ -132,6 +131,5 @@ export default class AuthModule {
         throw new Error(err.message);
       }
     }
-    return undefined;
   }
 }
