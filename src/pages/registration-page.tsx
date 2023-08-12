@@ -147,7 +147,7 @@ function Registration() {
               </Flex>
             </Paper>
           </Collapse>
-          <Switch label="Set as default shipping address" />
+          <Switch label="Set as default billing address" />
           <Button type="submit" m="auto" w="40%" color="orange" size="md">
             Sign up
           </Button>
