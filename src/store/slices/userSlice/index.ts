@@ -4,7 +4,7 @@ import {
   CustomerSignInResult,
   CustomerSignin,
 } from '@commercetools/platform-sdk';
-import ApiService from '../../service/api-service';
+import ApiService from '../../../service/api-service';
 
 export const signIn = createAsyncThunk(
   'user/signIn',
