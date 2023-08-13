@@ -1,9 +1,10 @@
 import {
+  CustomerDraft,
   CustomerSignInResult,
   CustomerSignin,
 } from '@commercetools/platform-sdk';
 import { vi } from 'vitest';
-import { signIn } from '.';
+import { signIn, signUp } from '.';
 import ApiService from '../../../service/api-service';
 
 vi.mock('../../../service/api-service');
@@ -74,6 +75,80 @@ describe('signInThunk', () => {
 
     expect(start[0].type).toBe(signIn.pending.type);
     expect(end[0].type).toBe(signIn.rejected.type);
+    expect(end[0].error.message).toBe(errorMessage);
+  });
+});
+
+describe('signUpThunk', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should return customer info, if email is not registered', async () => {
+    const customerDraft: CustomerDraft = {
+      email: 'johndoe@example.com',
+      firstName: 'John',
+      lastName: 'Doe',
+      password: 'secret123',
+    };
+
+    const customerResult: CustomerSignInResult = {
+      customer: {
+        addresses: [],
+        email: 'johndoe@example.com',
+        firstName: 'John',
+        id: 'some_123_id',
+        isEmailVerified: false,
+        lastName: 'Doe',
+        password: '****aGg=',
+        version: 1,
+        createdAt: '2015-07-06T13:22:33.339Z',
+        lastModifiedAt: '2015-07-06T13:22:33.339Z',
+        authenticationMode: 'Password',
+      },
+    };
+
+    ApiService.signUp = vi
+      .mocked(ApiService.signUp)
+      .mockResolvedValueOnce(customerResult);
+
+    const dispatch = vi.fn();
+    const thunk = signUp(customerDraft);
+    await thunk(dispatch, () => {}, {});
+    const { calls } = dispatch.mock;
+    expect(calls).toHaveLength(2);
+
+    const [start, end] = calls;
+
+    expect(start[0].type).toBe(signUp.pending.type);
+    expect(end[0].type).toBe(signUp.fulfilled.type);
+    expect(end[0].payload).toBe(customerResult);
+  });
+
+  it('should throw an error, if email is already used', async () => {
+    const customerDraft: CustomerDraft = {
+      email: 'test@test.test',
+      firstName: 'John',
+      lastName: 'Doe',
+      password: 'secret123',
+    };
+
+    const errorMessage = 'There is already an existing customer with the provided email';
+
+    ApiService.signUp = vi
+      .mocked(ApiService.signUp)
+      .mockRejectedValue(new Error(errorMessage));
+
+    const dispatch = vi.fn();
+    const thunk = signUp(customerDraft);
+    await thunk(dispatch, () => {}, {});
+    const { calls } = dispatch.mock;
+    expect(calls).toHaveLength(2);
+
+    const [start, end] = calls;
+
+    expect(start[0].type).toBe(signUp.pending.type);
+    expect(end[0].type).toBe(signUp.rejected.type);
     expect(end[0].error.message).toBe(errorMessage);
   });
 });
