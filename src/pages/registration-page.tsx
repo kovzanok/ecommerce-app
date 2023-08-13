@@ -15,7 +15,12 @@ import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconMail } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getAllCountries } from 'countries-and-timezones';
+import {
+  postcodeValidator,
+  postcodeValidatorExistsForCountry,
+} from 'postcode-validator';
 
 type ValidationFunc = string | null;
 
@@ -26,7 +31,6 @@ function Registration() {
   const LOWER_CASE_REGULAR = /[a-z]/;
   const PASSWORD_MIN_LENGTH = 8;
   const AGE_REQUIREMENT = 13;
-
   const CURRENT_AGE = (dateString: string): number => {
     const today = new Date();
     const birthDate = new Date(dateString);
@@ -90,29 +94,68 @@ function Registration() {
     return null;
   };
 
-  const postalCodeValidation = (val: string): ValidationFunc => {
-    console.log(val);
-    return val;
+  const postalCodeValidation = (
+    val: string,
+    country: string,
+  ): ValidationFunc => {
+    const isPostalCorrect = postcodeValidatorExistsForCountry(country)
+      && postcodeValidator(val, country);
+    if (!isPostalCorrect) {
+      return 'This postal code is incorrect!';
+    }
+    return null;
   };
 
-  const countryValidation = (val: string): ValidationFunc => {
-    console.log(val);
-
-    return val;
+  type Country = {
+    value: string;
+    label: string;
   };
+
+  const [countries, setCountries] = useState<Country[]>([]);
+
+  const [billingCountry, setBillingCountry] = useState(false);
+  const [shippingCountry, setShippingCountry] = useState(false);
+
+  useEffect(() => {
+    const getAllCountriesObjectValues = Object.values(getAllCountries());
+    const countryArray: Country[] = getAllCountriesObjectValues.map((el) => ({
+      label: el.name,
+      value: el.id,
+    }));
+
+    setCountries(countryArray);
+  }, []);
 
   const [opened, { toggle }] = useDisclosure(true);
 
-  // eslint-disable-next-line operator-linebreak
-  const [isBillingAddressChecked, setIsBillingAddressChecked] =
-    useState<boolean>(false);
+  const [isBillingAddressChecked, setIsBillingAddressChecked] = useState<boolean>(false);
 
   const addressValidation = {
-    country: (val: string) => countryValidation(val),
-    postalCode: (val: string) => postalCodeValidation(val),
     city: (val: string) => stringValidation(val),
     street: (val: string) => streetValidation(val),
   };
+
+  interface FormValues {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    dateOfBirthday: string;
+
+    shippingAddress: {
+      country: string;
+      postalCode: string;
+      city: string;
+      street: string;
+    };
+
+    billingAddress: {
+      country: string;
+      postalCode: string;
+      city: string;
+      street: string;
+    };
+  }
 
   const form = useForm({
     initialValues: {
@@ -145,9 +188,31 @@ function Registration() {
       dateOfBirthday: (val: string) => birthdayValidation(val),
       shippingAddress: {
         ...addressValidation,
+        country: (val: string) => {
+          if (val === '') {
+            return 'Choose the country';
+          }
+          setShippingCountry(true);
+          return null;
+        },
+        postalCode: (val: string, values: FormValues) => {
+          const { country } = values.shippingAddress;
+          return postalCodeValidation(val, country);
+        },
       },
       billingAddress: {
         ...addressValidation,
+        country: (val: string) => {
+          if (val === '') {
+            return 'Choose the country';
+          }
+          setBillingCountry(true);
+          return null;
+        },
+        postalCode: (val: string, values: FormValues) => {
+          const { country } = values.billingAddress;
+          return postalCodeValidation(val, country);
+        },
       },
     },
 
@@ -220,10 +285,12 @@ function Registration() {
                 <Select
                   placeholder="Belarus"
                   label="Country"
-                  data={['Belarus', 'Russia', 'Ukraine']}
+                  searchable
+                  data={countries}
                   {...form.getInputProps('shippingAddress.country')}
                 />
                 <TextInput
+                  disabled={!shippingCountry}
                   placeholder="AF-35A"
                   label="Postal code"
                   {...form.getInputProps('shippingAddress.postalCode')}
@@ -259,15 +326,16 @@ function Registration() {
                 <Select
                   placeholder="Belarus"
                   label="Country"
-                  data={[]}
+                  searchable
+                  data={countries}
                   {...form.getInputProps('billingAddress.country')}
                 />
                 <TextInput
+                  disabled={!billingCountry}
                   placeholder="AF-35A"
                   label="Postal code"
                   {...form.getInputProps('billingAddress.postalCode')}
                 />
-
                 {opened && billingSwitch}
               </Flex>
             </Paper>
