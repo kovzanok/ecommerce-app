@@ -3,7 +3,7 @@ import LoginPage from './pages/login-page';
 import Layout from './components/Layout';
 import NotFoundPage from './pages/not-found-page';
 import Registration from './pages/registration-page';
-import AuthRoute from './components/AuthRoute';
+import AuthRoute from './components/auth-route';
 
 function App() {
   return (
