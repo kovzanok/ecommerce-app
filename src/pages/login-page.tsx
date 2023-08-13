@@ -9,6 +9,13 @@ import {
 import { useForm } from '@mantine/form';
 
 export default function LoginPage() {
+  const EMAIL_FORMAT_REGULAR = /^\S+@\S.\S+$/;
+  const PASSWORD_MIN_LENGTH = 8;
+  const UPPER_CASE_REGULAR = /[A-Z]/;
+  const LOWER_CASE_REGULAR = /[a-z]/;
+  const DIGIT_REGULAR = /\d/;
+  const SPECIAL_CHARACTER_REGULAR = /!|@|#|\$|%|\^|&|\*/;
+
   const form = useForm({
     initialValues: {
       email: '',
@@ -24,23 +31,23 @@ export default function LoginPage() {
             return 'Email address must contain an "@" symbol separating local part and domain name';
           case value.split('@')[1].split('.').length === 2:
             return 'Email address must contain a domain name';
-          case /^\S+@\S.\S+$/.test(value):
+          case EMAIL_FORMAT_REGULAR.test(value):
             return 'Email address must be properly formatted';
         }
       },
       password: (value) => {
         switch (false) {
-          case value.length >= 8:
+          case value.length >= PASSWORD_MIN_LENGTH:
             return 'Password must be at least 8 characters long';
           case value.trim() === value:
             return 'Email address must not contain leading or trailing whitespace';
-          case /[A-Z]/.test(value):
+          case UPPER_CASE_REGULAR.test(value):
             return 'Password must contain at least one uppercase letter (A-Z)';
-          case /[a-z]/.test(value):
+          case LOWER_CASE_REGULAR.test(value):
             return 'Password must contain at least one lowercase letter (a-z)';
-          case /[0-1]/.test(value):
+          case DIGIT_REGULAR.test(value):
             return 'Password must contain at least one digit (0-9)';
-          case /!|@|#|\$|%|\^|&|\*/.test(value):
+          case SPECIAL_CHARACTER_REGULAR.test(value):
             return 'Password must contain at least one special character (e.g., !@#$%^&*)';
         }
       },
