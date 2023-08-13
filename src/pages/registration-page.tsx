@@ -87,6 +87,10 @@ function Registration() {
   };
 
   const birthdayValidation = (val: string): ValidationFunc => {
+    if (val.length === 0) {
+      return 'Choose your age';
+    }
+
     if (CURRENT_AGE(val) <= AGE_REQUIREMENT) {
       return 'A valid date input ensuring the user is above a 13';
     }
@@ -244,23 +248,31 @@ function Registration() {
       <form onSubmit={form.onSubmit(console.log)}>
         <Flex direction="column" justify="center" gap={10}>
           <TextInput
+            withAsterisk
             placeholder="Vasya"
             label="First name"
             {...form.getInputProps('firstName')}
           />
           <TextInput
+            withAsterisk
             placeholder="Pupkin"
             label="Last name"
             {...form.getInputProps('lastName')}
           />
           <TextInput
+            withAsterisk
             placeholder="example@gmail.com"
             label="Email"
             icon={<IconMail size="1rem" />}
             {...form.getInputProps('email')}
           />
-          <PasswordInput label="Password" {...form.getInputProps('password')} />
+          <PasswordInput
+            withAsterisk
+            label="Password"
+            {...form.getInputProps('password')}
+          />
           <DateInput
+            withAsterisk
             valueFormat="DD/MM/YY"
             label="Birthday"
             placeholder="01/01/1974"
@@ -273,16 +285,19 @@ function Registration() {
             <Paper mt="xs" shadow="xs" p="xs">
               <Flex direction="column" gap={10}>
                 <TextInput
+                  withAsterisk
                   placeholder="Lenin st. 12-01"
                   label="Street"
                   {...form.getInputProps('shippingAddress.street')}
                 />
                 <TextInput
+                  withAsterisk
                   placeholder="Minsk"
                   label="City"
                   {...form.getInputProps('shippingAddress.city')}
                 />
                 <Select
+                  withAsterisk
                   placeholder="Belarus"
                   label="Country"
                   searchable
@@ -290,6 +305,7 @@ function Registration() {
                   {...form.getInputProps('shippingAddress.country')}
                 />
                 <TextInput
+                  withAsterisk
                   disabled={!shippingCountry}
                   placeholder="AF-35A"
                   label="Postal code"
@@ -314,16 +330,19 @@ function Registration() {
             <Paper mt="xs" shadow="xs" p="xs">
               <Flex direction="column" gap={10}>
                 <TextInput
+                  withAsterisk
                   placeholder="Billing st. 12-01"
                   label="Street"
                   {...form.getInputProps('billingAddress.street')}
                 />
                 <TextInput
+                  withAsterisk
                   placeholder="Minsk"
                   label="City"
                   {...form.getInputProps('billingAddress.city')}
                 />
                 <Select
+                  withAsterisk
                   placeholder="Belarus"
                   label="Country"
                   searchable
@@ -331,6 +350,7 @@ function Registration() {
                   {...form.getInputProps('billingAddress.country')}
                 />
                 <TextInput
+                  withAsterisk
                   disabled={!billingCountry}
                   placeholder="AF-35A"
                   label="Postal code"
