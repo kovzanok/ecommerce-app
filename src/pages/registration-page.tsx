@@ -16,123 +16,25 @@ import { useForm } from '@mantine/form';
 import { IconMail } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
+import getCountriesArray from '../utils';
+import { Country } from '../types';
 import {
-  postcodeValidator,
-  postcodeValidatorExistsForCountry,
-} from 'postcode-validator';
+  validateBirthday,
+  validateEmail,
+  validatePassword,
+  validateStreet,
+  validateString,
+  validatePostalCode,
+} from '../utils/field-validation';
 
 function Registration() {
-  type ValidationFunc = string | null;
-
-  const SPECIAL_CHARACTERS_REGULAR = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
-  const EMAIL_REGULAR = /^\S+@\S+$/;
-  const DIGIT_REGULAR = /\d/;
-  const LOWER_CASE_REGULAR = /[a-z]/;
-  const PASSWORD_MIN_LENGTH = 8;
-  const AGE_REQUIREMENT = 13;
-
-  const CURRENT_AGE = (dateString: string): number => {
-    const today = new Date();
-    const birthDate = new Date(dateString);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age -= 1;
-    }
-    return age;
-  };
-
-  const stringValidation = (val: string): ValidationFunc => {
-    if (val.length === 0) {
-      return 'This field must contain at least one character';
-    }
-
-    if (SPECIAL_CHARACTERS_REGULAR.test(val) || DIGIT_REGULAR.test(val)) {
-      return 'This field must contain no special characters or numbers';
-    }
-
-    return null;
-  };
-
-  const streetValidation = (val: string): ValidationFunc => {
-    if (val.length === 0) {
-      return 'This field must contain at least one character';
-    }
-
-    return null;
-  };
-
-  const emailValidation = (val: string): ValidationFunc => {
-    if (!EMAIL_REGULAR.test(val)) {
-      return 'This field must have a properly formatted email address (e.g., example@email.com)';
-    }
-
-    return null;
-  };
-
-  const passwordValidation = (val: string): ValidationFunc => {
-    if (val.length < PASSWORD_MIN_LENGTH) {
-      return 'Password must have minimum 8 characters';
-    }
-
-    if (!LOWER_CASE_REGULAR.test(val)) {
-      return 'Password must have at least 1 lowercase letter';
-    }
-
-    if (!DIGIT_REGULAR.test(val)) {
-      return 'Password must have at least one number';
-    }
-
-    return null;
-  };
-
-  const birthdayValidation = (val: string): ValidationFunc => {
-    if (val.length === 0) {
-      return 'Choose your age';
-    }
-
-    if (CURRENT_AGE(val) <= AGE_REQUIREMENT) {
-      return 'A valid date input ensuring the user is above a 13';
-    }
-
-    return null;
-  };
-
-  const postalCodeValidation = (
-    val: string,
-    country: string,
-  ): ValidationFunc => {
-    const isPostalCorrect = postcodeValidatorExistsForCountry(country)
-      && postcodeValidator(val, country);
-    if (!isPostalCorrect) {
-      return 'This postal code is incorrect!';
-    }
-    return null;
-  };
-
-  const countryValidation = (val: string): ValidationFunc => {
-    console.log(val);
-
-    return val;
-  };
-
-  type Country = {
-    value: string;
-    label: string;
-  };
-
   const [countries, setCountries] = useState<Country[]>([]);
 
   const [billingCountry, setBillingCountry] = useState(false);
   const [shippingCountry, setShippingCountry] = useState(false);
 
   useEffect(() => {
-    const getAllCountriesObjectValues = Object.values(getAllCountries());
-    const countryArray: Country[] = getAllCountriesObjectValues.map((el) => ({
-      label: el.name,
-      value: el.id,
-    }));
-    setCountries(countryArray);
+    setCountries(getCountriesArray());
   }, []);
 
   const [opened, { toggle }] = useDisclosure(true);
@@ -140,10 +42,8 @@ function Registration() {
   const [isBillingAddressChecked, setIsBillingAddressChecked] = useState<boolean>(false);
 
   const addressValidation = {
-    country: (val: string) => countryValidation(val),
-    postalCode: (val: string) => postalCodeValidation(val),
-    city: (val: string) => stringValidation(val),
-    street: (val: string) => streetValidation(val),
+    city: (val: string) => validateString(val),
+    street: (val: string) => validateStreet(val),
   };
 
   interface FormValues {
@@ -187,7 +87,7 @@ function Registration() {
         },
         postalCode: (val: string, values: FormValues) => {
           const { country } = values.shippingAddress;
-          return postalCodeValidation(val, country);
+          return validatePostalCode(val, country);
         },
       },
 
@@ -202,17 +102,17 @@ function Registration() {
         },
         postalCode: (val: string, values: FormValues) => {
           const { country } = values.billingAddress;
-          return postalCodeValidation(val, country);
+          return validatePostalCode(val, country);
         },
       },
     },
 
     validate: {
-      firstName: (val: string) => stringValidation(val),
-      lastName: (val: string) => stringValidation(val),
-      email: (val: string) => emailValidation(val),
-      password: (val: string) => passwordValidation(val),
-      dateOfBirthday: (val: string) => birthdayValidation(val),
+      firstName: (val: string) => validateString(val),
+      lastName: (val: string) => validateString(val),
+      email: (val: string) => validateEmail(val),
+      password: (val: string) => validatePassword(val),
+      dateOfBirthday: (val: string) => validateBirthday(val),
       shippingAddress: {
         ...addressValidation,
       },
