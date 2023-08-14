@@ -1,4 +1,4 @@
-const EMAIL_FORMAT_REGULAR = /^\S+@\S.\S+$/;
+const EMAIL_FORMAT_REGULAR = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 const PASSWORD_MIN_LENGTH = 8;
 const UPPER_CASE_REGULAR = /[A-Z]/;
 const LOWER_CASE_REGULAR = /[a-z]/;
