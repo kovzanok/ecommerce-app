@@ -15,11 +15,11 @@ export default function LoginPage() {
       email: '',
       password: '',
     },
-
     validate: {
       email: (value) => validateEmail(value),
       password: (value) => validatePassword(value),
     },
+    validateInputOnChange: true,
   });
 
   return (
