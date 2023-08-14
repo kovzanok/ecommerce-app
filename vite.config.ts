@@ -17,5 +17,10 @@ export default defineConfig({
     environment: 'jsdom',
     css: true,
     setupFiles: './setupTest.ts',
+    coverage: {
+      extension: ['.ts', '.tsx'],
+      provider: 'istanbul',
+      reporter: 'text',
+    },
   },
 });
