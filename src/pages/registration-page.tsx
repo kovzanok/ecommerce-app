@@ -75,7 +75,26 @@ function Registration() {
       email: '',
       password: '',
       dateOfBirthday: '',
+      shippingAddress: {
+        country: '',
+        postalCode: '',
+        city: '',
+        street: '',
+      },
+      billingAddress: {
+        country: '',
+        postalCode: '',
+        city: '',
+        street: '',
+      },
+    },
 
+    validate: {
+      firstName: (val: string) => validateString(val),
+      lastName: (val: string) => validateString(val),
+      email: (val: string) => validateEmail(val),
+      password: (val: string) => validatePassword(val),
+      dateOfBirthday: (val: string) => validateBirthday(val),
       shippingAddress: {
         ...addressValidation,
         country: (val: string) => {
@@ -104,20 +123,6 @@ function Registration() {
           const { country } = values.billingAddress;
           return validatePostalCode(val, country);
         },
-      },
-    },
-
-    validate: {
-      firstName: (val: string) => validateString(val),
-      lastName: (val: string) => validateString(val),
-      email: (val: string) => validateEmail(val),
-      password: (val: string) => validatePassword(val),
-      dateOfBirthday: (val: string) => validateBirthday(val),
-      shippingAddress: {
-        ...addressValidation,
-      },
-      billingAddress: {
-        ...addressValidation,
       },
     },
 
