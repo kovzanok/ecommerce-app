@@ -15,9 +15,15 @@ import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconMail } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
-import { React, useState } from 'react';
+import { useEffect, useState } from 'react';
+import {
+  postcodeValidator,
+  postcodeValidatorExistsForCountry,
+} from 'postcode-validator';
 
 function Registration() {
+  type ValidationFunc = string | null;
+
   const SPECIAL_CHARACTERS_REGULAR = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]+/;
   const EMAIL_REGULAR = /^\S+@\S+$/;
   const DIGIT_REGULAR = /\d/;
@@ -88,9 +94,16 @@ function Registration() {
     return null;
   };
 
-  const postalCodeValidation = (val: string): ValidationFunc => {
-    console.log(val);
-    return val;
+  const postalCodeValidation = (
+    val: string,
+    country: string,
+  ): ValidationFunc => {
+    const isPostalCorrect = postcodeValidatorExistsForCountry(country)
+      && postcodeValidator(val, country);
+    if (!isPostalCorrect) {
+      return 'This postal code is incorrect!';
+    }
+    return null;
   };
 
   const countryValidation = (val: string): ValidationFunc => {
@@ -98,6 +111,25 @@ function Registration() {
 
     return val;
   };
+
+  type Country = {
+    value: string;
+    label: string;
+  };
+
+  const [countries, setCountries] = useState<Country[]>([]);
+
+  const [billingCountry, setBillingCountry] = useState(false);
+  const [shippingCountry, setShippingCountry] = useState(false);
+
+  useEffect(() => {
+    const getAllCountriesObjectValues = Object.values(getAllCountries());
+    const countryArray: Country[] = getAllCountriesObjectValues.map((el) => ({
+      label: el.name,
+      value: el.id,
+    }));
+    setCountries(countryArray);
+  }, []);
 
   const [opened, { toggle }] = useDisclosure(true);
 
@@ -110,6 +142,28 @@ function Registration() {
     street: (val: string) => streetValidation(val),
   };
 
+  interface FormValues {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    dateOfBirthday: string;
+
+    shippingAddress: {
+      country: string;
+      postalCode: string;
+      city: string;
+      street: string;
+    };
+
+    billingAddress: {
+      country: string;
+      postalCode: string;
+      city: string;
+      street: string;
+    };
+  }
+
   const form = useForm({
     initialValues: {
       firstName: '',
@@ -119,17 +173,33 @@ function Registration() {
       dateOfBirthday: '',
 
       shippingAddress: {
-        country: '',
-        postalCode: '',
-        city: '',
-        street: '',
+        ...addressValidation,
+        country: (val: string) => {
+          if (val === '') {
+            return 'Choose the country';
+          }
+          setShippingCountry(true);
+          return null;
+        },
+        postalCode: (val: string, values: FormValues) => {
+          const { country } = values.shippingAddress;
+          return postalCodeValidation(val, country);
+        },
       },
 
       billingAddress: {
-        country: '',
-        postalCode: '',
-        city: '',
-        street: '',
+        ...addressValidation,
+        country: (val: string) => {
+          if (val === '') {
+            return 'Choose the country';
+          }
+          setBillingCountry(true);
+          return null;
+        },
+        postalCode: (val: string, values: FormValues) => {
+          const { country } = values.billingAddress;
+          return postalCodeValidation(val, country);
+        },
       },
     },
 
@@ -216,12 +286,14 @@ function Registration() {
                 <Select
                   placeholder="Belarus"
                   label="Country"
-                  data={[]}
+                  searchable
+                  data={countries}
                   {...form.getInputProps('shippingAddress.country')}
                 />
                 <TextInput
                   placeholder="AF-35A"
                   label="Postal code"
+                  disabled={!shippingCountry}
                   {...form.getInputProps('shippingAddress.postalCode')}
                 />
                 <Flex justify="space-between">
@@ -255,12 +327,14 @@ function Registration() {
                 <Select
                   placeholder="Belarus"
                   label="Country"
-                  data={[]}
+                  searchable
+                  data={countries}
                   {...form.getInputProps('billingAddress.country')}
                 />
                 <TextInput
                   placeholder="AF-35A"
                   label="Postal code"
+                  disabled={!billingCountry}
                   {...form.getInputProps('billingAddress.postalCode')}
                 />
 
