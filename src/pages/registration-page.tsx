@@ -47,7 +47,7 @@ function Registration() {
       return 'This field must contain at least one character';
     }
 
-    if (SPECIAL_CHARACTERS_REGULAR.test(val)) {
+    if (SPECIAL_CHARACTERS_REGULAR.test(val) || DIGIT_REGULAR.test(val)) {
       return 'This field must contain no special characters or numbers';
     }
 
