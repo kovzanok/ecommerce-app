@@ -132,7 +132,6 @@ export default class AuthModule {
       }
     }
   }
-
   static resetApiRoot() {
     AuthModule.apiRoot = AuthModule.creatAnonymousApiRoot();
   }
