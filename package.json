@@ -11,6 +11,7 @@
     "prettier": "prettier src test --check",
     "prettier:fix": "npm run prettier -- --write",
     "test": "vitest",
+    "coverage": "vitest run --coverage",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -40,6 +41,7 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitejs/plugin-react": "^4.0.3",
+    "@vitest/coverage-istanbul": "^0.34.1",
     "eslint": "^8.45.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
