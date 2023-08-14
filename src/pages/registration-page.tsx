@@ -16,11 +16,12 @@ import { useForm } from '@mantine/form';
 import { IconMail } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
-import { getAllCountries } from 'countries-and-timezones';
 import {
   postcodeValidator,
   postcodeValidatorExistsForCountry,
 } from 'postcode-validator';
+import getCountriesArray from '../utils/countries';
+import { Country } from '../types';
 
 type ValidationFunc = string | null;
 
@@ -110,24 +111,13 @@ function Registration() {
     return null;
   };
 
-  type Country = {
-    value: string;
-    label: string;
-  };
-
   const [countries, setCountries] = useState<Country[]>([]);
 
   const [billingCountry, setBillingCountry] = useState(false);
   const [shippingCountry, setShippingCountry] = useState(false);
 
   useEffect(() => {
-    const getAllCountriesObjectValues = Object.values(getAllCountries());
-    const countryArray: Country[] = getAllCountriesObjectValues.map((el) => ({
-      label: el.name,
-      value: el.id,
-    }));
-
-    setCountries(countryArray);
+    setCountries(getCountriesArray());
   }, []);
 
   const [opened, { toggle }] = useDisclosure(true);
