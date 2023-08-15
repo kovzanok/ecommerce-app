@@ -2,7 +2,7 @@ import {
   Text, Title, Image, Flex, Container, Button,
 } from '@mantine/core';
 import { NavLink } from 'react-router-dom';
-import imageSrc from '../assets/not-found.png';
+import imageSrc from '../../assets/not-found.png';
 
 export default function NotFoundPage() {
   return (
