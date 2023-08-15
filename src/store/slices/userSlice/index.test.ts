@@ -4,7 +4,8 @@ import {
   CustomerSignin,
 } from '@commercetools/platform-sdk';
 import { vi } from 'vitest';
-import { signIn, signUp } from '.';
+import { Action } from '@reduxjs/toolkit';
+import userReducer, { logout, signIn, signUp } from '.';
 import ApiService from '../../../service/api-service';
 
 vi.mock('../../../service/api-service');
@@ -150,5 +151,43 @@ describe('signUpThunk', () => {
     expect(start[0].type).toBe(signUp.pending.type);
     expect(end[0].type).toBe(signUp.rejected.type);
     expect(end[0].error.message).toBe(errorMessage);
+  });
+});
+
+describe('userSlice', () => {
+  const initialState = {
+    user: null,
+    loading: false,
+    error: '',
+  };
+
+  it('should return initial state', () => {
+    const result = userReducer(undefined, { type: '' });
+    expect(result).toStrictEqual(initialState);
+  });
+
+  it('should logout user', () => {
+    const userState = {
+      user: {
+        customer: {
+          addresses: [],
+          email: 'johndoe@example.com',
+          firstName: 'John',
+          id: 'some_123_id',
+          isEmailVerified: false,
+          lastName: 'Doe',
+          password: '****aGg=',
+          version: 1,
+          createdAt: '2015-07-06T13:22:33.339Z',
+          lastModifiedAt: '2015-07-06T13:22:33.339Z',
+          authenticationMode: 'Password',
+        },
+      },
+      loading: false,
+      error: '',
+    };
+    const action: Action = { type: logout.type };
+    const result = userReducer(userState, action);
+    expect(result).toStrictEqual(initialState);
   });
 });
