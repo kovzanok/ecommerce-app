@@ -23,6 +23,7 @@
     "no-console": 0,
     "no-param-reassign": ["error", { "props": false }],
     "consistent-return": 0,
-    "react/jsx-props-no-spreading": 0
+    "react/jsx-props-no-spreading": 0,
+    "default-case": 0
   }
 }
