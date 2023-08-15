@@ -8,9 +8,12 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { CustomerSignin } from '@commercetools/platform-sdk';
+import { useAppDispatch } from '../hooks';
 import { validateEmail, validatePassword } from '../utils/field-validation';
+import { signIn } from '../store/slices/userSlice';
 
 export default function LoginPage() {
+  const dispatch = useAppDispatch();
   const form = useForm<CustomerSignin>({
     initialValues: {
       email: '',
@@ -23,6 +26,10 @@ export default function LoginPage() {
     validateInputOnChange: true,
   });
 
+  const handleSubmit = (values: CustomerSignin) => {
+    dispatch(signIn(values));
+  };
+
   return (
     <Center h="100vh">
       <Flex direction="column" gap="lg">
@@ -30,7 +37,7 @@ export default function LoginPage() {
           Login
         </Title>
         <form
-          onSubmit={form.onSubmit((values) => values)}
+          onSubmit={form.onSubmit(handleSubmit)}
           style={{
             border: '1px solid orange',
             borderRadius: '5px',
