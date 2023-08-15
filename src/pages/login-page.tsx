@@ -7,10 +7,11 @@ import {
   Title,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { CustomerSignin } from '@commercetools/platform-sdk';
 import { validateEmail, validatePassword } from '../utils/field-validation';
 
 export default function LoginPage() {
-  const form = useForm({
+  const form = useForm<CustomerSignin>({
     initialValues: {
       email: '',
       password: '',
