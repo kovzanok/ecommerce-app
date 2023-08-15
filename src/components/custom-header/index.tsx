@@ -2,11 +2,11 @@ import {
   Header, Image, Flex, Container, Button,
 } from '@mantine/core';
 import { NavLink, useNavigate } from 'react-router-dom';
-import logo from '../assets/logo.png';
-import { useAppDispatch, useAppSelector } from '../hooks';
-import userSelector from '../store/selectors';
-import { logout } from '../store/slices/userSlice';
-import AuthModule from '../service/modules/auth-module';
+import logo from '../../assets/logo.png';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import userSelector from '../../store/selectors';
+import { logout } from '../../store/slices/userSlice';
+import AuthModule from '../../service/modules/auth-module';
 
 export default function CustomHeader() {
   const { user } = useAppSelector(userSelector);
