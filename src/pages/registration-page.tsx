@@ -15,58 +15,12 @@ import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconMail } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
-import { useEffect, useState } from 'react';
-import getCountriesArray from '../utils';
-import { Country } from '../types';
-import {
-  validateBirthday,
-  validateEmail,
-  validatePassword,
-  validateStreet,
-  validateString,
-  validatePostalCode,
-} from '../utils/field-validation';
-
-interface FormValues {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  dateOfBirthday: string;
-
-  shippingAddress: {
-    country: string;
-    postalCode: string;
-    city: string;
-    street: string;
-  };
-
-  billingAddress: {
-    country: string;
-    postalCode: string;
-    city: string;
-    street: string;
-  };
-}
+import { React, useState } from 'react';
 
 function Registration() {
-  const [countries, setCountries] = useState<Country[]>([]);
-
-  const [billingCountry, setBillingCountry] = useState(false);
-  const [shippingCountry, setShippingCountry] = useState(false);
-
-  useEffect(() => {
-    setCountries(getCountriesArray());
-  }, []);
-
   const [opened, { toggle }] = useDisclosure(true);
 
   const [isBillingAddressChecked, setIsBillingAddressChecked] = useState<boolean>(false);
-
-  const addressValidation = {
-    city: (val: string) => validateString(val),
-    street: (val: string) => validateStreet(val),
-  };
 
   const form = useForm({
     initialValues: {
@@ -75,12 +29,14 @@ function Registration() {
       email: '',
       password: '',
       dateOfBirthday: '',
+
       shippingAddress: {
         country: '',
         postalCode: '',
         city: '',
         street: '',
       },
+
       billingAddress: {
         country: '',
         postalCode: '',
@@ -88,45 +44,6 @@ function Registration() {
         street: '',
       },
     },
-
-    validate: {
-      firstName: (val: string) => validateString(val),
-      lastName: (val: string) => validateString(val),
-      email: (val: string) => validateEmail(val),
-      password: (val: string) => validatePassword(val),
-      dateOfBirthday: (val: string) => validateBirthday(val),
-      shippingAddress: {
-        ...addressValidation,
-        country: (val: string) => {
-          if (val === '') {
-            return 'Choose the country';
-          }
-          setShippingCountry(true);
-          return null;
-        },
-        postalCode: (val: string, values: FormValues) => {
-          const { country } = values.shippingAddress;
-          return validatePostalCode(val, country);
-        },
-      },
-
-      billingAddress: {
-        ...addressValidation,
-        country: (val: string) => {
-          if (val === '') {
-            return 'Choose the country';
-          }
-          setBillingCountry(true);
-          return null;
-        },
-        postalCode: (val: string, values: FormValues) => {
-          const { country } = values.billingAddress;
-          return validatePostalCode(val, country);
-        },
-      },
-    },
-
-    validateInputOnChange: true,
   });
 
   const billingSwitch = (
@@ -151,37 +68,29 @@ function Registration() {
       <Title align="center" color="orange" order={1} size="h1">
         Registration
       </Title>
-      <form onSubmit={form.onSubmit(console.log)}>
+      <form>
         <Flex direction="column" justify="center" gap={10}>
           <TextInput
-            withAsterisk
             placeholder="Vasya"
             label="First name"
             {...form.getInputProps('firstName')}
           />
           <TextInput
-            withAsterisk
             placeholder="Pupkin"
             label="Last name"
             {...form.getInputProps('lastName')}
           />
           <TextInput
-            withAsterisk
             placeholder="example@gmail.com"
             label="Email"
             icon={<IconMail size="1rem" />}
             {...form.getInputProps('email')}
           />
-          <PasswordInput
-            withAsterisk
-            label="Password"
-            {...form.getInputProps('password')}
-          />
+          <PasswordInput label="Password" {...form.getInputProps('password')} />
           <DateInput
-            withAsterisk
-            valueFormat="YYYY-MM-DD"
+            valueFormat="DD/MM/YY"
             label="Birthday"
-            placeholder="1974-01-01"
+            placeholder="01/01/1974"
             {...form.getInputProps('dateOfBirthday')}
           />
           <Box>
@@ -191,31 +100,25 @@ function Registration() {
             <Paper mt="xs" shadow="xs" p="xs">
               <Flex direction="column" gap={10}>
                 <TextInput
-                  withAsterisk
                   placeholder="Lenin st. 12-01"
                   label="Street"
-                  {...form.getInputProps('shippingAddress.street')}
+                  {...form.getInputProps('address.street')}
                 />
                 <TextInput
-                  withAsterisk
                   placeholder="Minsk"
                   label="City"
-                  {...form.getInputProps('shippingAddress.city')}
-                />
-                <Select
-                  withAsterisk
-                  placeholder="Belarus"
-                  label="Country"
-                  searchable
-                  data={countries}
-                  {...form.getInputProps('shippingAddress.country')}
+                  {...form.getInputProps('address.city')}
                 />
                 <TextInput
-                  withAsterisk
                   placeholder="AF-35A"
                   label="Postal code"
-                  disabled={!shippingCountry}
-                  {...form.getInputProps('shippingAddress.postalCode')}
+                  {...form.getInputProps('address.postalCode')}
+                />
+                <Select
+                  placeholder="Belarus"
+                  label="Country"
+                  data={[]}
+                  {...form.getInputProps('address.country')}
                 />
                 <Flex justify="space-between">
                   <Switch label="Set as default shipping address" />
@@ -236,31 +139,25 @@ function Registration() {
             <Paper mt="xs" shadow="xs" p="xs">
               <Flex direction="column" gap={10}>
                 <TextInput
-                  withAsterisk
                   placeholder="Billing st. 12-01"
                   label="Street"
                   {...form.getInputProps('billingAddress.street')}
                 />
                 <TextInput
-                  withAsterisk
                   placeholder="Minsk"
                   label="City"
                   {...form.getInputProps('billingAddress.city')}
                 />
-                <Select
-                  withAsterisk
-                  placeholder="Belarus"
-                  label="Country"
-                  searchable
-                  data={countries}
-                  {...form.getInputProps('billingAddress.country')}
-                />
                 <TextInput
-                  withAsterisk
                   placeholder="AF-35A"
                   label="Postal code"
-                  disabled={!billingCountry}
                   {...form.getInputProps('billingAddress.postalCode')}
+                />
+                <Select
+                  placeholder="Belarus"
+                  label="Country"
+                  data={[]}
+                  {...form.getInputProps('billingAddress.country')}
                 />
 
                 {opened && billingSwitch}

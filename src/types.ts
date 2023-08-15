@@ -8,8 +8,3 @@ export type PageLink = {
   name: string;
   description: string;
 };
-
-export type Country = {
-  value: string;
-  label: string;
-};
