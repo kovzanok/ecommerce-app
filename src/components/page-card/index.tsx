@@ -3,7 +3,7 @@ import {
 } from '@mantine/core';
 import { NavLink } from 'react-router-dom';
 import { useHover } from '@mantine/hooks';
-import { PageLink } from '../types';
+import { PageLink } from '../../types';
 
 export default function PageCard({ description, name, to }: PageLink) {
   const { ref, hovered } = useHover();
