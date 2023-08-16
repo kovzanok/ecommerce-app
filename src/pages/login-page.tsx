@@ -7,10 +7,16 @@ import {
   Title,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { CustomerSignin } from '@commercetools/platform-sdk';
+import { useAppDispatch, useAppSelector } from '../hooks';
 import { validateEmail, validatePassword } from '../utils/field-validation';
+import { signIn } from '../store/slices/userSlice';
+import userSelector from '../store/selectors';
 
 export default function LoginPage() {
-  const form = useForm({
+  const dispatch = useAppDispatch();
+  const { loading } = useAppSelector(userSelector);
+  const form = useForm<CustomerSignin>({
     initialValues: {
       email: '',
       password: '',
@@ -22,6 +28,10 @@ export default function LoginPage() {
     validateInputOnChange: true,
   });
 
+  const handleSubmit = (values: CustomerSignin) => {
+    dispatch(signIn(values));
+  };
+
   return (
     <Center h="100vh">
       <Flex direction="column" gap="lg">
@@ -29,7 +39,7 @@ export default function LoginPage() {
           Login
         </Title>
         <form
-          onSubmit={form.onSubmit((values) => values)}
+          onSubmit={form.onSubmit(handleSubmit)}
           style={{
             border: '1px solid orange',
             borderRadius: '5px',
@@ -38,17 +48,26 @@ export default function LoginPage() {
         >
           <Flex p="20px" direction="column" gap="lg">
             <TextInput
+              disabled={loading}
               withAsterisk
               label="Email"
               placeholder="your@email.com"
               {...form.getInputProps('email')}
             />
             <PasswordInput
+              disabled={loading}
               withAsterisk
               label="Password"
               {...form.getInputProps('password')}
             />
-            <Button type="submit" m="auto" w="40%" color="orange" size="md">
+            <Button
+              disabled={loading}
+              type="submit"
+              m="auto"
+              w="40%"
+              color="orange"
+              size="md"
+            >
               Sign in
             </Button>
           </Flex>
