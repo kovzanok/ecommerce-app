@@ -27,6 +27,28 @@ import {
   validatePostalCode,
 } from '../utils/field-validation';
 
+interface FormValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  dateOfBirthday: string;
+
+  shippingAddress: {
+    country: string;
+    postalCode: string;
+    city: string;
+    street: string;
+  };
+
+  billingAddress: {
+    country: string;
+    postalCode: string;
+    city: string;
+    street: string;
+  };
+}
+
 function Registration() {
   const [countries, setCountries] = useState<Country[]>([]);
 
@@ -45,28 +67,6 @@ function Registration() {
     city: (val: string) => validateString(val),
     street: (val: string) => validateStreet(val),
   };
-
-  interface FormValues {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    dateOfBirthday: string;
-
-    shippingAddress: {
-      country: string;
-      postalCode: string;
-      city: string;
-      street: string;
-    };
-
-    billingAddress: {
-      country: string;
-      postalCode: string;
-      city: string;
-      street: string;
-    };
-  }
 
   const form = useForm({
     initialValues: {
