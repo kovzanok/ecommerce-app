@@ -174,9 +174,9 @@ function Registration() {
           />
           <DateInput
             withAsterisk
-            valueFormat="DD/MM/YY"
+            valueFormat="YYYY-MM-DD"
             label="Birthday"
-            placeholder="01/01/1974"
+            placeholder="1974-01-01"
             {...form.getInputProps('dateOfBirthday')}
           />
           <Box>
