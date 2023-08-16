@@ -68,7 +68,7 @@ function Registration() {
     street: (val: string) => validateStreet(val),
   };
 
-  const form = useForm({
+  const { onSubmit, getInputProps } = useForm({
     initialValues: {
       firstName: '',
       lastName: '',
@@ -152,38 +152,38 @@ function Registration() {
       <Title align="center" color="orange" order={1} size="h1">
         Registration
       </Title>
-      <form onSubmit={form.onSubmit(console.log)}>
+      <form onSubmit={onSubmit(console.log)}>
         <Flex direction="column" justify="center" gap={10}>
           <TextInput
             withAsterisk
             placeholder="Vasya"
             label="First name"
-            {...form.getInputProps('firstName')}
+            {...getInputProps('firstName')}
           />
           <TextInput
             withAsterisk
             placeholder="Pupkin"
             label="Last name"
-            {...form.getInputProps('lastName')}
+            {...getInputProps('lastName')}
           />
           <TextInput
             withAsterisk
             placeholder="example@gmail.com"
             label="Email"
             icon={<IconMail size="1rem" />}
-            {...form.getInputProps('email')}
+            {...getInputProps('email')}
           />
           <PasswordInput
             withAsterisk
             label="Password"
-            {...form.getInputProps('password')}
+            {...getInputProps('password')}
           />
           <DateInput
             withAsterisk
             valueFormat="YYYY-MM-DD"
             label="Birthday"
             placeholder="1974-01-01"
-            {...form.getInputProps('dateOfBirthday')}
+            {...getInputProps('dateOfBirthday')}
           />
           <Box>
             <Title mt="xl" order={3} size="h3">
@@ -195,13 +195,13 @@ function Registration() {
                   withAsterisk
                   placeholder="Lenin st. 12-01"
                   label="Street"
-                  {...form.getInputProps('shippingAddress.street')}
+                  {...getInputProps('shippingAddress.street')}
                 />
                 <TextInput
                   withAsterisk
                   placeholder="Minsk"
                   label="City"
-                  {...form.getInputProps('shippingAddress.city')}
+                  {...getInputProps('shippingAddress.city')}
                 />
                 <Select
                   withAsterisk
@@ -209,14 +209,14 @@ function Registration() {
                   label="Country"
                   searchable
                   data={countries}
-                  {...form.getInputProps('shippingAddress.country')}
+                  {...getInputProps('shippingAddress.country')}
                 />
                 <TextInput
                   withAsterisk
                   placeholder="AF-35A"
                   label="Postal code"
                   disabled={!shippingCountry}
-                  {...form.getInputProps('shippingAddress.postalCode')}
+                  {...getInputProps('shippingAddress.postalCode')}
                 />
 
                 <Flex justify="space-between">
@@ -241,13 +241,13 @@ function Registration() {
                   withAsterisk
                   placeholder="Billing st. 12-01"
                   label="Street"
-                  {...form.getInputProps('billingAddress.street')}
+                  {...getInputProps('billingAddress.street')}
                 />
                 <TextInput
                   withAsterisk
                   placeholder="Minsk"
                   label="City"
-                  {...form.getInputProps('billingAddress.city')}
+                  {...getInputProps('billingAddress.city')}
                 />
                 <Select
                   withAsterisk
@@ -255,14 +255,14 @@ function Registration() {
                   label="Country"
                   searchable
                   data={countries}
-                  {...form.getInputProps('billingAddress.country')}
+                  {...getInputProps('billingAddress.country')}
                 />
                 <TextInput
                   withAsterisk
                   placeholder="AF-35A"
                   label="Postal code"
                   disabled={!billingCountry}
-                  {...form.getInputProps('billingAddress.postalCode')}
+                  {...getInputProps('billingAddress.postalCode')}
                 />
 
                 {opened && billingSwitch}
