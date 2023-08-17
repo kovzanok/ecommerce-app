@@ -387,9 +387,7 @@ function Registration() {
 
           <Flex justify="center" mx="auto" gap={5}>
             <Text>Already have an account?</Text>
-            <NavLink ml="xs" to="/login">
-              Sign in
-            </NavLink>
+            <NavLink to="/login">Sign in</NavLink>
           </Flex>
         </Flex>
       </form>
