@@ -161,8 +161,12 @@ function Registration() {
     'billingAddress.postalCode',
   );
 
+  const modalMessage = 'Hooray! You have become a part of us!';
+
   const handleSubmit = (values: CustomerDraft) => {
-    dispatch(signUp(values));
+    dispatch(signUp(values))
+      .unwrap()
+      .then(() => alert(modalMessage));
   };
 
   return (
