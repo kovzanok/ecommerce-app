@@ -10,6 +10,7 @@ import {
   Paper,
   PasswordInput,
   TextInput,
+  LoadingOverlay,
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
@@ -27,11 +28,13 @@ import {
   validateString,
   validatePostalCode,
 } from '../utils/field-validation';
-import { useAppSelector } from '../hooks';
+import { signUp } from '../store/slices/userSlice';
+import { useAppDispatch, useAppSelector } from '../hooks';
 import userSelector from '../store/selectors';
 
 function Registration() {
-  const { error } = useAppSelector(userSelector);
+  const dispatch = useAppDispatch();
+  const { error, loading } = useAppSelector(userSelector);
   const [countries, setCountries] = useState<Country[]>([]);
 
   const [billingCountry, setBillingCountry] = useState(false);
@@ -162,19 +165,32 @@ function Registration() {
     'billingAddress.postalCode',
   );
 
+  const modalMessage = 'Congratulations! Your account has been successfully created.';
+
   const handleSubmit = (values: CustomerDraft) => {
-    console.log(values);
+    dispatch(signUp(values))
+      .unwrap()
+      .then(() => alert(modalMessage));
   };
 
   return (
     <Paper
       mt="xs"
       shadow="xs"
-      style={{ border: '1px solid orange' }}
+      style={{ border: '1px solid orange', zIndex: 0 }}
       p="xs"
       maw={600}
       mx="auto"
+      pos="relative"
     >
+      <LoadingOverlay
+        loaderProps={{ size: 'lg', color: 'orange' }}
+        overlayOpacity={0.5}
+        overlayColor="#c5c5c5"
+        visible={loading}
+        overlayBlur={2}
+      />
+
       <Title align="center" color="orange" order={1} size="h1">
         Registration
       </Title>
