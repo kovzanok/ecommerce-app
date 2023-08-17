@@ -1,16 +1,22 @@
 import {
-  Center,
   TextInput,
   PasswordInput,
   Button,
   Flex,
   Title,
+  Paper,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { CustomerSignin } from '@commercetools/platform-sdk';
+import { useAppDispatch, useAppSelector } from '../hooks';
 import { validateEmail, validatePassword } from '../utils/field-validation';
+import { signIn } from '../store/slices/userSlice';
+import userSelector from '../store/selectors';
 
 export default function LoginPage() {
-  const form = useForm({
+  const dispatch = useAppDispatch();
+  const { loading } = useAppSelector(userSelector);
+  const form = useForm<CustomerSignin>({
     initialValues: {
       email: '',
       password: '',
@@ -22,38 +28,50 @@ export default function LoginPage() {
     validateInputOnChange: true,
   });
 
+  const handleSubmit = (values: CustomerSignin) => {
+    dispatch(signIn(values));
+  };
+
   return (
-    <Center h="100vh">
+    <Paper m="auto" maw={450} mt={100}>
       <Flex direction="column" gap="lg">
         <Title color="orange" ta="center">
           Login
         </Title>
         <form
-          onSubmit={form.onSubmit((values) => values)}
+          onSubmit={form.onSubmit(handleSubmit)}
           style={{
             border: '1px solid orange',
             borderRadius: '5px',
-            width: '480px',
           }}
         >
           <Flex p="20px" direction="column" gap="lg">
             <TextInput
+              disabled={loading}
               withAsterisk
               label="Email"
               placeholder="your@email.com"
               {...form.getInputProps('email')}
             />
             <PasswordInput
+              disabled={loading}
               withAsterisk
               label="Password"
               {...form.getInputProps('password')}
             />
-            <Button type="submit" m="auto" w="40%" color="orange" size="md">
+            <Button
+              disabled={loading}
+              type="submit"
+              m="auto"
+              w="50%"
+              color="orange"
+              size="md"
+            >
               Sign in
             </Button>
           </Flex>
         </form>
       </Flex>
-    </Center>
+    </Paper>
   );
 }

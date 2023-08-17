@@ -22,7 +22,7 @@ export default function MainPage() {
       <Title ta="center" mb={20} size={24}>
         Available pages
       </Title>
-      <Flex justify="space-evenly">
+      <Flex rowGap={20} wrap="wrap" justify="space-evenly">
         {links.map((pageLink) => (
           <PageCard key={pageLink.to} {...pageLink} />
         ))}
