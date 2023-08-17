@@ -5,9 +5,12 @@ import {
   Flex,
   Title,
   Paper,
+  Text,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { CustomerSignin } from '@commercetools/platform-sdk';
+import { useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { validateEmail, validatePassword } from '../utils/field-validation';
 import { signIn } from '../store/slices/userSlice';
@@ -15,7 +18,7 @@ import userSelector from '../store/selectors';
 
 export default function LoginPage() {
   const dispatch = useAppDispatch();
-  const { loading } = useAppSelector(userSelector);
+  const { loading, error } = useAppSelector(userSelector);
   const form = useForm<CustomerSignin>({
     initialValues: {
       email: '',
@@ -27,6 +30,11 @@ export default function LoginPage() {
     },
     validateInputOnChange: true,
   });
+
+  useEffect(() => {
+    form.setFieldError('email', error);
+    form.setFieldError('password', error);
+  }, [error]);
 
   const handleSubmit = (values: CustomerSignin) => {
     dispatch(signIn(values));
@@ -69,6 +77,10 @@ export default function LoginPage() {
             >
               Sign in
             </Button>
+            <Text m="auto">
+              Don&apos;t have a account?&nbsp;
+              <NavLink to="/register">Sing up</NavLink>
+            </Text>
           </Flex>
         </form>
       </Flex>
