@@ -39,14 +39,17 @@ function Registration() {
 
   const [opened, { toggle }] = useDisclosure(true);
 
-  const [isBillingAddressChecked, setIsBillingAddressChecked] = useState<boolean>(false);
-
   const addressValidation = {
     city: (val: string) => validateString(val),
     street: (val: string) => validateStreet(val),
   };
 
-  const { onSubmit, getInputProps } = useForm({
+  const {
+    onSubmit,
+    getInputProps,
+    setFieldValue,
+    values: formValues,
+  } = useForm({
     initialValues: {
       firstName: '',
       lastName: '',
@@ -113,10 +116,7 @@ function Registration() {
   const billingSwitch = (
     <Switch
       {...getInputProps('billingAddress.isAddressDefault')}
-      onChange={() => {
-        setIsBillingAddressChecked(!isBillingAddressChecked);
-      }}
-      checked={isBillingAddressChecked}
+      checked={formValues.billingAddress.isAddressDefault}
       label="Set as default billing address"
     />
   );
@@ -270,6 +270,13 @@ function Registration() {
             label="Use the same address for billing"
             onChange={() => {
               toggle();
+
+              if (opened) {
+                setFieldValue('billingAddress', {
+                  ...formValues.shippingAddress,
+                  isAddressDefault: formValues.billingAddress.isAddressDefault,
+                });
+              }
             }}
           />
           <Collapse in={opened}>

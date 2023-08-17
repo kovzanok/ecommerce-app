@@ -26,28 +26,42 @@ export function transformRegistrationData(
 
   const [shippingIndex, billingIndex] = [0, 1];
 
+  const {
+    isAddressDefault: isShippingAddressDefault,
+    ...shippingAddressCustomerDraft
+  } = shippingAddress;
+
+  const {
+    isAddressDefault: isBillingAddressDefault,
+    ...billingAddressCustomerDraft
+  } = billingAddress;
+
+  const birthdayDay = new Date(dateOfBirthday);
+
+  const dateConverter = (date: Date) => {
+    const withZero = (dateInput: number) => `0${dateInput}`.slice(-2);
+    const getMonth = withZero(date.getMonth() + 1);
+    const getDay = withZero(date.getDate());
+
+    return `${date.getFullYear()}-${getMonth}-${getDay}`;
+  };
+
   const customerDraftData: CustomerDraft = {
     firstName,
     lastName,
     email,
     password,
-    dateOfBirth: new Date(dateOfBirthday).toISOString().substring(0, 10),
-    addresses: isSame ? [shippingAddress] : [shippingAddress, billingAddress],
+    dateOfBirth: dateConverter(birthdayDay),
+    addresses: isSame
+      ? [shippingAddressCustomerDraft]
+      : [shippingAddressCustomerDraft, billingAddressCustomerDraft],
     shippingAddresses: [shippingIndex],
     billingAddresses: isSame ? [shippingIndex] : [billingIndex],
+    defaultShippingAddress: isShippingAddressDefault
+      ? shippingIndex
+      : undefined,
+    defaultBillingAddress: isBillingAddressDefault ? billingIndex : undefined,
   };
-
-  if (shippingAddress.isAddressDefault) {
-    Object.defineProperty(customerDraftData, 'defaultShippingAddress', {
-      value: shippingIndex,
-    });
-  }
-
-  if (billingAddress.isAddressDefault) {
-    Object.defineProperty(customerDraftData, 'defaultBillingAddress', {
-      value: billingIndex,
-    });
-  }
 
   return customerDraftData;
 }
