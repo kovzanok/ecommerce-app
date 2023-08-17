@@ -11,6 +11,7 @@ import {
   PasswordInput,
   TextInput,
   Text,
+  LoadingOverlay
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
@@ -29,8 +30,13 @@ import {
   validateString,
   validatePostalCode,
 } from '../utils/field-validation';
+import { signUp } from '../store/slices/userSlice';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import userSelector from '../store/selectors';
 
 function Registration() {
+  const dispatch = useAppDispatch();
+  const { error, loading } = useAppSelector(userSelector);
   const [countries, setCountries] = useState<Country[]>([]);
 
   const [billingCountry, setBillingCountry] = useState(false);
@@ -51,6 +57,7 @@ function Registration() {
     onSubmit,
     getInputProps,
     setFieldValue,
+    setFieldError,
     values: formValues,
   } = useForm({
     initialValues: {
@@ -118,6 +125,10 @@ function Registration() {
     transformValues: (values) => transformRegistrationData(values, !opened),
   });
 
+  useEffect(() => {
+    setFieldError('email', error);
+  }, [error]);
+
   const billingSwitch = (
     <Switch
       {...getInputProps('billingAddress.isAddressDefault')}
@@ -156,19 +167,32 @@ function Registration() {
     'billingAddress.postalCode',
   );
 
+  const modalMessage = 'Congratulations! Your account has been successfully created.';
+
   const handleSubmit = (values: CustomerDraft) => {
-    console.log(values);
+    dispatch(signUp(values))
+      .unwrap()
+      .then(() => alert(modalMessage));
   };
 
   return (
     <Paper
       mt="xs"
       shadow="xs"
-      style={{ border: '1px solid orange' }}
+      style={{ border: '1px solid orange', zIndex: 0 }}
       p="xs"
       maw={600}
       mx="auto"
+      pos="relative"
     >
+      <LoadingOverlay
+        loaderProps={{ size: 'lg', color: 'orange' }}
+        overlayOpacity={0.5}
+        overlayColor="#c5c5c5"
+        visible={loading}
+        overlayBlur={2}
+      />
+
       <Title align="center" color="orange" order={1} size="h1">
         Registration
       </Title>
