@@ -10,7 +10,8 @@ import {
   Paper,
   PasswordInput,
   TextInput,
-  LoadingOverlay,
+  Text,
+  LoadingOverlay
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
@@ -18,6 +19,7 @@ import { IconMail } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { CustomerDraft } from '@commercetools/platform-sdk';
+import { NavLink } from 'react-router-dom';
 import getCountriesArray, { transformRegistrationData } from '../utils';
 import { Country, FormValues } from '../types';
 import {
@@ -351,6 +353,13 @@ function Registration() {
           <Button type="submit" m="auto" w="40%" color="orange" size="md">
             Sign up
           </Button>
+
+          <Flex justify="center" mx="auto" gap={5}>
+            <Text>Already have an account?</Text>
+            <NavLink ml="xs" to="/login">
+              Sign in
+            </NavLink>
+          </Flex>
         </Flex>
       </form>
     </Paper>
