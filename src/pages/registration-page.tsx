@@ -27,8 +27,11 @@ import {
   validateString,
   validatePostalCode,
 } from '../utils/field-validation';
+import { signUp } from '../store/slices/userSlice';
+import { useAppDispatch } from '../hooks';
 
 function Registration() {
+  const dispatch = useAppDispatch();
   const [countries, setCountries] = useState<Country[]>([]);
 
   const [billingCountry, setBillingCountry] = useState(false);
@@ -155,7 +158,7 @@ function Registration() {
   );
 
   const handleSubmit = (values: CustomerDraft) => {
-    console.log(values);
+    dispatch(signUp(values));
   };
 
   return (
