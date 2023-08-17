@@ -10,7 +10,7 @@ import {
   PasswordInput,
   TextInput,
   Text,
-  LoadingOverlay
+  LoadingOverlay,
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
@@ -125,18 +125,9 @@ function Registration() {
     transformValues: (values) => transformRegistrationData(values, !opened),
   });
 
-
   useEffect(() => {
     setFieldError('email', error);
   }, [error]);
-
-  const billingSwitch = (
-    <Switch
-      {...getInputProps('billingAddress.isAddressDefault')}
-      checked={formValues.billingAddress.isAddressDefault}
-      label="Set as default billing address"
-    />
-  );
 
   const { onChange: shippingCityHandle } = getInputProps(
     'shippingAddress.city',
@@ -171,6 +162,8 @@ function Registration() {
   const modalMessage = 'Congratulations! Your account has been successfully created.';
 
   const handleSubmit = (values: CustomerDraft) => {
+    console.log(values);
+
     dispatch(signUp(values))
       .unwrap()
       .then(() => alert(modalMessage));
@@ -213,7 +206,7 @@ function Registration() {
         visible={loading}
         overlayBlur={2}
       />
-       <Title
+      <Title
         align="center"
         color="orange"
         order={1}
@@ -394,9 +387,7 @@ function Registration() {
 
           <Flex justify="center" mx="auto" gap={5}>
             <Text>Already have an account?</Text>
-            <NavLink ml="xs" to="/login">
-              Sign in
-            </NavLink>
+            <NavLink to="/login">Sign in</NavLink>
           </Flex>
         </Flex>
       </form>

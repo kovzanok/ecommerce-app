@@ -46,6 +46,16 @@ export function transformRegistrationData(
     return `${date.getFullYear()}-${getMonth}-${getDay}`;
   };
 
+  const defaultBillingCondition = () => {
+    if (isBillingAddressDefault) {
+      if (isSame) {
+        return shippingIndex;
+      }
+
+      return billingIndex;
+    }
+  };
+
   const customerDraftData: CustomerDraft = {
     firstName,
     lastName,
@@ -60,7 +70,7 @@ export function transformRegistrationData(
     defaultShippingAddress: isShippingAddressDefault
       ? shippingIndex
       : undefined,
-    defaultBillingAddress: isBillingAddressDefault ? billingIndex : undefined,
+    defaultBillingAddress: defaultBillingCondition(),
   };
 
   return customerDraftData;
