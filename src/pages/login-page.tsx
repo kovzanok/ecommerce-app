@@ -5,9 +5,11 @@ import {
   Flex,
   Title,
   Paper,
+  Text,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { CustomerSignin } from '@commercetools/platform-sdk';
+import { NavLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { validateEmail, validatePassword } from '../utils/field-validation';
 import { signIn } from '../store/slices/userSlice';
@@ -69,6 +71,10 @@ export default function LoginPage() {
             >
               Sign in
             </Button>
+            <Text m="auto">
+              Don&apos;t have a account?&nbsp;
+              <NavLink to="/register">Sing up</NavLink>
+            </Text>
           </Flex>
         </form>
       </Flex>
