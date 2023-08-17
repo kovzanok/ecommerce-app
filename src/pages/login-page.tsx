@@ -1,10 +1,10 @@
 import {
-  Center,
   TextInput,
   PasswordInput,
   Button,
   Flex,
   Title,
+  Paper,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { CustomerSignin } from '@commercetools/platform-sdk';
@@ -33,7 +33,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Center h="100vh">
+    <Paper m="auto" maw={450} mt={100}>
       <Flex direction="column" gap="lg">
         <Title color="orange" ta="center">
           Login
@@ -43,7 +43,6 @@ export default function LoginPage() {
           style={{
             border: '1px solid orange',
             borderRadius: '5px',
-            width: '480px',
           }}
         >
           <Flex p="20px" direction="column" gap="lg">
@@ -64,7 +63,7 @@ export default function LoginPage() {
               disabled={loading}
               type="submit"
               m="auto"
-              w="40%"
+              w="50%"
               color="orange"
               size="md"
             >
@@ -73,6 +72,6 @@ export default function LoginPage() {
           </Flex>
         </form>
       </Flex>
-    </Center>
+    </Paper>
   );
 }
