@@ -16,6 +16,7 @@ import { useForm } from '@mantine/form';
 import { IconMail } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
+import { CustomerDraft } from '@commercetools/platform-sdk';
 import getCountriesArray, { transformRegistrationData } from '../utils';
 import { Country, FormValues } from '../types';
 import {
@@ -111,6 +112,8 @@ function Registration() {
     },
 
     validateInputOnChange: true,
+
+    transformValues: (values) => transformRegistrationData(values, !opened),
   });
 
   const billingSwitch = (
@@ -151,9 +154,8 @@ function Registration() {
     'billingAddress.postalCode',
   );
 
-  const handleSubmit = (values: FormValues) => {
+  const handleSubmit = (values: CustomerDraft) => {
     console.log(values);
-    console.log(transformRegistrationData(values, !opened));
   };
 
   return (
