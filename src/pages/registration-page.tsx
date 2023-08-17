@@ -3,7 +3,6 @@ import {
   Button,
   Box,
   Title,
-  Collapse,
   Flex,
   Checkbox,
   Select,
@@ -16,7 +15,7 @@ import {
 import { DateInput } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { IconMail } from '@tabler/icons-react';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { CustomerDraft } from '@commercetools/platform-sdk';
 import { NavLink } from 'react-router-dom';
@@ -35,6 +34,7 @@ import { useAppDispatch, useAppSelector } from '../hooks';
 import userSelector from '../store/selectors';
 
 function Registration() {
+  const matches = useMediaQuery('(max-width: 48em)');
   const dispatch = useAppDispatch();
   const { error, loading } = useAppSelector(userSelector);
   const [countries, setCountries] = useState<Country[]>([]);
@@ -125,6 +125,7 @@ function Registration() {
     transformValues: (values) => transformRegistrationData(values, !opened),
   });
 
+
   useEffect(() => {
     setFieldError('email', error);
   }, [error]);
@@ -175,13 +176,33 @@ function Registration() {
       .then(() => alert(modalMessage));
   };
 
+  const makeSameAddressesCheckbox = (
+    <Checkbox
+      mt="xs"
+      mx="auto"
+      label="Use the same address for billing"
+      checked={!opened}
+      onChange={() => {
+        toggle();
+
+        if (opened) {
+          setBillingCountry(false);
+
+          setFieldValue('billingAddress', {
+            ...formValues.shippingAddress,
+            isAddressDefault: formValues.billingAddress.isAddressDefault,
+          });
+        }
+      }}
+    />
+  );
   return (
     <Paper
       mt="xs"
       shadow="xs"
       style={{ border: '1px solid orange', zIndex: 0 }}
       p="xs"
-      maw={600}
+      maw={900}
       mx="auto"
       pos="relative"
     >
@@ -192,165 +213,182 @@ function Registration() {
         visible={loading}
         overlayBlur={2}
       />
-
-      <Title align="center" color="orange" order={1} size="h1">
+       <Title
+        align="center"
+        color="orange"
+        order={1}
+        size={matches ? 'h2' : 'h1'}
+      >
         Registration
       </Title>
       <form onSubmit={onSubmit(handleSubmit)}>
         <Flex direction="column" justify="center" gap={10}>
-          <TextInput
-            withAsterisk
-            placeholder="Vasya"
-            label="First name"
-            {...getInputProps('firstName')}
-          />
-          <TextInput
-            withAsterisk
-            placeholder="Pupkin"
-            label="Last name"
-            {...getInputProps('lastName')}
-          />
-          <TextInput
-            withAsterisk
-            placeholder="example@gmail.com"
-            label="Email"
-            icon={<IconMail size="1rem" />}
-            {...getInputProps('email')}
-          />
-          <PasswordInput
-            withAsterisk
-            label="Password"
-            {...getInputProps('password')}
-          />
-          <DateInput
-            withAsterisk
-            valueFormat="YYYY-MM-DD"
-            label="Birthday"
-            placeholder="1974-01-01"
-            {...getInputProps('dateOfBirthday')}
-          />
-          <Box>
-            <Title mt="xl" order={3} size="h3">
-              Shipping address
-            </Title>
-            <Paper mt="xs" shadow="xs" p="xs">
-              <Flex direction="column" gap={10}>
-                <TextInput
-                  withAsterisk
-                  placeholder="Lenin st. 12-01"
-                  label="Street"
-                  {...getInputProps('shippingAddress.street')}
-                  onChange={(event) => {
-                    shippingStreetHandle(event);
+          <Flex direction={matches ? 'column' : 'row'} gap={20}>
+            <TextInput
+              w="100%"
+              withAsterisk
+              placeholder="Vasya"
+              label="First name"
+              {...getInputProps('firstName')}
+            />
+            <TextInput
+              w="100%"
+              withAsterisk
+              placeholder="Pupkin"
+              label="Last name"
+              {...getInputProps('lastName')}
+            />
+          </Flex>
 
-                    if (!opened) billingStreetHandle(event);
-                  }}
-                />
-                <TextInput
-                  withAsterisk
-                  placeholder="Minsk"
-                  label="City"
-                  {...getInputProps('shippingAddress.city')}
-                  onChange={(event) => {
-                    shippingCityHandle(event);
+          <Flex direction={matches ? 'column' : 'row'} gap={20}>
+            <TextInput
+              w="100%"
+              withAsterisk
+              placeholder="example@gmail.com"
+              label="Email"
+              icon={<IconMail size="1rem" />}
+              {...getInputProps('email')}
+            />
+            <PasswordInput
+              w="100%"
+              withAsterisk
+              label="Password"
+              {...getInputProps('password')}
+            />
+            <DateInput
+              w="100%"
+              withAsterisk
+              valueFormat="YYYY-MM-DD"
+              label="Birthday"
+              placeholder="1974-01-01"
+              {...getInputProps('dateOfBirthday')}
+            />
+          </Flex>
 
-                    if (!opened) billingCityHandle(event);
-                  }}
-                />
-                <Select
-                  withAsterisk
-                  placeholder="Belarus"
-                  label="Country"
-                  searchable
-                  data={countries}
-                  {...getInputProps('shippingAddress.country')}
-                  onChange={(event) => {
-                    shippingCountryHandle(event);
+          <Flex gap={20} direction={matches ? 'column' : 'row'}>
+            <Box w="100%">
+              <Title mt="xl" order={3} size={matches ? 'h4' : 'h3'}>
+                Shipping address
+              </Title>
+              <Paper mt="xs" shadow="xs" p="xs">
+                <Flex direction="column" gap={10}>
+                  <TextInput
+                    withAsterisk
+                    placeholder="Lenin st. 12-01"
+                    label="Street"
+                    {...getInputProps('shippingAddress.street')}
+                    onChange={(event) => {
+                      shippingStreetHandle(event);
 
-                    if (!opened) billingCountryHandle(event);
-                  }}
-                />
-                <TextInput
-                  withAsterisk
-                  placeholder="AF-35A"
-                  label="Postal code"
-                  disabled={!shippingCountry}
-                  {...getInputProps('shippingAddress.postalCode')}
-                  onChange={(event) => {
-                    shippingPostalCodeHandle(event);
+                      if (!opened) billingStreetHandle(event);
+                    }}
+                  />
+                  <TextInput
+                    withAsterisk
+                    placeholder="Minsk"
+                    label="City"
+                    {...getInputProps('shippingAddress.city')}
+                    onChange={(event) => {
+                      shippingCityHandle(event);
 
-                    if (!opened) billingPostalCodeHandle(event);
-                  }}
-                />
+                      if (!opened) billingCityHandle(event);
+                    }}
+                  />
+                  <Select
+                    withAsterisk
+                    placeholder="Belarus"
+                    label="Country"
+                    searchable
+                    data={countries}
+                    {...getInputProps('shippingAddress.country')}
+                    onChange={(event) => {
+                      shippingCountryHandle(event);
 
-                <Flex justify="space-between">
+                      if (!opened) billingCountryHandle(event);
+                    }}
+                  />
+                  <TextInput
+                    withAsterisk
+                    placeholder="AF-35A"
+                    label="Postal code"
+                    disabled={!shippingCountry}
+                    {...getInputProps('shippingAddress.postalCode')}
+                    onChange={(event) => {
+                      shippingPostalCodeHandle(event);
+
+                      if (!opened) billingPostalCodeHandle(event);
+                    }}
+                  />
+
                   <Switch
                     label="Set as default shipping address"
                     {...getInputProps('shippingAddress.isAddressDefault')}
                   />
-                  {!opened && billingSwitch}
                 </Flex>
-              </Flex>
-            </Paper>
-          </Box>
-          <Checkbox
-            mt="xs"
-            label="Use the same address for billing"
-            onChange={() => {
-              toggle();
+              </Paper>
+            </Box>
 
-              if (opened) {
-                setFieldValue('billingAddress', {
-                  ...formValues.shippingAddress,
-                  isAddressDefault: formValues.billingAddress.isAddressDefault,
-                });
-              }
-            }}
-          />
-          <Collapse in={opened}>
-            <Title mt="xl" order={3} size="h3">
-              Billing address
-            </Title>
-            <Paper mt="xs" shadow="xs" p="xs">
-              <Flex direction="column" gap={10}>
-                <TextInput
-                  withAsterisk
-                  placeholder="Billing st. 12-01"
-                  label="Street"
-                  {...getInputProps('billingAddress.street')}
-                  onChange={billingStreetHandle}
-                />
-                <TextInput
-                  withAsterisk
-                  placeholder="Minsk"
-                  label="City"
-                  {...getInputProps('billingAddress.city')}
-                  onChange={billingCityHandle}
-                />
-                <Select
-                  withAsterisk
-                  placeholder="Belarus"
-                  label="Country"
-                  searchable
-                  data={countries}
-                  {...getInputProps('billingAddress.country')}
-                  onChange={billingCountryHandle}
-                />
-                <TextInput
-                  withAsterisk
-                  placeholder="AF-35A"
-                  label="Postal code"
-                  disabled={!billingCountry}
-                  {...getInputProps('billingAddress.postalCode')}
-                  onChange={billingPostalCodeHandle}
-                />
+            {matches && makeSameAddressesCheckbox}
 
-                {opened && billingSwitch}
-              </Flex>
-            </Paper>
-          </Collapse>
+            <Box w="100%">
+              <Title mt="xl" order={3} size={matches ? 'h4' : 'h3'}>
+                Billing address
+              </Title>
+              <Paper mt="xs" shadow="xs" p="xs">
+                <Flex direction="column" gap={10}>
+                  <TextInput
+                    disabled={!opened}
+                    withAsterisk
+                    placeholder="Billing st. 12-01"
+                    label="Street"
+                    {...getInputProps('billingAddress.street')}
+                    onChange={billingStreetHandle}
+                  />
+                  <TextInput
+                    disabled={!opened}
+                    withAsterisk
+                    placeholder="Minsk"
+                    label="City"
+                    {...getInputProps('billingAddress.city')}
+                    onChange={billingCityHandle}
+                  />
+                  <Select
+                    withAsterisk
+                    disabled={!opened}
+                    placeholder="Belarus"
+                    label="Country"
+                    searchable
+                    data={countries}
+                    {...getInputProps('billingAddress.country')}
+                    onChange={billingCountryHandle}
+                  />
+                  <TextInput
+                    withAsterisk
+                    placeholder="AF-35A"
+                    label="Postal code"
+                    disabled={!billingCountry || !opened}
+                    {...getInputProps('billingAddress.postalCode')}
+                    onChange={billingPostalCodeHandle}
+                  />
+                  <Switch
+                    {...getInputProps('billingAddress.isAddressDefault')}
+                    checked={formValues.billingAddress.isAddressDefault}
+                    label="Set as default billing address"
+                  />
+                </Flex>
+              </Paper>
+            </Box>
+          </Flex>
 
-          <Button type="submit" m="auto" w="40%" color="orange" size="md">
+          {!matches && makeSameAddressesCheckbox}
+
+          <Button
+            type="submit"
+            m="auto"
+            w={matches ? '100%' : '40%'}
+            color="orange"
+            size="md"
+          >
             Sign up
           </Button>
 
