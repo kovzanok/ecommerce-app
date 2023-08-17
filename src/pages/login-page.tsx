@@ -11,15 +11,16 @@ import { useForm } from '@mantine/form';
 import { CustomerSignin } from '@commercetools/platform-sdk';
 import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { useAppDispatch, useAppSelector, useTitle } from '../hooks';
 import { validateEmail, validatePassword } from '../utils/field-validation';
 import { signIn } from '../store/slices/userSlice';
 import userSelector from '../store/selectors';
 
 export default function LoginPage() {
+  useTitle('Login');
   const dispatch = useAppDispatch();
   const { loading, error } = useAppSelector(userSelector);
-  const form = useForm<CustomerSignin>({
+  const { setFieldError, onSubmit, getInputProps } = useForm<CustomerSignin>({
     initialValues: {
       email: '',
       password: '',
@@ -32,9 +33,9 @@ export default function LoginPage() {
   });
 
   useEffect(() => {
-    form.setFieldError('email', error);
-    form.setFieldError('password', error);
-  }, [error]);
+    setFieldError('email', error);
+    setFieldError('password', error);
+  }, [error, setFieldError]);
 
   const handleSubmit = (values: CustomerSignin) => {
     dispatch(signIn(values));
@@ -47,7 +48,7 @@ export default function LoginPage() {
           Login
         </Title>
         <form
-          onSubmit={form.onSubmit(handleSubmit)}
+          onSubmit={onSubmit(handleSubmit)}
           style={{
             border: '1px solid orange',
             borderRadius: '5px',
@@ -59,13 +60,13 @@ export default function LoginPage() {
               withAsterisk
               label="Email"
               placeholder="your@email.com"
-              {...form.getInputProps('email')}
+              {...getInputProps('email')}
             />
             <PasswordInput
               disabled={loading}
               withAsterisk
               label="Password"
-              {...form.getInputProps('password')}
+              {...getInputProps('password')}
             />
             <Button
               disabled={loading}

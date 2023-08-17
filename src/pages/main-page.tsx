@@ -1,8 +1,10 @@
 import { Flex, Title } from '@mantine/core';
 import { PageLink } from '../types';
 import PageCard from '../components/page-card';
+import { useTitle } from '../hooks';
 
 export default function MainPage() {
+  useTitle('Main');
   const links: PageLink[] = [
     {
       to: '/login',

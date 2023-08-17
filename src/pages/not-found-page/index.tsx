@@ -3,8 +3,10 @@ import {
 } from '@mantine/core';
 import { NavLink } from 'react-router-dom';
 import imageSrc from '../../assets/not-found.png';
+import { useTitle } from '../../hooks';
 
 export default function NotFoundPage() {
+  useTitle('Not found');
   return (
     <Container>
       <Flex wrap="wrap" columnGap={10} align="center" justify="space-evenly">
