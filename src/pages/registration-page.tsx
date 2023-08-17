@@ -16,8 +16,8 @@ import { useForm } from '@mantine/form';
 import { IconMail } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
-import getCountriesArray from '../utils';
-import { Country } from '../types';
+import getCountriesArray, { transformRegistrationData } from '../utils';
+import { Country, FormValues } from '../types';
 import {
   validateBirthday,
   validateEmail,
@@ -26,28 +26,6 @@ import {
   validateString,
   validatePostalCode,
 } from '../utils/field-validation';
-
-interface FormValues {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  dateOfBirthday: string;
-
-  shippingAddress: {
-    country: string;
-    postalCode: string;
-    city: string;
-    street: string;
-  };
-
-  billingAddress: {
-    country: string;
-    postalCode: string;
-    city: string;
-    street: string;
-  };
-}
 
 function Registration() {
   const [countries, setCountries] = useState<Country[]>([]);
@@ -81,12 +59,14 @@ function Registration() {
         postalCode: '',
         city: '',
         street: '',
+        isAddressDefault: false,
       },
       billingAddress: {
         country: '',
         postalCode: '',
         city: '',
         street: '',
+        isAddressDefault: false,
       },
     },
 
@@ -132,6 +112,7 @@ function Registration() {
 
   const billingSwitch = (
     <Switch
+      {...getInputProps('billingAddress.isAddressDefault')}
       onChange={() => {
         setIsBillingAddressChecked(!isBillingAddressChecked);
       }}
@@ -139,6 +120,41 @@ function Registration() {
       label="Set as default billing address"
     />
   );
+
+  const { onChange: shippingCityHandle } = getInputProps(
+    'shippingAddress.city',
+  );
+
+  const { onChange: billingCityHandle } = getInputProps('billingAddress.city');
+
+  const { onChange: shippingStreetHandle } = getInputProps(
+    'shippingAddress.street',
+  );
+
+  const { onChange: billingStreetHandle } = getInputProps(
+    'billingAddress.street',
+  );
+
+  const { onChange: shippingCountryHandle } = getInputProps(
+    'shippingAddress.country',
+  );
+
+  const { onChange: billingCountryHandle } = getInputProps(
+    'billingAddress.country',
+  );
+
+  const { onChange: shippingPostalCodeHandle } = getInputProps(
+    'shippingAddress.postalCode',
+  );
+
+  const { onChange: billingPostalCodeHandle } = getInputProps(
+    'billingAddress.postalCode',
+  );
+
+  const handleSubmit = (values: FormValues) => {
+    console.log(values);
+    console.log(transformRegistrationData(values, !opened));
+  };
 
   return (
     <Paper
@@ -152,7 +168,7 @@ function Registration() {
       <Title align="center" color="orange" order={1} size="h1">
         Registration
       </Title>
-      <form onSubmit={onSubmit(console.log)}>
+      <form onSubmit={onSubmit(handleSubmit)}>
         <Flex direction="column" justify="center" gap={10}>
           <TextInput
             withAsterisk
@@ -196,12 +212,22 @@ function Registration() {
                   placeholder="Lenin st. 12-01"
                   label="Street"
                   {...getInputProps('shippingAddress.street')}
+                  onChange={(event) => {
+                    shippingStreetHandle(event);
+
+                    if (!opened) billingStreetHandle(event);
+                  }}
                 />
                 <TextInput
                   withAsterisk
                   placeholder="Minsk"
                   label="City"
                   {...getInputProps('shippingAddress.city')}
+                  onChange={(event) => {
+                    shippingCityHandle(event);
+
+                    if (!opened) billingCityHandle(event);
+                  }}
                 />
                 <Select
                   withAsterisk
@@ -210,6 +236,11 @@ function Registration() {
                   searchable
                   data={countries}
                   {...getInputProps('shippingAddress.country')}
+                  onChange={(event) => {
+                    shippingCountryHandle(event);
+
+                    if (!opened) billingCountryHandle(event);
+                  }}
                 />
                 <TextInput
                   withAsterisk
@@ -217,10 +248,18 @@ function Registration() {
                   label="Postal code"
                   disabled={!shippingCountry}
                   {...getInputProps('shippingAddress.postalCode')}
+                  onChange={(event) => {
+                    shippingPostalCodeHandle(event);
+
+                    if (!opened) billingPostalCodeHandle(event);
+                  }}
                 />
 
                 <Flex justify="space-between">
-                  <Switch label="Set as default shipping address" />
+                  <Switch
+                    label="Set as default shipping address"
+                    {...getInputProps('shippingAddress.isAddressDefault')}
+                  />
                   {!opened && billingSwitch}
                 </Flex>
               </Flex>
@@ -229,7 +268,9 @@ function Registration() {
           <Checkbox
             mt="xs"
             label="Use the same address for billing"
-            onChange={toggle}
+            onChange={() => {
+              toggle();
+            }}
           />
           <Collapse in={opened}>
             <Title mt="xl" order={3} size="h3">
@@ -242,12 +283,14 @@ function Registration() {
                   placeholder="Billing st. 12-01"
                   label="Street"
                   {...getInputProps('billingAddress.street')}
+                  onChange={billingStreetHandle}
                 />
                 <TextInput
                   withAsterisk
                   placeholder="Minsk"
                   label="City"
                   {...getInputProps('billingAddress.city')}
+                  onChange={billingCityHandle}
                 />
                 <Select
                   withAsterisk
@@ -256,6 +299,7 @@ function Registration() {
                   searchable
                   data={countries}
                   {...getInputProps('billingAddress.country')}
+                  onChange={billingCountryHandle}
                 />
                 <TextInput
                   withAsterisk
@@ -263,6 +307,7 @@ function Registration() {
                   label="Postal code"
                   disabled={!billingCountry}
                   {...getInputProps('billingAddress.postalCode')}
+                  onChange={billingPostalCodeHandle}
                 />
 
                 {opened && billingSwitch}
