@@ -30,7 +30,7 @@ import {
   validatePostalCode,
 } from '../utils/field-validation';
 import { signUp } from '../store/slices/userSlice';
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { useAppDispatch, useAppSelector, useTitle } from '../hooks';
 import userSelector from '../store/selectors';
 
 function Registration() {
@@ -41,7 +41,7 @@ function Registration() {
 
   const [billingCountry, setBillingCountry] = useState(false);
   const [shippingCountry, setShippingCountry] = useState(false);
-
+  useTitle('Register');
   useEffect(() => {
     setCountries(getCountriesArray());
   }, []);
@@ -127,7 +127,7 @@ function Registration() {
 
   useEffect(() => {
     setFieldError('email', error);
-  }, [error]);
+  }, [error, setFieldError]);
 
   const { onChange: shippingCityHandle } = getInputProps(
     'shippingAddress.city',
