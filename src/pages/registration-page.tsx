@@ -34,8 +34,7 @@ import userSelector from '../store/selectors';
 
 function Registration() {
   const dispatch = useAppDispatch();
-
-  const { loading } = useAppSelector(userSelector);
+  const { error, loading } = useAppSelector(userSelector);
   const [countries, setCountries] = useState<Country[]>([]);
 
   const [billingCountry, setBillingCountry] = useState(false);
@@ -56,6 +55,7 @@ function Registration() {
     onSubmit,
     getInputProps,
     setFieldValue,
+    setFieldError,
     values: formValues,
   } = useForm({
     initialValues: {
@@ -122,6 +122,10 @@ function Registration() {
 
     transformValues: (values) => transformRegistrationData(values, !opened),
   });
+
+  useEffect(() => {
+    setFieldError('email', error);
+  }, [error]);
 
   const billingSwitch = (
     <Switch
