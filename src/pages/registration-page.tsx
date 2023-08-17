@@ -27,8 +27,11 @@ import {
   validateString,
   validatePostalCode,
 } from '../utils/field-validation';
+import { useAppSelector } from '../hooks';
+import userSelector from '../store/selectors';
 
 function Registration() {
+  const { error } = useAppSelector(userSelector);
   const [countries, setCountries] = useState<Country[]>([]);
 
   const [billingCountry, setBillingCountry] = useState(false);
@@ -49,6 +52,7 @@ function Registration() {
     onSubmit,
     getInputProps,
     setFieldValue,
+    setFieldError,
     values: formValues,
   } = useForm({
     initialValues: {
@@ -115,6 +119,10 @@ function Registration() {
 
     transformValues: (values) => transformRegistrationData(values, !opened),
   });
+
+  useEffect(() => {
+    setFieldError('email', error);
+  }, [error]);
 
   const billingSwitch = (
     <Switch
