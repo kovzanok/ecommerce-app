@@ -348,7 +348,13 @@ function Registration() {
 
           {!matches && makeSameAddressesCheckbox}
 
-          <Button type="submit" m="auto" w="40%" color="orange" size="md">
+          <Button
+            type="submit"
+            m="auto"
+            w={matches ? '100%' : '40%'}
+            color="orange"
+            size="md"
+          >
             Sign up
           </Button>
         </Flex>
