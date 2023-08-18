@@ -7,7 +7,7 @@ import {
 } from '.';
 
 describe('validateString', () => {
-  it('field is empty', () => {
+  it('should return error, if field is empty', () => {
     const actual = '';
 
     expect(validateString(actual)).toBe(
@@ -21,7 +21,7 @@ describe('validateString', () => {
       'This field must contain no special characters or numbers',
     );
   });
-  it('field is valid', () => {
+  it('should pass validation', () => {
     const actual = 'Alexei';
 
     expect(validateString(actual)).toBe(undefined);
@@ -29,7 +29,7 @@ describe('validateString', () => {
 });
 
 describe('validateStreet', () => {
-  it('field is empty', () => {
+  it('should return error, if field is empty', () => {
     const actual = '';
 
     expect(validateStreet(actual)).toBe(
@@ -37,7 +37,7 @@ describe('validateStreet', () => {
     );
   });
 
-  it('field is valid', () => {
+  it('should pass validation', () => {
     const actual = 'Baker street';
 
     expect(validateStreet(actual)).toBe(undefined);
@@ -45,19 +45,19 @@ describe('validateStreet', () => {
 });
 
 describe('validateBirthday', () => {
-  it('field is empty', () => {
+  it('should return error, if field is empty', () => {
     const actual = '';
 
     expect(validateBirthday(actual)).toBe('Choose your age');
   });
-  it('user is younger a 13', () => {
+  it('should return error, if user is younger then 13', () => {
     const actual = '2020-12-12';
 
     expect(validateBirthday(actual)).toBe(
       'A valid date input ensuring the user is above a 13',
     );
   });
-  it('field is valid', () => {
+  it('should pass validation', () => {
     const actual = '2000-12-12';
 
     expect(validateBirthday(actual)).toBe(undefined);
@@ -65,7 +65,7 @@ describe('validateBirthday', () => {
 });
 
 describe('validatePostalCode', () => {
-  it('postalCode is incorrect', () => {
+  it('should return error after incorrect postal code', () => {
     const actualPostalCode = '123456';
     const actualCountry = 'US';
 
@@ -73,7 +73,7 @@ describe('validatePostalCode', () => {
       'This postal code is incorrect!',
     );
   });
-  it('postalCode is valid', () => {
+  it('should pass validation', () => {
     const actualPostalCode = '12345';
     const actualCountry = 'US';
 
