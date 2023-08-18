@@ -14,7 +14,7 @@ describe('validateString', () => {
       'This field must contain at least one character',
     );
   });
-  it('field has special characters', () => {
+  it('should return error, if field has special characters', () => {
     const actual = 'St$reet';
 
     expect(validateString(actual)).toBe(
