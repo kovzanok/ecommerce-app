@@ -1,6 +1,7 @@
 import { describe, it } from 'vitest';
 import {
   validateBirthday,
+  validateEmail,
   validatePostalCode,
   validateStreet,
   validateString,
@@ -78,5 +79,37 @@ describe('validatePostalCode', () => {
     const actualCountry = 'US';
 
     expect(validatePostalCode(actualPostalCode, actualCountry)).toBe(undefined);
+  });
+});
+
+describe('validateEmail', () => {
+  const testCases = [
+    {
+      name: 'should return error for email containing leading or trailing spaces',
+      inValue: ' test@test.com',
+      expectedValue:
+        'Email address must not contain leading or trailing whitespace',
+    },
+    {
+      name: 'should return error for email not containing an "@" symbol separating local part and domain name',
+      inValue: 'testtest.com',
+      expectedValue:
+        'Email address must contain an "@" symbol separating local part and domain name',
+    },
+    {
+      name: 'should return error for email not containing a domain name',
+      inValue: 'test@test',
+      expectedValue: 'Email address must contain a domain name',
+    },
+    {
+      name: 'should return error for email not properly formatted',
+      inValue: 'test test@test.com',
+      expectedValue: 'Email address must be properly formatted',
+    },
+  ];
+  testCases.forEach((test) => {
+    it(test.name, () => {
+      expect(validateEmail(test.inValue)).toBe(test.expectedValue);
+    });
   });
 });
