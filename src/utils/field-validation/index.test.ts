@@ -2,6 +2,7 @@ import { describe, it } from 'vitest';
 import {
   validateBirthday,
   validateEmail,
+  validatePassword,
   validatePostalCode,
   validateStreet,
   validateString,
@@ -110,6 +111,49 @@ describe('validateEmail', () => {
   testCases.forEach((test) => {
     it(test.name, () => {
       expect(validateEmail(test.inValue)).toBe(test.expectedValue);
+    });
+  });
+});
+
+describe('validatePassword', () => {
+  const testCases = [
+    {
+      name: 'should return error for password length less than 8',
+      inValue: 'Aa1 @',
+      expectedValue: 'Password must be at least 8 characters long',
+    },
+    {
+      name: 'should return error for password containing leading or trailing spaces',
+      inValue: 'Test1234@ ',
+      expectedValue: 'Password must not contain leading or trailing whitespace',
+    },
+    {
+      name: 'should return error for password not containing at least one uppercase letter (A-Z)',
+      inValue: 'test123@',
+      expectedValue:
+        'Password must contain at least one uppercase letter (A-Z)',
+    },
+    {
+      name: 'should return error for password not containing at least one lowercase letter (a-z)',
+      inValue: 'TEST123#',
+      expectedValue:
+        'Password must contain at least one lowercase letter (a-z)',
+    },
+    {
+      name: 'should return error for password not containing at least one digit (0-9)',
+      inValue: 'TestTest#@',
+      expectedValue: 'Password must contain at least one digit (0-9)',
+    },
+    {
+      name: 'should return error for password not containing at least one special character (e.g., !@#$%^&*)',
+      inValue: 'Test1234',
+      expectedValue:
+        'Password must contain at least one special character (e.g., !@#$%^&*)',
+    },
+  ];
+  testCases.forEach((test) => {
+    it(test.name, () => {
+      expect(validatePassword(test.inValue)).toBe(test.expectedValue);
     });
   });
 });
