@@ -80,7 +80,7 @@ export default function LoginPage() {
             </Button>
             <Text m="auto">
               Don&apos;t have a account?&nbsp;
-              <NavLink to="/register">Sing up</NavLink>
+              <NavLink to="/register">Sign up</NavLink>
             </Text>
           </Flex>
         </form>
