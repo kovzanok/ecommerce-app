@@ -20,6 +20,12 @@
       { "allowConstantExport": true }
     ],
     "react/react-in-jsx-scope": 0,
-    "no-console": 0
+    "no-console": 0,
+    "no-param-reassign": ["error", { "props": false }],
+    "consistent-return": 0,
+    "react/jsx-props-no-spreading": 0,
+    "default-case": 0,
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "no-alert": 0
   }
 }
