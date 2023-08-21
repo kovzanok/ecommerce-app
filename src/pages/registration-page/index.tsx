@@ -19,8 +19,8 @@ import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { CustomerDraft } from '@commercetools/platform-sdk';
 import { NavLink } from 'react-router-dom';
-import getCountriesArray, { transformRegistrationData } from '../utils';
-import { Country, FormValues } from '../types';
+import getCountriesArray, { transformRegistrationData } from '../../utils';
+import { Country, FormValues } from '../../types';
 import {
   validateBirthday,
   validateEmail,
@@ -28,10 +28,10 @@ import {
   validateStreet,
   validateString,
   validatePostalCode,
-} from '../utils/field-validation';
-import { signUp } from '../store/slices/userSlice';
-import { useAppDispatch, useAppSelector, useTitle } from '../hooks';
-import userSelector from '../store/selectors';
+} from '../../utils/field-validation';
+import { signUp } from '../../store/slices/userSlice';
+import { useAppDispatch, useAppSelector, useTitle } from '../../hooks';
+import userSelector from '../../store/selectors';
 
 function Registration() {
   const matches = useMediaQuery('(max-width: 48em)');
@@ -162,8 +162,6 @@ function Registration() {
   const modalMessage = 'Congratulations! Your account has been successfully created.';
 
   const handleSubmit = (values: CustomerDraft) => {
-    console.log(values);
-
     dispatch(signUp(values))
       .unwrap()
       .then(() => alert(modalMessage));
@@ -332,7 +330,7 @@ function Registration() {
                   <TextInput
                     disabled={!opened}
                     withAsterisk
-                    placeholder="Billing st. 12-01"
+                    placeholder="Lenin st. 12-01"
                     label="Street"
                     {...getInputProps('billingAddress.street')}
                     onChange={billingStreetHandle}
