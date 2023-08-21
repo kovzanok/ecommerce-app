@@ -8,7 +8,7 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --fix --report-unused-disable-directives --max-warnings 0",
-    "prettier": "prettier src test --check",
+    "prettier": "prettier src --check",
     "prettier:fix": "npm run prettier -- --write",
     "test": "vitest",
     "coverage": "vitest run --coverage",
