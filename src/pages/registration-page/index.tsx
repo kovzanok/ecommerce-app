@@ -164,7 +164,8 @@ function Registration() {
   const handleSubmit = (values: CustomerDraft) => {
     dispatch(signUp(values))
       .unwrap()
-      .then(() => alert(modalMessage));
+      .then(() => alert(modalMessage))
+      .catch(console.log);
   };
 
   const makeSameAddressesCheckbox = (
