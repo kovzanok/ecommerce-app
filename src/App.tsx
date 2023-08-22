@@ -5,6 +5,8 @@ import NotFoundPage from './pages/not-found-page';
 import AuthRoute from './components/auth-route';
 import MainPage from './pages/main-page';
 import Registration from './pages/registration-page';
+import CatalogPage from './pages/catalog-page';
+import ProductPage from './pages/product-page';
 
 function App() {
   return (
@@ -16,6 +18,9 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<Registration />} />
           </Route>
+          <Route path="/catalog" element={<CatalogPage />} />
+          <Route path="/catalog/:category" element={<CatalogPage />} />
+          <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/*" element={<NotFoundPage />} />
         </Route>
       </Routes>
