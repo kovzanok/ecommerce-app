@@ -5,6 +5,7 @@ import NotFoundPage from './pages/not-found-page';
 import AuthRoute from './components/auth-route';
 import MainPage from './pages/main-page';
 import Registration from './pages/registration-page';
+import UserPage from './pages/user-page';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<Registration />} />
           </Route>
+          <Route path="/user" element={<UserPage />} />
           <Route path="/*" element={<NotFoundPage />} />
         </Route>
       </Routes>
