@@ -59,6 +59,9 @@ const userSlice = createSlice({
       state.error = '';
       state.loading = false;
     },
+    resetError: (state) => {
+      state.error = '';
+    },
   },
   extraReducers(builder) {
     builder.addCase(signIn.pending, (state) => {
@@ -102,6 +105,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { logout } = userSlice.actions;
+export const { logout, resetError } = userSlice.actions;
 
 export default userSlice.reducer;
