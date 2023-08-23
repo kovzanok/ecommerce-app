@@ -58,7 +58,7 @@ export default function ProductCard({
   const engDescription = description && description['en-US'];
 
   const priceContent = price ? (
-    <Flex mt={5} justify="space-evenly">
+    <Flex mt={5} justify="space-evenly" w="100%">
       {price?.discounted && <DiscountedPriceBlock {...price.discounted} />}
       <PriceBlock {...price} />
     </Flex>
