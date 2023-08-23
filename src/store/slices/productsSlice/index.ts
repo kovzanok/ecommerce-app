@@ -15,7 +15,7 @@ type ProductsState = {
 
 const initialState: ProductsState = {
   products: [],
-  loading: false,
+  loading: true,
   error: '',
 };
 
