@@ -67,12 +67,13 @@ export default function ProductCard({
   return (
     <NavLink style={{ textDecoration: 'none' }} to={`/product/${id}`}>
       <Card ta="center" withBorder w={200}>
-        <Flex h="100%" direction="column" justify="space-between">
-          <img
-            style={{ height: '200px' }}
-            alt={name['en-US']}
-            src={mainImage}
-          />
+        <Flex
+          align="center"
+          h="100%"
+          direction="column"
+          justify="space-between"
+        >
+          <img width="80%" height="200px" alt={name['en-US']} src={mainImage} />
           {priceContent}
           <Flex mt={5} ta="center" direction="column">
             <Title h={50} order={5}>
