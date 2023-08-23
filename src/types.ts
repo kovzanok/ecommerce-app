@@ -37,3 +37,48 @@ export interface FormValues {
     isAddressDefault: boolean;
   };
 }
+
+export type ProductAttributes = [
+  PublishedType,
+  CoverType,
+  AuthorType,
+  AgeType,
+  PublisherType,
+];
+
+export type PublishedType = {
+  name: 'Published';
+  value: number;
+};
+
+type CoverType = {
+  name: 'Cover';
+  value: {
+    key: string;
+    label: string;
+  };
+};
+
+export type AuthorType = {
+  name: 'Author';
+  value: {
+    key: string;
+    label: string;
+  };
+};
+
+type AgeType = {
+  name: 'Age_restrictions';
+  value: {
+    key: string;
+    label: string;
+  };
+};
+
+type PublisherType = {
+  name: 'publisher';
+  value: {
+    key: string;
+    label: string;
+  };
+};
