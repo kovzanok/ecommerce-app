@@ -5,7 +5,7 @@ import { ProductsQuery } from '../../../types';
 
 export const fetchProducts = createAsyncThunk(
   'products/fetch',
-  async (query: ProductsQuery | undefined) => {
+  async (query: ProductsQuery) => {
     const res = ApiService.getProducts(query);
     return res;
   },

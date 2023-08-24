@@ -1,6 +1,18 @@
-import { Attribute, CustomerDraft } from '@commercetools/platform-sdk';
+import {
+  Attribute,
+  AttributeDefinition,
+  CustomerDraft,
+} from '@commercetools/platform-sdk';
 import { getAllCountries } from 'countries-and-timezones';
-import { Country, FormValues, ProductAttributes } from '../types';
+import {
+  Country,
+  FilterName,
+  FilterParam,
+  Filters,
+  FormValues,
+  PriceObj,
+  ProductAttributes,
+} from '../types';
 
 export default function getCountriesArray(): Country[] {
   const getAllCountriesObjectValues = Object.values(getAllCountries());
@@ -86,3 +98,43 @@ export const getProductAttribute = <T>(
 
   return attribute;
 };
+
+export const capitalize = (str: string) => str[0].toUpperCase() + str.slice(1);
+
+export const getFilterParams = (
+  attributes: AttributeDefinition[],
+): FilterParam[] => {
+  const filters: FilterParam[] = [];
+  attributes?.forEach(({ type, label, name }) => {
+    const enLabel = label['en-US'] as string;
+    if (type.name === 'enum' || type.name === 'lenum') {
+      const values = type.values.map(({ key, label: label2 }) => {
+        if (typeof label2 === 'string') return { label: label2, value: key };
+        return {
+          label: label['en-US'] as string,
+          value: key,
+        };
+      });
+      filters.push({ label: enLabel, values, name: name as FilterName });
+    }
+  });
+  return filters;
+};
+
+export const createQueryString = (filters: Filters): string[] => Object.entries(filters).map(([key, value]) => {
+  let queryParam: string;
+  switch (true) {
+    case value && typeof value === 'object':
+      const { min, max } = value as PriceObj['price'];
+      queryParam = `variants.price.centAmount:range (${min * 100} to ${
+        max * 100
+      })`;
+      break;
+    case Boolean(value):
+      queryParam = `variants.attributes.${key}.key:"${value}"`;
+      break;
+    default:
+      queryParam = '';
+  }
+  return queryParam;
+});

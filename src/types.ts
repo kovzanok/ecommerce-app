@@ -85,4 +85,23 @@ type PublisherType = {
 
 export type ProductsQuery = {
   search: string;
+  filters: Filters;
+};
+export type FilterParam = {
+  name: FilterName;
+  label: string;
+  values: { value: string; label: string }[];
+};
+
+export type FilterName = 'Cover' | 'Author' | 'Age_restrictions' | 'publisher';
+
+export type Filters = {
+  [name in FilterName]: string;
+} & PriceObj;
+
+export type PriceObj = {
+  price: {
+    min: number;
+    max: number;
+  };
 };

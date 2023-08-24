@@ -30,7 +30,7 @@ export default class ApiService {
     return customer;
   }
 
-  static async getProducts(query: ProductsQuery = { search: '' }) {
+  static async getProducts(query: ProductsQuery) {
     return ProductsModule.getProducts(query);
   }
 }
