@@ -1,13 +1,15 @@
 import {
-  Loader, Flex, Center, Title,
+  Loader, Flex, Center, Title, TextInput, Button,
 } from '@mantine/core';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { IconSearch, IconSquareX } from '@tabler/icons-react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { productsSelector } from '../../store/selectors';
 import { fetchProducts } from '../../store/slices/productsSlice';
 import ProductCard from '../../components/product-card';
 
 export default function CatalogPage() {
+  const [search, setSearch] = useState('');
   const { products, loading } = useAppSelector(productsSelector);
   const dispatch = useAppDispatch();
 
@@ -48,9 +50,38 @@ export default function CatalogPage() {
       );
   }
 
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    dispatch(fetchProducts({ search }));
+  };
   return (
     <Flex columnGap={30}>
-      <div style={{ width: '100%' }}>{content}</div>
+      <div style={{ width: '100%' }}>
+        <form onSubmit={handleSubmit}>
+          <Flex w="100%" columnGap={30} mb={30}>
+            <TextInput
+              rightSection={<IconSquareX style={{ cursor: 'pointer' }} />}
+              rightSectionProps={{
+                onClick: () => {
+                  setSearch('');
+                },
+              }}
+              disabled={loading}
+              w="95%"
+              icon={<IconSearch />}
+              placeholder="Search..."
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
+            />
+            <Button type="submit" color="orange">
+              Search
+            </Button>
+          </Flex>
+        </form>
+        {content}
+      </div>
     </Flex>
   );
 }
