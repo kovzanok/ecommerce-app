@@ -8,7 +8,7 @@ export const fetchProducts = createAsyncThunk('products/fetch', async () => {
 });
 
 type ProductsState = {
-  products: ProductProjection[] | null;
+  products: ProductProjection[];
   loading: boolean;
   error: string;
 };
