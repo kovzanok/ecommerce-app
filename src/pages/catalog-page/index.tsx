@@ -83,6 +83,7 @@ export default function CatalogPage() {
   return (
     <Flex columnGap={30}>
       <FilterForm
+        loading={loading}
         reset={reset}
         onSubmit={applyFilters}
         getInputProps={getInputProps}
