@@ -15,6 +15,7 @@ export function setupStore(
   return configureStore({
     reducer: {
       user: userReducer,
+      products: productReducer,
     },
     preloadedState,
   });

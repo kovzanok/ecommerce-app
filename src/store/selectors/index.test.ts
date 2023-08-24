@@ -8,8 +8,14 @@ describe('userSelector', () => {
       loading: true,
       user: null,
     };
+    const products = {
+      products: [],
+      loading: false,
+      error: '',
+    };
     const store: RootState = {
       user,
+      products,
     };
 
     const result = userSelector(store);

@@ -25,7 +25,7 @@ export interface FormValues {
     country: string;
     postalCode: string;
     city: string;
-    street: string;
+    streetName: string;
     isAddressDefault: boolean;
   };
 
@@ -33,7 +33,7 @@ export interface FormValues {
     country: string;
     postalCode: string;
     city: string;
-    street: string;
+    streetName: string;
     isAddressDefault: boolean;
   };
 }
