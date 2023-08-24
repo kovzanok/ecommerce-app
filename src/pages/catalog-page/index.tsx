@@ -1,9 +1,8 @@
 import {
-  Loader, Flex, Center, Title, TextInput, Button,
+  Loader, Flex, Center, Title,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useEffect, useState } from 'react';
-import { IconSearch, IconSquareX } from '@tabler/icons-react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { productsSelector } from '../../store/selectors';
 import { fetchProducts } from '../../store/slices/productsSlice';
@@ -12,6 +11,7 @@ import FilterForm from '../../components/filters';
 import { FilterParam, Filters } from '../../types';
 import { getFilterParams } from '../../utils';
 import ProductsModule from '../../service/modules/products-module';
+import SearchBar from '../../components/search-bar';
 
 const initialValues: Filters = {
   Age_restrictions: '',
@@ -90,29 +90,19 @@ export default function CatalogPage() {
         filters={filters}
       />
       <div style={{ width: '100%' }}>
-        <form onSubmit={handleSubmit}>
-          <Flex w="100%" columnGap={30} mb={30}>
-            <TextInput
-              rightSection={<IconSquareX style={{ cursor: 'pointer' }} />}
-              rightSectionProps={{
-                onClick: () => {
-                  setSearch('');
-                },
-              }}
-              disabled={loading}
-              w="95%"
-              icon={<IconSearch />}
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-              }}
-            />
-            <Button type="submit" color="orange">
-              Search
-            </Button>
-          </Flex>
-        </form>
+        <Flex mb={20} align="end" columnGap={20}>
+          <SearchBar
+            loading={loading}
+            value={search}
+            handleChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            handleClear={() => {
+              setSearch('');
+            }}
+            handleSearch={handleSubmit}
+          />
+        </Flex>
         {content}
       </div>
     </Flex>
