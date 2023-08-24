@@ -53,7 +53,7 @@ function Registration() {
 
   const addressValidation = {
     city: (val: string) => validateString(val),
-    street: (val: string) => validateStreet(val),
+    streetName: (val: string) => validateStreet(val),
   };
 
   const {
@@ -74,14 +74,14 @@ function Registration() {
         country: '',
         postalCode: '',
         city: '',
-        street: '',
+        streetName: '',
         isAddressDefault: false,
       },
       billingAddress: {
         country: '',
         postalCode: '',
         city: '',
-        street: '',
+        streetName: '',
         isAddressDefault: false,
       },
     },
@@ -139,11 +139,11 @@ function Registration() {
   const { onChange: billingCityHandle } = getInputProps('billingAddress.city');
 
   const { onChange: shippingStreetHandle } = getInputProps(
-    'shippingAddress.street',
+    'shippingAddress.streetName',
   );
 
   const { onChange: billingStreetHandle } = getInputProps(
-    'billingAddress.street',
+    'billingAddress.streetName',
   );
 
   const { onChange: shippingCountryHandle } = getInputProps(
@@ -271,7 +271,7 @@ function Registration() {
                     withAsterisk
                     placeholder="Lenin st. 12-01"
                     label="Street"
-                    {...getInputProps('shippingAddress.street')}
+                    {...getInputProps('shippingAddress.streetName')}
                     onChange={(event) => {
                       shippingStreetHandle(event);
 
@@ -336,7 +336,7 @@ function Registration() {
                     withAsterisk
                     placeholder="Lenin st. 12-01"
                     label="Street"
-                    {...getInputProps('billingAddress.street')}
+                    {...getInputProps('billingAddress.streetName')}
                     onChange={billingStreetHandle}
                   />
                   <TextInput
