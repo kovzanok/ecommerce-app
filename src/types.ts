@@ -86,6 +86,7 @@ type PublisherType = {
 export type ProductsQuery = {
   search: string;
   filters: Filters;
+  sort: Sorting;
 };
 export type FilterParam = {
   name: FilterName;
@@ -105,3 +106,9 @@ export type PriceObj = {
     max: number;
   };
 };
+
+export type Sorting =
+  | 'name.en-US asc'
+  | 'name.en-US desc'
+  | 'price asc'
+  | 'price desc';

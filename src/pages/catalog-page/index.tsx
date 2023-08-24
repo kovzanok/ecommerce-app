@@ -8,8 +8,9 @@ import { productsSelector } from '../../store/selectors';
 import { fetchProducts } from '../../store/slices/productsSlice';
 import ProductCard from '../../components/product-card';
 import FilterForm from '../../components/filters';
-import { FilterParam, Filters } from '../../types';
+import { FilterParam, Filters, Sorting } from '../../types';
 import { getFilterParams } from '../../utils';
+import SortSelect from '../../components/sort-select';
 import ProductsModule from '../../service/modules/products-module';
 import SearchBar from '../../components/search-bar';
 
@@ -25,6 +26,7 @@ const initialValues: Filters = {
 };
 
 export default function CatalogPage() {
+  const [sort, setSort] = useState<Sorting>('name.en-US asc');
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState<FilterParam[]>([]);
   const {
@@ -34,7 +36,7 @@ export default function CatalogPage() {
   const dispatch = useAppDispatch();
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
-    dispatch(fetchProducts({ search, filters: values }));
+    dispatch(fetchProducts({ search, filters: values, sort }));
     ProductsModule.getProductAttributes()
       .catch(console.log)
       .then((res) => res && setFilters(getFilterParams(res)));
@@ -75,10 +77,16 @@ export default function CatalogPage() {
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    dispatch(fetchProducts({ search, filters: values }));
+    dispatch(fetchProducts({ search, filters: values, sort }));
   };
 
-  const applyFilters = onSubmit((appliedFilters) => dispatch(fetchProducts({ search, filters: appliedFilters })));
+  const applyFilters = onSubmit((appliedFilters) => dispatch(fetchProducts({ search, filters: appliedFilters, sort })));
+  const handleChange = (value: string | null) => {
+    setSort(value as Sorting);
+    dispatch(
+      fetchProducts({ search, filters: values, sort: value as Sorting }),
+    );
+  };
 
   return (
     <Flex columnGap={30}>
@@ -89,8 +97,14 @@ export default function CatalogPage() {
         getInputProps={getInputProps}
         filters={filters}
       />
+
       <div style={{ width: '100%' }}>
         <Flex mb={20} align="end" columnGap={20}>
+          <SortSelect
+            handleChange={handleChange}
+            value={sort}
+            loading={loading}
+          />
           <SearchBar
             loading={loading}
             value={search}

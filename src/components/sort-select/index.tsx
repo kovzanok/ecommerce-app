@@ -20,6 +20,7 @@ export default function SortSelect({
   ];
   return (
     <Select
+      color="orange"
       disabled={loading}
       onChange={handleChange}
       value={value}
