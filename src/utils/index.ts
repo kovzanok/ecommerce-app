@@ -1,6 +1,6 @@
-import { CustomerDraft } from '@commercetools/platform-sdk';
+import { Attribute, CustomerDraft } from '@commercetools/platform-sdk';
 import { getAllCountries } from 'countries-and-timezones';
-import { Country, FormValues } from '../types';
+import { Country, FormValues, ProductAttributes } from '../types';
 
 export default function getCountriesArray(): Country[] {
   const getAllCountriesObjectValues = Object.values(getAllCountries());
@@ -75,3 +75,14 @@ export function transformRegistrationData(
 
   return customerDraftData;
 }
+
+export const getProductAttribute = <T>(
+  attributes: Attribute[] | undefined,
+  attributeName: string,
+): T => {
+  const attribute = (attributes as ProductAttributes).find(
+    ({ name }) => name === attributeName,
+  ) as T;
+
+  return attribute;
+};

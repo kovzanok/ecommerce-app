@@ -5,6 +5,7 @@ import {
 } from '@commercetools/platform-sdk';
 import AuthModule from './modules/auth-module';
 import { CreateApiData } from '../types';
+import ProductsModule from './modules/products-module';
 
 export default class ApiService {
   static async signIn(
@@ -26,5 +27,9 @@ export default class ApiService {
       password,
     } as CustomerSignin);
     return customer;
+  }
+
+  static async getProducts() {
+    return ProductsModule.getProducts();
   }
 }
