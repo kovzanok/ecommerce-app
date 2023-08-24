@@ -1,6 +1,7 @@
 import { screen } from '@testing-library/react';
 import { renderWithProviders } from '../../test';
 import CustomHeader from '.';
+import { RootState } from '../../store';
 
 describe('CustomHeader', () => {
   it('should render header with logo', async () => {
@@ -11,7 +12,7 @@ describe('CustomHeader', () => {
     );
   });
   it('should render logout button to authorized users', async () => {
-    const preloadedState = {
+    const preloadedState: RootState = {
       user: {
         user: {
           customer: {
@@ -28,6 +29,11 @@ describe('CustomHeader', () => {
             authenticationMode: 'Password',
           },
         },
+        loading: false,
+        error: '',
+      },
+      products: {
+        products: [],
         loading: false,
         error: '',
       },

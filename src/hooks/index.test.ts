@@ -36,11 +36,16 @@ describe('useAppSelector', () => {
       loading: false,
       error: '',
     };
+    const products = {
+      products: [],
+      loading: false,
+      error: '',
+    };
     const {
       result: { current },
     } = renderHookWithProviders<RootState['user']>(
       () => useAppSelector((state) => state.user),
-      { preloadedState: { user } },
+      { preloadedState: { user, products } },
     );
     expect(current).toStrictEqual(user);
   });
