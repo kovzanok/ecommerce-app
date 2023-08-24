@@ -5,7 +5,7 @@ import CustomHeader from './custom-header';
 export default function Layout() {
   return (
     <AppShell header={<CustomHeader />}>
-      <Container>
+      <Container size="lg">
         <Outlet />
       </Container>
     </AppShell>
