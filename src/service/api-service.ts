@@ -20,6 +20,7 @@ export default class ApiService {
     customerDraft: CustomerDraft,
   ): Promise<CustomerSignInResult | undefined> {
     const { email, password } = customerDraft;
+    AuthModule.resetApiRoot();
     await AuthModule.createCustomer(customerDraft);
     AuthModule.createApiRoot({ email, password } as CreateApiData);
     const customer = await AuthModule.login({
