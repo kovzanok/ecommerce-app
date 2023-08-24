@@ -4,7 +4,7 @@ import {
   CustomerSignin,
 } from '@commercetools/platform-sdk';
 import AuthModule from './modules/auth-module';
-import { CreateApiData } from '../types';
+import { CreateApiData, ProductsQuery } from '../types';
 import ProductsModule from './modules/products-module';
 
 export default class ApiService {
@@ -30,7 +30,7 @@ export default class ApiService {
     return customer;
   }
 
-  static async getProducts() {
-    return ProductsModule.getProducts();
+  static async getProducts(query: ProductsQuery = { search: '' }) {
+    return ProductsModule.getProducts(query);
   }
 }

@@ -1,11 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { ProductProjection } from '@commercetools/platform-sdk';
 import ApiService from '../../../service/api-service';
+import { ProductsQuery } from '../../../types';
 
-export const fetchProducts = createAsyncThunk('products/fetch', async () => {
-  const res = ApiService.getProducts();
-  return res;
-});
+export const fetchProducts = createAsyncThunk(
+  'products/fetch',
+  async (query: ProductsQuery | undefined) => {
+    const res = ApiService.getProducts(query);
+    return res;
+  },
+);
 
 type ProductsState = {
   products: ProductProjection[];
