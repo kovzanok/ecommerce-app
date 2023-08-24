@@ -82,3 +82,7 @@ type PublisherType = {
     label: string;
   };
 };
+
+export type ProductsQuery = {
+  search: string;
+};
