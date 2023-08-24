@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAppDispatch, useAppSelector, useTitle } from '../hooks';
 import { validateEmail, validatePassword } from '../utils/field-validation';
-import { signIn } from '../store/slices/userSlice';
+import { resetError, signIn } from '../store/slices/userSlice';
 import userSelector from '../store/selectors';
 
 export default function LoginPage() {
@@ -31,6 +31,10 @@ export default function LoginPage() {
     },
     validateInputOnChange: true,
   });
+
+  useEffect(() => () => {
+    dispatch(resetError());
+  }, []);
 
   useEffect(() => {
     setFieldError('email', error);

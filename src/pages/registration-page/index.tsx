@@ -29,7 +29,7 @@ import {
   validateString,
   validatePostalCode,
 } from '../../utils/field-validation';
-import { signUp } from '../../store/slices/userSlice';
+import { resetError, signUp } from '../../store/slices/userSlice';
 import { useAppDispatch, useAppSelector, useTitle } from '../../hooks';
 import userSelector from '../../store/selectors';
 
@@ -44,6 +44,9 @@ function Registration() {
   useTitle('Register');
   useEffect(() => {
     setCountries(getCountriesArray());
+    return () => {
+      dispatch(resetError());
+    };
   }, []);
 
   const [opened, { toggle }] = useDisclosure(true);
