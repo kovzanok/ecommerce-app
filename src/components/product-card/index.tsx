@@ -7,6 +7,7 @@ import {
   Flex, Text, Card, Title,
 } from '@mantine/core';
 import { NavLink } from 'react-router-dom';
+import { useHover } from '@mantine/hooks';
 import { AuthorType, PublishedType } from '../../types';
 import { getProductAttribute } from '../../utils';
 
@@ -51,6 +52,7 @@ export default function ProductCard({
   description,
   masterVariant: { prices, images, attributes },
 }: ProductCardProps) {
+  const { hovered, ref } = useHover();
   const price = prices && prices[0];
   const mainImage = images && images[0].url;
   const author = getProductAttribute<AuthorType>(attributes, 'Author');
@@ -66,14 +68,23 @@ export default function ProductCard({
 
   return (
     <NavLink style={{ textDecoration: 'none' }} to={`/product/${id}`}>
-      <Card ta="center" withBorder w={200}>
+      <Card
+        shadow={hovered ? '0px 0px 22px 0px rgba(0,0,0,1)' : ''}
+        style={{
+          border: hovered ? '1px solid black' : '',
+        }}
+        ref={ref}
+        ta="center"
+        withBorder
+        w={270}
+      >
         <Flex
           align="center"
           h="100%"
           direction="column"
           justify="space-between"
         >
-          <img width="80%" height="200px" alt={name['en-US']} src={mainImage} />
+          <img width="60%" height="200px" alt={name['en-US']} src={mainImage} />
           {priceContent}
           <Flex mt={5} ta="center" direction="column">
             <Title h={50} order={5}>
