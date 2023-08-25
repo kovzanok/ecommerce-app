@@ -34,12 +34,14 @@ export default class ApiService {
     return ProductsModule.getProducts(query);
   }
 
+  static async getCategories() {
+    return ProductsModule.getCategories();
+  }
+
   static async getCategoryChain(categoryId: string) {
     const category = await ProductsModule.getCategoryById(categoryId);
     const ancestors = await Promise.all(
-      category.ancestors.map(
-        async ({ id }) => ProductsModule.getCategoryById(id),
-      ),
+      category.ancestors.map(async ({ id }) => ProductsModule.getCategoryById(id)),
     );
     return [...ancestors, category];
   }
