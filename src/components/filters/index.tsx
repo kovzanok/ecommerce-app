@@ -7,6 +7,7 @@ import { capitalize } from '../../utils';
 
 type FiltersProps = {
   filters: FilterParam[];
+  loading: boolean;
   getInputProps: GetInputProps<Filters>;
   onSubmit: (event?: React.FormEvent<HTMLFormElement> | undefined) => void;
   reset: Reset;
@@ -16,6 +17,7 @@ export default function FilterForm({
   filters,
   getInputProps,
   onSubmit,
+  loading,
   reset,
 }: FiltersProps) {
   return (
@@ -33,6 +35,7 @@ export default function FilterForm({
         <Flex direction="column" rowGap={20}>
           {filters.map(({ name, values, label }) => (
             <Select
+              disabled={loading}
               clearable
               searchable
               {...getInputProps(name)}
@@ -43,6 +46,7 @@ export default function FilterForm({
           ))}
           <Flex columnGap={20}>
             <NumberInput
+              disabled={loading}
               {...getInputProps('price.min')}
               hideControls
               min={0}
@@ -51,6 +55,7 @@ export default function FilterForm({
               label="Min price"
             />
             <NumberInput
+              disabled={loading}
               {...getInputProps('price.max')}
               hideControls
               min={0}
@@ -61,10 +66,15 @@ export default function FilterForm({
           </Flex>
         </Flex>
         <Group>
-          <Button type="submit" color="orange">
+          <Button disabled={loading} type="submit" color="orange">
             Apply filters
           </Button>
-          <Button onClick={() => reset()} color="orange" variant="outline">
+          <Button
+            disabled={loading}
+            onClick={() => reset()}
+            color="orange"
+            variant="outline"
+          >
             Reset
           </Button>
         </Group>

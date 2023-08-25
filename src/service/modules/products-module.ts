@@ -12,6 +12,7 @@ export default class ProductsModule extends BaseModule {
   static async getProducts({
     search,
     filters,
+    sort,
   }: ProductsQuery): Promise<ProductProjection[] | undefined> {
     try {
       const queryString = createQueryString(filters);
@@ -21,7 +22,11 @@ export default class ProductsModule extends BaseModule {
         .productProjections()
         .search()
         .get({
-          queryArgs: { 'text.en-US': search, 'filter.query': queryString },
+          queryArgs: {
+            'text.en-US': search,
+            'filter.query': queryString,
+            sort,
+          },
         })
         .execute();
       return results;
