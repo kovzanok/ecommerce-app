@@ -1,6 +1,7 @@
 import {
   Attribute,
   AttributeDefinition,
+  Category,
   CustomerDraft,
 } from '@commercetools/platform-sdk';
 import { getAllCountries } from 'countries-and-timezones';
@@ -13,6 +14,7 @@ import {
   PriceObj,
   ProductAttributes,
 } from '../types';
+import bookCategoryId from './const';
 
 export default function getCountriesArray(): Country[] {
   const getAllCountriesObjectValues = Object.values(getAllCountries());
@@ -138,3 +140,18 @@ export const createQueryString = (filters: Filters): string[] => Object.entries(
   }
   return queryParam;
 });
+
+export const createCategoryMap = (
+  categories: Category[],
+): Map<Category, Category[]> => {
+  const map = new Map<Category, Category[]>();
+  categories.forEach((category, _, array) => {
+    const childrenCategories = array.filter(
+      ({ parent }) => parent?.id === category.id,
+    );
+    if (childrenCategories.length && category.id !== bookCategoryId) {
+      map.set(category, childrenCategories);
+    }
+  });
+  return map;
+};
