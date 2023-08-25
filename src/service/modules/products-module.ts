@@ -1,5 +1,6 @@
 import {
   AttributeDefinition,
+  Category,
   ProductProjection,
 } from '@commercetools/platform-sdk';
 import BaseModule from '../../utils/base-module';
@@ -13,9 +14,11 @@ export default class ProductsModule extends BaseModule {
     search,
     filters,
     sort,
+    category,
   }: ProductsQuery): Promise<ProductProjection[] | undefined> {
     try {
       const queryString = createQueryString(filters);
+      queryString.push(`categories.id: subtree("${category}")`);
       const {
         body: { results },
       } = await ProductsModule.apiRoot
@@ -52,5 +55,21 @@ export default class ProductsModule extends BaseModule {
         throw new Error(err.message);
       }
     }
+  }
+
+  static async getCategories(): Promise<Category[]> {
+    const {
+      body: { results },
+    } = await ProductsModule.apiRoot.categories().get().execute();
+    return results;
+  }
+
+  static async getCategoryById(id: string): Promise<Category> {
+    const { body } = await ProductsModule.apiRoot
+      .categories()
+      .withId({ ID: id })
+      .get()
+      .execute();
+    return body;
   }
 }
