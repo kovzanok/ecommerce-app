@@ -87,6 +87,7 @@ export type ProductsQuery = {
   search: string;
   filters: Filters;
   sort: Sorting;
+  category: string;
 };
 export type FilterParam = {
   name: FilterName;

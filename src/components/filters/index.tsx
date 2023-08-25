@@ -24,7 +24,6 @@ export default function FilterForm({
     <form
       onSubmit={onSubmit}
       style={{
-        width: '30%',
         height: 'fit-content',
         padding: '10px',
         border: '1px solid #dee2e6',
