@@ -31,7 +31,7 @@ export default function SearchBar({
           value={value}
           onChange={handleChange}
         />
-        <Button type="submit" color="orange">
+        <Button disabled={loading} type="submit" color="orange">
           Search
         </Button>
       </Flex>
