@@ -11,7 +11,6 @@ import {
 } from '@mantine/core';
 import { IconMail } from '@tabler/icons-react';
 import { DateInput } from '@mantine/dates';
-import { Country } from 'countries-and-timezones';
 import { useMediaQuery } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { useForm } from '@mantine/form';
@@ -26,18 +25,16 @@ import {
   validateStreet,
   validateString,
 } from '../../utils/field-validation';
-import { ProfileFormValues } from '../../types';
+import { Country } from '../../types';
 import { resetError } from '../../store/slices/userSlice';
 
 export default function UserPage() {
   const matches = useMediaQuery('(max-width: 48em)');
+  const dispatch = useAppDispatch();
   useTitle('Profile');
 
-  const dispatch = useAppDispatch();
   const { user } = useAppSelector(userSelector);
-
   const [isReadonly, setIsReadonly] = useState(true);
-
   const [countries, setCountries] = useState<Country[]>([]);
 
   useEffect(() => {
@@ -48,37 +45,46 @@ export default function UserPage() {
   }, []);
 
   const addressValidation = {
-    city: (val: string) => validateString(val),
-    streetName: (val: string) => validateStreet(val),
+    city: (val: string | undefined) => validateString(val || ''),
+    streetName: (val: string | undefined) => validateStreet(val || ''),
   };
 
   if (!user) return <Navigate to="/login" />;
 
-  const { customer } = user;
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    dateOfBirth,
+    addresses,
+    billingAddressIds,
+    shippingAddressIds,
+  } = user.customer;
 
   const { getInputProps, values: formValues } = useForm({
     initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      dateOfBirthday: '',
+      firstName,
+      lastName,
+      email,
+      password,
+      dateOfBirthday: new Date(dateOfBirth || ''),
 
-      shippingAddresses: customer.shippingAddressIds
-        ? getAddresses(customer.shippingAddressIds, customer.addresses)
+      shippingAddresses: shippingAddressIds
+        ? getAddresses(shippingAddressIds, addresses)
         : [],
 
-      billingAddresses: customer.billingAddressIds
-        ? getAddresses(customer.billingAddressIds, customer.addresses)
+      billingAddresses: billingAddressIds
+        ? getAddresses(billingAddressIds, addresses)
         : [],
     },
 
     validate: {
-      firstName: (val: string) => validateString(val),
-      lastName: (val: string) => validateString(val),
+      firstName: (val = '') => validateString(val),
+      lastName: (val = '') => validateString(val),
       email: (val: string) => validateEmail(val),
-      password: (val: string) => validatePassword(val),
-      dateOfBirthday: (val: string) => validateBirthday(val),
+      password: (val = '') => validatePassword(val),
+      dateOfBirthday: (val: Date) => validateBirthday(val.toString()),
       shippingAddresses: {
         ...addressValidation,
         country: (val: string) => {
@@ -87,9 +93,12 @@ export default function UserPage() {
           }
           return null;
         },
-        postalCode: (val: string, values: ProfileFormValues) => {
-          const { country } = values.shippingAddresses;
-          return validatePostalCode(val, country);
+        postalCode: (val: string | undefined, values, path) => {
+          const index = +path.split('.')[1];
+
+          const countryName = values.shippingAddresses[index].country;
+
+          return validatePostalCode(val || '', countryName);
         },
       },
 
@@ -101,9 +110,11 @@ export default function UserPage() {
           }
           return null;
         },
-        postalCode: (val: string, values: ProfileFormValues) => {
-          const { country } = values.billingAddresses;
-          return validatePostalCode(val, country);
+        postalCode: (val, values, path) => {
+          const index = +path.split('.')[1];
+
+          const countryName = values.billingAddresses[index].country;
+          return validatePostalCode(val || '', countryName);
         },
       },
     },
@@ -124,7 +135,6 @@ export default function UserPage() {
                 placeholder="Vasya"
                 label="First name"
                 {...getInputProps('firstName')}
-                value={customer.firstName || ''}
               />
               <TextInput
                 readOnly={isReadonly}
@@ -133,7 +143,6 @@ export default function UserPage() {
                 placeholder="Pupkin"
                 label="Last name"
                 {...getInputProps('lastName')}
-                value={customer.lastName || ''}
               />
             </Flex>
 
@@ -146,7 +155,6 @@ export default function UserPage() {
                 label="Email"
                 icon={<IconMail size="1rem" />}
                 {...getInputProps('email')}
-                value={customer.email || ''}
               />
               <PasswordInput
                 readOnly={isReadonly}
@@ -154,7 +162,6 @@ export default function UserPage() {
                 withAsterisk
                 label="Password"
                 {...getInputProps('password')}
-                value={customer.password || ''}
               />
               <DateInput
                 readOnly={isReadonly}
@@ -164,7 +171,6 @@ export default function UserPage() {
                 label="Birthday"
                 placeholder="1974-01-01"
                 {...getInputProps('dateOfBirthday')}
-                value={new Date(customer.dateOfBirth || '')}
               />
             </Flex>
 
@@ -176,7 +182,7 @@ export default function UserPage() {
                 <Paper mt="xs" shadow="xs" p="xs">
                   <Flex gap={20} direction="row">
                     {formValues.shippingAddresses.map((adr, ind) => (
-                      <Flex direction="column" gap={10} key={adr.key}>
+                      <Flex direction="column" gap={10} key={adr.id}>
                         <TextInput
                           withAsterisk
                           placeholder="Lenin st. 12-01"
@@ -184,14 +190,12 @@ export default function UserPage() {
                           {...getInputProps(
                             `shippingAddresses.${ind}.streetName`,
                           )}
-                          value={adr.streetName || ''}
                         />
                         <TextInput
                           withAsterisk
                           placeholder="Minsk"
                           label="City"
                           {...getInputProps(`shippingAddresses.${ind}.city`)}
-                          value={adr.city || ''}
                         />
                         <Select
                           withAsterisk
@@ -200,7 +204,6 @@ export default function UserPage() {
                           searchable
                           data={countries}
                           {...getInputProps(`shippingAddresses.${ind}.country`)}
-                          value={adr.country}
                         />
                         <TextInput
                           withAsterisk
@@ -209,7 +212,6 @@ export default function UserPage() {
                           {...getInputProps(
                             `shippingAddresses.${ind}.postalCode`,
                           )}
-                          value={adr.postalCode || ''}
                         />
                       </Flex>
                     ))}
@@ -225,7 +227,7 @@ export default function UserPage() {
                 <Paper mt="xs" shadow="xs" p="xs">
                   <Flex gap={20} direction="row">
                     {formValues.billingAddresses.map((adr, ind) => (
-                      <Flex direction="column" gap={10} key={adr.key}>
+                      <Flex direction="column" gap={10} key={adr.id}>
                         <TextInput
                           withAsterisk
                           placeholder="Lenin st. 12-01"
@@ -233,14 +235,12 @@ export default function UserPage() {
                           {...getInputProps(
                             `billingAddresses.${ind}.streetName`,
                           )}
-                          value={adr.streetName || ''}
                         />
                         <TextInput
                           withAsterisk
                           placeholder="Minsk"
                           label="City"
                           {...getInputProps(`billingAddresses.${ind}.city`)}
-                          value={adr.city || ''}
                         />
                         <Select
                           withAsterisk
@@ -249,7 +249,6 @@ export default function UserPage() {
                           searchable
                           data={countries}
                           {...getInputProps(`billingAddresses.${ind}.country`)}
-                          value={adr.country}
                         />
                         <TextInput
                           withAsterisk
@@ -258,7 +257,6 @@ export default function UserPage() {
                           {...getInputProps(
                             `billingAddresses.${ind}.postalCode`,
                           )}
-                          value={adr.postalCode || ''}
                         />
                       </Flex>
                     ))}

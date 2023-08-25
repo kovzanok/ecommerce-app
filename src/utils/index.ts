@@ -28,7 +28,9 @@ export default function getCountriesArray(): Country[] {
 export const getAddresses = (
   idArray: string[],
   addresses: Address[],
-): Address[] => addresses.filter((address) => idArray.includes(address.id || ''));
+): Address[] => structuredClone(
+  addresses.filter((address) => idArray.includes(address.id || '')),
+);
 
 export function transformRegistrationData(
   data: FormValues,

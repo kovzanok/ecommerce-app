@@ -45,22 +45,19 @@ export interface ProfileFormValues {
   password: string;
   dateOfBirthday: string;
 
-  shippingAddresses: {
-    country: string;
-    postalCode: string;
-    city: string;
-    streetName: string;
-    isAddressDefault: boolean;
-  };
+  shippingAddresses: LocalAdr[];
 
-  billingAddresses: {
-    country: string;
-    postalCode: string;
-    city: string;
-    streetName: string;
-    isAddressDefault: boolean;
-  };
+  billingAddresses: LocalAdr[];
 }
+
+export type LocalAdr = {
+  country: string;
+  postalCode: string;
+  city: string;
+  streetName: string;
+  id: string;
+  isAddressDefault?: boolean;
+};
 
 export type ProductAttributes = [
   PublishedType,

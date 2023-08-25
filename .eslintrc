@@ -29,6 +29,6 @@
     "no-alert": 0,
     "react-hooks/rules-of-hooks": 0,
     "no-case-declarations": 0,
-    "max-len": ["error", { "code": 120 }]
+    "max-len": ["error", { "code": 150 }]
   }
 }
