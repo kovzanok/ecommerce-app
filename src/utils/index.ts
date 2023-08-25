@@ -1,4 +1,5 @@
 import {
+  Address,
   Attribute,
   AttributeDefinition,
   CustomerDraft,
@@ -21,6 +22,11 @@ export default function getCountriesArray(): Country[] {
     value: el.id,
   }));
 }
+
+export const getAddresses = (
+  idArray: string[],
+  addresses: Address[],
+): Address[] => addresses.filter((address) => idArray.includes(address.id || ''));
 
 export function transformRegistrationData(
   data: FormValues,

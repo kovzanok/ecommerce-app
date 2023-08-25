@@ -132,36 +132,6 @@ function Registration() {
     setFieldError('email', error);
   }, [error, setFieldError]);
 
-  const { onChange: shippingCityHandle } = getInputProps(
-    'shippingAddress.city',
-  );
-
-  const { onChange: billingCityHandle } = getInputProps('billingAddress.city');
-
-  const { onChange: shippingStreetHandle } = getInputProps(
-    'shippingAddress.streetName',
-  );
-
-  const { onChange: billingStreetHandle } = getInputProps(
-    'billingAddress.streetName',
-  );
-
-  const { onChange: shippingCountryHandle } = getInputProps(
-    'shippingAddress.country',
-  );
-
-  const { onChange: billingCountryHandle } = getInputProps(
-    'billingAddress.country',
-  );
-
-  const { onChange: shippingPostalCodeHandle } = getInputProps(
-    'shippingAddress.postalCode',
-  );
-
-  const { onChange: billingPostalCodeHandle } = getInputProps(
-    'billingAddress.postalCode',
-  );
-
   const modalMessage = 'Congratulations! Your account has been successfully created.';
 
   const handleSubmit = (values: CustomerDraft) => {
