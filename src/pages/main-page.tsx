@@ -18,6 +18,24 @@ export default function MainPage() {
       description:
         'Register page provides user ability to create account in this e-commerce app.',
     },
+    {
+      to: '/catalog',
+      name: 'Catalog Page',
+      description:
+        'Catalog page shows all available products and provide robust filtering, sorting and searching for better user experience.',
+    },
+    {
+      to: '/product/b7feab93-bd95-415b-9d9f-fdafdfa44fdd',
+      name: 'Product Page',
+      description:
+        'Product page contains all the detailed product information.',
+    },
+    {
+      to: '/user',
+      name: 'User Profile Page',
+      description:
+        'User Profile page is available only for authorized users and contains all ther user information, which can be modified and saved.',
+    },
   ];
   return (
     <>
