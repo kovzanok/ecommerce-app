@@ -8,6 +8,7 @@ import {
 } from '@commercetools/platform-sdk';
 import ApiService from '../../../service/api-service';
 import AuthModule from '../../../service/modules/auth-module';
+import { RootState } from '../..';
 
 export const signIn = createAsyncThunk(
   'user/signIn',
@@ -57,7 +58,7 @@ export const vertifyAuth = createAsyncThunk(
 );
 
 export const approveChanges = createAsyncThunk(
-  'user/setFirstName',
+  'user/approveChanges',
   async (
     actions: CustomerUpdateAction[],
     ThunkAPI,
