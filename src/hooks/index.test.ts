@@ -45,7 +45,13 @@ describe('useAppSelector', () => {
       result: { current },
     } = renderHookWithProviders<RootState['user']>(
       () => useAppSelector((state) => state.user),
-      { preloadedState: { user, products } },
+      {
+        preloadedState: {
+          user,
+          products,
+          product: { product: null, loading: false, error: '' },
+        },
+      },
     );
     expect(current).toStrictEqual(user);
   });
@@ -79,7 +85,11 @@ describe('useTitle', () => {
       error: '',
     };
     renderHookWithProviders(() => useTitle('New title'), {
-      preloadedState: { user, products },
+      preloadedState: {
+        user,
+        products,
+        product: { product: null, loading: false, error: '' },
+      },
     });
     expect(document.title).toBe('New title');
   });

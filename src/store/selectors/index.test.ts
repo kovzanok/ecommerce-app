@@ -16,6 +16,7 @@ describe('userSelector', () => {
     const store: RootState = {
       user,
       products,
+      product: { product: null, loading: false, error: '' },
     };
 
     const result = userSelector(store);
@@ -38,6 +39,7 @@ describe('productsSelector', () => {
     const store: RootState = {
       user,
       products,
+      product: { product: null, loading: false, error: '' },
     };
 
     const result = productsSelector(store);

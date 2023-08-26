@@ -1,11 +1,13 @@
 import { PreloadedState, configureStore } from '@reduxjs/toolkit';
 import userReducer from './slices/userSlice';
-import productReducer from './slices/productsSlice';
+import productsReducer from './slices/productsSlice';
+import productReducer from './slices/productSlice';
 
 const store = configureStore({
   reducer: {
     user: userReducer,
-    products: productReducer,
+    products: productsReducer,
+    product: productReducer,
   },
 });
 
@@ -15,7 +17,8 @@ export function setupStore(
   return configureStore({
     reducer: {
       user: userReducer,
-      products: productReducer,
+      products: productsReducer,
+      product: productReducer,
     },
     preloadedState,
   });
