@@ -4,7 +4,6 @@ import {
   Category,
   CustomerDraft,
 } from '@commercetools/platform-sdk';
-import { getAllCountries } from 'countries-and-timezones';
 import {
   Country,
   FilterName,
@@ -14,11 +13,11 @@ import {
   PriceObj,
   ProductAttributes,
 } from '../types';
-import bookCategoryId from './const';
+
+import bookCategoryId, { countryNames } from './const';
 
 export default function getCountriesArray(): Country[] {
-  const getAllCountriesObjectValues = Object.values(getAllCountries());
-  return getAllCountriesObjectValues.map((el) => ({
+  return countryNames.map((el) => ({
     label: el.name,
     value: el.id,
   }));

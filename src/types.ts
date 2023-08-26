@@ -38,6 +38,27 @@ export interface FormValues {
   };
 }
 
+export interface ProfileFormValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  dateOfBirthday: string;
+
+  shippingAddresses: LocalAdr[];
+
+  billingAddresses: LocalAdr[];
+}
+
+export type LocalAdr = {
+  country: string;
+  postalCode: string;
+  city: string;
+  streetName: string;
+  id: string;
+  isAddressDefault?: boolean;
+};
+
 export type ProductAttributes = [
   PublishedType,
   CoverType,
