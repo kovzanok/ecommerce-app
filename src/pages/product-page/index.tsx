@@ -9,7 +9,13 @@ import { IconArrowBigUp, IconArrowBigDown } from '@tabler/icons-react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { productSelector } from '../../store/selectors';
 import { fetchProductById } from '../../store/slices/productSlice';
-import { AuthorType, PublishedType } from '../../types';
+import {
+  AgeType,
+  AuthorType,
+  CoverType,
+  PublishedType,
+  PublisherType,
+} from '../../types';
 import PriceContent from '../../components/price-content';
 import { getProductAttribute } from '../../utils';
 
@@ -37,6 +43,9 @@ export default function ProductPage() {
   } = product;
   const author = getProductAttribute<AuthorType>(attributes, 'Author');
   const published = getProductAttribute<PublishedType>(attributes, 'Published');
+  const cover = getProductAttribute<CoverType>(attributes, 'Cover');
+  const age = getProductAttribute<AgeType>(attributes, 'Age_restrictions');
+  const publisher = getProductAttribute<PublisherType>(attributes, 'publisher');
   const price = prices?.[0] as Price;
   const isOnlyOneImage = images?.length !== 1;
   return (
@@ -83,6 +92,49 @@ export default function ProductPage() {
         </div>
         <div style={{ height: '2px', background: 'gray' }} />
         <Text>{description?.['en-US']}</Text>
+        <div style={{ height: '2px', background: 'gray' }} />
+        <div>
+          <Title order={2}>Additional info</Title>
+          <div>
+            <span
+              style={{
+                minWidth: '100px',
+                display: 'inline-block',
+                color: 'gray',
+              }}
+            >
+              Cover:
+            </span>
+            {' '}
+            <span style={{ fontWeight: 600 }}>{cover.value.label}</span>
+          </div>
+          <div>
+            <span
+              style={{
+                minWidth: '100px',
+                display: 'inline-block',
+                color: 'gray',
+              }}
+            >
+              Age:
+            </span>
+            {' '}
+            <span style={{ fontWeight: 600 }}>{age.value.label}</span>
+          </div>
+          <div>
+            <span
+              style={{
+                minWidth: '100px',
+                display: 'inline-block',
+                color: 'gray',
+              }}
+            >
+              Publisher:
+            </span>
+            {' '}
+            <span style={{ fontWeight: 600 }}>{publisher.value.label}</span>
+          </div>
+        </div>
       </Flex>
     </Flex>
   );
