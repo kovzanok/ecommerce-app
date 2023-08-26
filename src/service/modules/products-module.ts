@@ -6,6 +6,7 @@ import {
 import BaseModule from '../../utils/base-module';
 import { ProductsQuery } from '../../types';
 import { createQueryString } from '../../utils';
+import AuthModule from './auth-module';
 
 export default class ProductsModule extends BaseModule {
   static productTypeId = 'aa10f723-a1bc-4131-975d-f26f9174ecf3';
@@ -67,6 +68,15 @@ export default class ProductsModule extends BaseModule {
   static async getCategoryById(id: string): Promise<Category> {
     const { body } = await ProductsModule.apiRoot
       .categories()
+      .withId({ ID: id })
+      .get()
+      .execute();
+    return body;
+  }
+
+  static async getProductById(id: string): Promise<ProductProjection> {
+    const { body } = await AuthModule.apiRoot
+      .productProjections()
       .withId({ ID: id })
       .get()
       .execute();
