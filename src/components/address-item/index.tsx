@@ -3,6 +3,7 @@ import {
   Checkbox, Flex, Paper, Radio, Select, TextInput,
 } from '@mantine/core';
 import { Country } from '../../types';
+import { useDisabledStyles } from '../../utils/const';
 
 type AddressProps = {
   address: Address;
@@ -21,6 +22,8 @@ export default function AddressItem({
   isShipping,
   isBilling,
 }: AddressProps) {
+  const { classes } = useDisabledStyles();
+
   return (
     <Flex
       direction="row"
@@ -32,18 +35,26 @@ export default function AddressItem({
     >
       <Flex direction="row" gap={100} align="center" justify="center" m="auto">
         <Radio
-          name="defaultShipping"
-          value="defaultShipping"
+          name="defaultShippingAddress"
           defaultChecked={defaultShipping}
-          disabled
           label="Default shipping address"
+          disabled
+          classNames={{
+            radio: classes.input,
+            label: classes.label,
+          }}
+          value="defaultShipping"
         />
         <Radio
-          name="defaultBilling"
-          value="defaultBilling"
+          name="defaultBillingAddress"
           defaultChecked={defaultBilling}
-          disabled
           label="Default billing address"
+          disabled
+          classNames={{
+            radio: classes.input,
+            label: classes.label,
+          }}
+          value="defaultBilling"
         />
       </Flex>
       <Paper w="50%" mt="xs" shadow="xs" p="xs">
@@ -52,7 +63,11 @@ export default function AddressItem({
             <TextInput
               placeholder="Lenin st. 12-01"
               label="Street"
-              readOnly
+              disabled
+              classNames={{
+                input: classes.input,
+                label: classes.label,
+              }}
               value={address.streetName}
               w="100%"
             />
@@ -60,7 +75,11 @@ export default function AddressItem({
               withAsterisk
               placeholder="Minsk"
               label="City"
-              readOnly
+              disabled
+              classNames={{
+                input: classes.input,
+                label: classes.label,
+              }}
               value={address.city}
               w="100%"
             />
@@ -71,7 +90,11 @@ export default function AddressItem({
               label="Country"
               searchable
               data={countries}
-              readOnly
+              disabled
+              classNames={{
+                input: classes.input,
+                label: classes.label,
+              }}
               value={address.country}
               w="100%"
             />
@@ -79,7 +102,11 @@ export default function AddressItem({
               withAsterisk
               placeholder="AF-35A"
               label="Postal code"
-              readOnly
+              disabled
+              classNames={{
+                input: classes.input,
+                label: classes.label,
+              }}
               value={address.postalCode}
               w="100%"
             />
@@ -88,13 +115,21 @@ export default function AddressItem({
             <Checkbox
               label="Shipping address"
               checked={isShipping}
-              readOnly
+              disabled
+              classNames={{
+                input: classes.input,
+                label: classes.label,
+              }}
               w="100%"
             />
             <Checkbox
               label="Billing address"
               checked={isBilling}
-              readOnly
+              disabled
+              classNames={{
+                input: classes.input,
+                label: classes.label,
+              }}
               w="100%"
             />
           </Flex>

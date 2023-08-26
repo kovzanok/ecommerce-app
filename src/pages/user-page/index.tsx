@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector, useTitle } from '../../hooks';
 import { Country } from '../../types';
 import { resetError } from '../../store/slices/userSlice';
 import AddressItem from '../../components/address-item';
+import { useDisabledStyles } from '../../utils/const';
 
 export default function UserPage() {
   const matches = useMediaQuery('(max-width: 48em)');
@@ -33,31 +34,45 @@ export default function UserPage() {
 
   const { customer } = user;
 
+  const { classes } = useDisabledStyles();
+
   return (
     <div>
       <Paper>
         <Flex direction="column" justify="center" gap={10}>
           <Flex direction={matches ? 'column' : 'row'} gap={20}>
             <TextInput
-              readOnly
               w="100%"
               withAsterisk
               placeholder="Vasya"
+              value={customer.firstName}
+              disabled
+              classNames={{
+                input: classes.input,
+              }}
               label="First name"
             />
             <TextInput
-              readOnly
+              disabled
+              classNames={{
+                input: classes.input,
+              }}
               w="100%"
               withAsterisk
               placeholder="Pupkin"
+              value={customer.lastName}
               label="Last name"
             />
 
             <DateInput
-              readOnly
+              disabled
+              classNames={{
+                input: classes.input,
+              }}
               w="100%"
               withAsterisk
               valueFormat="YYYY-MM-DD"
+              value={new Date(customer.dateOfBirth || '')}
               label="Birthday"
               placeholder="1974-01-01"
             />
