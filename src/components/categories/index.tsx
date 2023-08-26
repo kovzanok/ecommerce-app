@@ -13,7 +13,7 @@ export default function Categories() {
   const [opened, { open, close }] = useDisclosure(false);
   const matches = useMediaQuery('(max-width: 900px)');
   useEffect(() => {
-    ApiService.getCategories().then(setCategories);
+    ApiService.getCategories().then(setCategories).catch();
   }, []);
 
   const nestedCategories = createCategoryMap(categories);

@@ -113,3 +113,14 @@ export type Sorting =
   | 'name.en-US desc'
   | 'price asc'
   | 'price desc';
+
+export type ActiveToken = {
+  active: true;
+  scope: string;
+  exp: number;
+  client_id: string;
+};
+
+export type NonActiveToken = {
+  active: false;
+};

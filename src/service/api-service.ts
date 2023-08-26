@@ -30,6 +30,19 @@ export default class ApiService {
     return customer;
   }
 
+  static async verifyToken(): Promise<CustomerSignInResult | undefined> {
+    const tokenState = await AuthModule.introspectToken();
+    if (tokenState.active) {
+      AuthModule.createApiRootWithToken();
+      const customerId = tokenState.scope.split('customer_id:')[1];
+      const customer = await AuthModule.getClientById(customerId);
+      // const cart = await AuthModule.getCartById(customerId);
+      return { customer };
+    }
+    AuthModule.creatAnonymousApiRoot();
+    throw new Error('Invalid token');
+  }
+
   static async getProducts(query: ProductsQuery) {
     return ProductsModule.getProducts(query);
   }
