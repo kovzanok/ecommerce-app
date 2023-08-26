@@ -38,6 +38,21 @@ export const signUp = createAsyncThunk(
   },
 );
 
+export const vertifyAuth = createAsyncThunk(
+  'user/verify',
+  async (): Promise<CustomerSignInResult | null> => {
+    try {
+      const res = await ApiService.verifyToken();
+      if (res) {
+        return res;
+      }
+      return null;
+    } catch (err) {
+      throw new Error();
+    }
+  },
+);
+
 type UserState = {
   user: CustomerSignInResult | null;
   loading: boolean;
@@ -46,7 +61,7 @@ type UserState = {
 
 const initialState: UserState = {
   user: null,
-  loading: false,
+  loading: true,
   error: '',
 };
 
@@ -64,6 +79,22 @@ const userSlice = createSlice({
     },
   },
   extraReducers(builder) {
+    builder.addCase(vertifyAuth.pending, (state) => {
+      state.error = '';
+      state.loading = true;
+      state.user = null;
+    });
+    builder.addCase(vertifyAuth.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.error = '';
+        state.loading = false;
+        state.user = action.payload;
+      }
+    });
+    builder.addCase(vertifyAuth.rejected, (state) => {
+      state.loading = false;
+      state.user = null;
+    });
     builder.addCase(signIn.pending, (state) => {
       state.error = '';
       state.loading = true;
