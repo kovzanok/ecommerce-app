@@ -66,21 +66,28 @@ export default function AddressItem({
               disabled
               classNames={{
                 input: classes.input,
-                label: classes.label,
               }}
               value={address.streetName}
               w="100%"
             />
             <TextInput
-              withAsterisk
               placeholder="Minsk"
               label="City"
               disabled
               classNames={{
                 input: classes.input,
-                label: classes.label,
               }}
               value={address.city}
+              w="100%"
+            />
+            <TextInput
+              placeholder="Myadel"
+              label="State"
+              disabled
+              classNames={{
+                input: classes.input,
+              }}
+              value={address.state}
               w="100%"
             />
           </Flex>
@@ -93,19 +100,16 @@ export default function AddressItem({
               disabled
               classNames={{
                 input: classes.input,
-                label: classes.label,
               }}
               value={address.country}
               w="100%"
             />
             <TextInput
-              withAsterisk
               placeholder="AF-35A"
               label="Postal code"
               disabled
               classNames={{
                 input: classes.input,
-                label: classes.label,
               }}
               value={address.postalCode}
               w="100%"

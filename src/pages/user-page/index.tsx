@@ -43,7 +43,6 @@ export default function UserPage() {
           <Flex direction={matches ? 'column' : 'row'} gap={20}>
             <TextInput
               w="100%"
-              withAsterisk
               placeholder="Vasya"
               value={customer.firstName}
               disabled
@@ -58,7 +57,6 @@ export default function UserPage() {
                 input: classes.input,
               }}
               w="100%"
-              withAsterisk
               placeholder="Pupkin"
               value={customer.lastName}
               label="Last name"
@@ -70,7 +68,6 @@ export default function UserPage() {
                 input: classes.input,
               }}
               w="100%"
-              withAsterisk
               valueFormat="YYYY-MM-DD"
               value={new Date(customer.dateOfBirth || '')}
               label="Birthday"
