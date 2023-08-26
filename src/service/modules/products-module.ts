@@ -3,11 +3,11 @@ import {
   Category,
   ProductProjection,
 } from '@commercetools/platform-sdk';
-import BaseModule from '../../utils/base-module';
 import { ProductsQuery } from '../../types';
 import { createQueryString } from '../../utils';
+import AuthModule from './auth-module';
 
-export default class ProductsModule extends BaseModule {
+export default class ProductsModule {
   static productTypeId = 'aa10f723-a1bc-4131-975d-f26f9174ecf3';
 
   static async getProducts({
@@ -21,7 +21,7 @@ export default class ProductsModule extends BaseModule {
       queryString.push(`categories.id: subtree("${category}")`);
       const {
         body: { results },
-      } = await ProductsModule.apiRoot
+      } = await AuthModule.apiRoot
         .productProjections()
         .search()
         .get({
@@ -44,7 +44,7 @@ export default class ProductsModule extends BaseModule {
     try {
       const {
         body: { attributes },
-      } = await ProductsModule.apiRoot
+      } = await AuthModule.apiRoot
         .productTypes()
         .withId({ ID: ProductsModule.productTypeId })
         .get()
@@ -52,7 +52,7 @@ export default class ProductsModule extends BaseModule {
       return attributes as AttributeDefinition[];
     } catch (err) {
       if (err instanceof Error) {
-        throw new Error(err.message);
+        console.log(err.message);
       }
     }
   }
@@ -60,12 +60,12 @@ export default class ProductsModule extends BaseModule {
   static async getCategories(): Promise<Category[]> {
     const {
       body: { results },
-    } = await ProductsModule.apiRoot.categories().get().execute();
+    } = await AuthModule.apiRoot.categories().get().execute();
     return results;
   }
 
   static async getCategoryById(id: string): Promise<Category> {
-    const { body } = await ProductsModule.apiRoot
+    const { body } = await AuthModule.apiRoot
       .categories()
       .withId({ ID: id })
       .get()
