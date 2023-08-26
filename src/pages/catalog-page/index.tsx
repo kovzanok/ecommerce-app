@@ -51,7 +51,8 @@ export default function CatalogPage() {
     );
     ProductsModule.getProductAttributes()
       .catch(console.log)
-      .then((res) => res && setFilters(getFilterParams(res)));
+      .then((res) => res && setFilters(getFilterParams(res)))
+      .catch();
   }, [category]);
 
   let content: JSX.Element;

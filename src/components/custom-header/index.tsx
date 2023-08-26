@@ -22,6 +22,7 @@ export default function CustomHeader() {
 
   const handleClick = () => {
     dispatch(logout());
+    localStorage.removeItem('qwe_access-token');
     AuthModule.creatAnonymousApiRoot();
     navigate('/login');
   };
