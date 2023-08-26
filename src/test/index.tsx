@@ -12,6 +12,11 @@ const defaultState = {
     loading: false,
     error: '',
   },
+  product: {
+    product: null,
+    loading: false,
+    error: '',
+  },
   products: {
     products: [],
     loading: false,
