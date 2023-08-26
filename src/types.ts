@@ -1,3 +1,5 @@
+import { CustomerUpdateAction } from '@commercetools/platform-sdk';
+
 export type CreateApiData = {
   email: string;
   password: string;
@@ -41,13 +43,13 @@ export interface FormValues {
 export interface ProfileFormValues {
   firstName: string;
   lastName: string;
-  email: string;
-  password: string;
-  dateOfBirthday: string;
+  // email: string;
+  // password: string;
+  dateOfBirthday: Date;
 
-  shippingAddresses: LocalAdr[];
+  // shippingAddresses: LocalAdr[];
 
-  billingAddresses: LocalAdr[];
+  // billingAddresses: LocalAdr[];
 }
 
 export type LocalAdr = {
@@ -57,6 +59,12 @@ export type LocalAdr = {
   streetName: string;
   id: string;
   isAddressDefault?: boolean;
+};
+
+export type FieldUpdateType = {
+  action: CustomerUpdateAction;
+  key: string;
+  value: string;
 };
 
 export type ProductAttributes = [

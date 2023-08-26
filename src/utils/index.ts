@@ -23,6 +23,14 @@ export default function getCountriesArray(): Country[] {
   }));
 }
 
+export const dateConverter = (date: Date) => {
+  const withZero = (dateInput: number) => `0${dateInput}`.slice(-2);
+  const getMonth = withZero(date.getMonth() + 1);
+  const getDay = withZero(date.getDate());
+
+  return `${date.getFullYear()}-${getMonth}-${getDay}`;
+};
+
 export function transformRegistrationData(
   data: FormValues,
   isSame: boolean,
@@ -50,14 +58,6 @@ export function transformRegistrationData(
   } = billingAddress;
 
   const birthdayDay = new Date(dateOfBirthday);
-
-  const dateConverter = (date: Date) => {
-    const withZero = (dateInput: number) => `0${dateInput}`.slice(-2);
-    const getMonth = withZero(date.getMonth() + 1);
-    const getDay = withZero(date.getDate());
-
-    return `${date.getFullYear()}-${getMonth}-${getDay}`;
-  };
 
   const defaultBillingCondition = () => {
     if (isBillingAddressDefault) {

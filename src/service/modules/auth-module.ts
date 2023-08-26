@@ -10,6 +10,7 @@ import {
   CustomerDraft,
   CustomerSignInResult,
   CustomerSignin,
+  CustomerUpdateAction,
   createApiBuilderFromCtpClient,
 } from '@commercetools/platform-sdk';
 import { ByProjectKeyRequestBuilder } from '@commercetools/platform-sdk/dist/declarations/src/generated/client/by-project-key-request-builder';
@@ -190,5 +191,26 @@ export default class AuthModule {
       .get()
       .execute();
     return body;
+  }
+
+  static async updateCustomer(
+    ID: string,
+    actions: CustomerUpdateAction[],
+    version: number,
+  ): Promise<Customer> {
+    console.log('actions', actions);
+
+    const res = await AuthModule.apiRoot
+      .customers()
+      .withId({ ID })
+      .post({
+        body: {
+          actions,
+          version,
+        },
+      })
+      .execute();
+
+    return res.body;
   }
 }
