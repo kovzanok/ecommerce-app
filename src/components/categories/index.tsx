@@ -8,7 +8,7 @@ import { createCategoryMap } from '../../utils';
 export default function Categories() {
   const [categories, setCategories] = useState<Category[]>([]);
   useEffect(() => {
-    ApiService.getCategories().then(setCategories);
+    ApiService.getCategories().then(setCategories).catch();
   }, []);
 
   const nestedCategories = createCategoryMap(categories);
