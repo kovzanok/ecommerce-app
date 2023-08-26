@@ -1,13 +1,18 @@
 import { vi } from 'vitest';
 import {
+  Category,
   CustomerDraft,
   CustomerSignInResult,
   CustomerSignin,
+  ProductProjection,
 } from '@commercetools/platform-sdk';
 import ApiService from './api-service';
 import AuthModule from './modules/auth-module';
+import ProductsModule from './modules/products-module';
+import { ProductsQuery } from '../types';
 
-vi.mock('../service/modules/auth-module');
+vi.mock('./modules/auth-module');
+vi.mock('./modules/products-module');
 
 describe('ApiService', () => {
   const customer: CustomerSignInResult = {
@@ -60,5 +65,34 @@ describe('ApiService', () => {
       .mocked(AuthModule.createCustomer)
       .mockResolvedValue(customer);
     expect(await ApiService.signUp(customerDraft)).toStrictEqual(customer);
+  });
+
+  it('should return product list', async () => {
+    const query: ProductsQuery = {
+      category: '',
+      filters: {
+        Age_restrictions: '',
+        Author: '',
+        Cover: '',
+        price: { max: 100, min: 0 },
+        publisher: '',
+      },
+      search: '',
+      sort: 'name.en-US asc',
+    };
+    const products: ProductProjection[] = [];
+    ProductsModule.getProducts = vi
+      .mocked(ProductsModule.getProducts)
+      .mockResolvedValue(products);
+
+    expect(await ApiService.getProducts(query)).toStrictEqual(products);
+  });
+
+  it('should return categories', async () => {
+    const categories: Category[] = [];
+    ProductsModule.getCategories = vi
+      .mocked(ProductsModule.getCategories)
+      .mockResolvedValue(categories);
+    expect(await ApiService.getCategories()).toStrictEqual(categories);
   });
 });
