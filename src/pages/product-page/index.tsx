@@ -2,7 +2,7 @@ import {
   Flex, Title, Text, Image, Loader, Center,
 } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { Price } from '@commercetools/platform-sdk';
 import { IconArrowBigUp, IconArrowBigDown } from '@tabler/icons-react';
@@ -22,19 +22,21 @@ import { getProductAttribute } from '../../utils';
 export default function ProductPage() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const { loading, product } = useAppSelector(productSelector);
+  const { loading, product, error } = useAppSelector(productSelector);
   useEffect(() => {
     if (id) {
       dispatch(fetchProductById(id));
     }
   }, [id]);
-  if (!product || loading) {
+  if (loading) {
     return (
       <Center h="100%">
         <Loader color="orange" />
       </Center>
     );
   }
+
+  if (!product || error) return <Navigate replace to="/not-found" />;
 
   const {
     name,
