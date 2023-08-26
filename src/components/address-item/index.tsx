@@ -2,7 +2,6 @@ import { Address } from '@commercetools/platform-sdk';
 import {
   Checkbox, Flex, Paper, Radio, Select, TextInput,
 } from '@mantine/core';
-import React from 'react';
 import { Country } from '../../types';
 
 type AddressProps = {
