@@ -35,7 +35,7 @@ export default function ProductCard({
         ref={ref}
         ta="center"
         withBorder
-        w={270}
+        w={250}
       >
         <Flex
           align="center"

@@ -1,7 +1,8 @@
 import { GetInputProps, Reset } from '@mantine/form/lib/types';
 import {
-  Button, Flex, Group, NumberInput, Select,
+  Button, Flex, Group, Modal, NumberInput, Select,
 } from '@mantine/core';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { FilterParam, Filters } from '../../types';
 import { capitalize } from '../../utils';
 
@@ -20,9 +21,14 @@ export default function FilterForm({
   loading,
   reset,
 }: FiltersProps) {
-  return (
+  const matches = useMediaQuery('(max-width: 900px)');
+  const [opened, { open, close }] = useDisclosure(false);
+  const form = (
     <form
-      onSubmit={onSubmit}
+      onSubmit={(e) => {
+        onSubmit(e);
+        close();
+      }}
       style={{
         height: 'fit-content',
         padding: '10px',
@@ -79,5 +85,30 @@ export default function FilterForm({
         </Group>
       </Flex>
     </form>
+  );
+
+  return (
+    <div>
+      {matches ? (
+        <div>
+          <Modal opened={opened} title="Filters" onClose={close}>
+            {form}
+          </Modal>
+          <Button
+            onClick={open}
+            size="md"
+            style={{ zIndex: 10, transform: 'translate(-50%, 0)' }}
+            pos="fixed"
+            left="50%"
+            bottom="5%"
+            color="orange"
+          >
+            Filters
+          </Button>
+        </div>
+      ) : (
+        form
+      )}
+    </div>
   );
 }
