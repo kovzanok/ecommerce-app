@@ -31,6 +31,16 @@ export const dateConverter = (date: Date) => {
   return `${date.getFullYear()}-${getMonth}-${getDay}`;
 };
 
+export const isInstanceOfDate = (currentValue: string | Date | undefined) => currentValue instanceof Date;
+
+export const areNotValuesEquals = (
+  currentValue: string | Date | undefined,
+  defaultValue: string | undefined,
+) => (isInstanceOfDate(currentValue)
+  ? dateConverter(new Date(defaultValue || ''))
+      !== dateConverter(new Date(currentValue || ''))
+  : defaultValue !== currentValue);
+
 export function transformRegistrationData(
   data: FormValues,
   isSame: boolean,

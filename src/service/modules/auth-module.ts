@@ -198,8 +198,6 @@ export default class AuthModule {
     actions: CustomerUpdateAction[],
     version: number,
   ): Promise<Customer> {
-    console.log('actions', actions);
-
     const res = await AuthModule.apiRoot
       .customers()
       .withId({ ID })

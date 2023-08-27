@@ -2,7 +2,7 @@ import { ActionIcon } from '@mantine/core';
 import { SetFieldValue } from '@mantine/form/lib/types';
 import { IconArrowBack } from '@tabler/icons-react';
 import { PersonalInfoFormValues } from '../../types';
-import { dateConverter } from '../../utils';
+import { areNotValuesEquals, isInstanceOfDate } from '../../utils';
 
 type RightSectionProps = {
   typeOfValue: string;
@@ -17,20 +17,17 @@ export default function RightSection({
   formValue,
   setFieldValue,
 }: RightSectionProps) {
-  const isInstanceOfDate = formValue instanceof Date;
-
   return (
     <div>
-      {(isInstanceOfDate
-        ? dateConverter(new Date(customerValue || ''))
-          !== dateConverter(new Date(formValue))
-        : customerValue !== formValue) && (
+      {areNotValuesEquals(formValue, customerValue) && (
         <ActionIcon
           variant="outline"
           onClick={() => {
             setFieldValue(
               typeOfValue,
-              isInstanceOfDate ? new Date(customerValue || '') : customerValue,
+              isInstanceOfDate(formValue)
+                ? new Date(customerValue || '')
+                : customerValue,
             );
           }}
         >

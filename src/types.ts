@@ -45,7 +45,7 @@ export interface PersonalInfoFormValues {
   lastName: string;
   email: string;
   // password: string;
-  dateOfBirthday: Date;
+  dateOfBirth: Date;
 
   // shippingAddresses: LocalAdr[];
 

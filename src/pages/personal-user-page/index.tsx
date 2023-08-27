@@ -4,10 +4,10 @@ import {
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useMediaQuery } from '@mantine/hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from '@mantine/form';
 import { CustomerUpdateAction } from '@commercetools/platform-sdk';
-import { dateConverter } from '../../utils';
+import { areNotValuesEquals, dateConverter } from '../../utils';
 import userSelector from '../../store/selectors';
 import { useAppDispatch, useAppSelector, useTitle } from '../../hooks';
 import { PersonalInfoFormValues } from '../../types';
@@ -25,7 +25,7 @@ export default function UserPage() {
   const dispatch = useAppDispatch();
   useTitle('Personal Info');
 
-  const { user } = useAppSelector(userSelector);
+  const { user, error } = useAppSelector(userSelector);
   const [isReadonly, setIsReadonly] = useState(true);
 
   if (!user) return <Navigate to="/login" />;
@@ -37,38 +37,58 @@ export default function UserPage() {
   ): CustomerUpdateAction[] => {
     setIsReadonly(true);
 
-    return [
-      {
+    const customerUpdateActionArray: CustomerUpdateAction[] = [];
+
+    if (areNotValuesEquals(values.firstName, customer.firstName)) {
+      customerUpdateActionArray.push({
         action: 'setFirstName',
         firstName: values.firstName || '',
-      },
-      {
+      });
+    }
+
+    if (areNotValuesEquals(values.lastName, customer.lastName)) {
+      customerUpdateActionArray.push({
         action: 'setLastName',
         lastName: values.lastName || '',
-      },
-      {
+      });
+    }
+
+    if (areNotValuesEquals(values.dateOfBirth, customer.dateOfBirth)) {
+      customerUpdateActionArray.push({
         action: 'setDateOfBirth',
-        dateOfBirth: dateConverter(new Date(values.dateOfBirthday || '')),
-      },
-    ];
+        dateOfBirth: dateConverter(new Date(values.dateOfBirth || '')),
+      });
+    }
+
+    if (areNotValuesEquals(values.email, customer.email)) {
+      customerUpdateActionArray.push({
+        action: 'changeEmail',
+        email: values.email || '',
+      });
+    }
+
+    console.log(customerUpdateActionArray);
+
+    return customerUpdateActionArray;
   };
 
   const {
     onSubmit,
     getInputProps,
+    setFieldError,
     setFieldValue,
     values: formValues,
   } = useForm<PersonalInfoFormValues>({
     initialValues: {
       firstName: customer.firstName || '',
       lastName: customer.lastName || '',
-      dateOfBirthday: new Date(customer.dateOfBirth || ''),
+      dateOfBirth: new Date(customer.dateOfBirth || ''),
       email: customer.email || '',
     },
     validate: {
       firstName: (val) => validateString(val),
       lastName: (val) => validateString(val),
-      dateOfBirthday: (val) => validateBirthday(val.toString()),
+      dateOfBirth: (val) => validateBirthday(dateConverter(val)),
       email: (val) => validateEmail(val),
     },
 
@@ -76,12 +96,19 @@ export default function UserPage() {
   });
 
   const handleSubmit = () => {
-    const vals = collectChanges(formValues);
-    dispatch(approveChanges(vals))
-      .unwrap()
-      .then(() => alert('Изменено'))
-      .catch(console.log);
+    const transformedValues = collectChanges(formValues);
+
+    if (transformedValues.length) {
+      dispatch(approveChanges(transformedValues))
+        .unwrap()
+        .then(() => alert('Изменено'))
+        .catch(console.log);
+    }
   };
+
+  useEffect(() => {
+    setFieldError('email', error);
+  }, [error, setFieldError]);
 
   const { classes } = useDisabledStyles();
 
@@ -158,14 +185,14 @@ export default function UserPage() {
                   }}
                   rightSection={(
                     <RightSection
-                      typeOfValue="dateOfBirthday"
+                      typeOfValue="dateOfBirth"
                       setFieldValue={setFieldValue}
-                      formValue={formValues.dateOfBirthday}
+                      formValue={formValues.dateOfBirth}
                       customerValue={customer.dateOfBirth}
                     />
                   )}
                   w="100%"
-                  {...getInputProps('dateOfBirthday')}
+                  {...getInputProps('dateOfBirth')}
                   valueFormat="YYYY-MM-DD"
                   label="Birthday"
                   placeholder="1974-01-01"
