@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import {
-  Button, Flex, Paper, TextInput, Title,
+  Button, Flex, Grid, Paper, TextInput, Title,
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { useMediaQuery } from '@mantine/hooks';
@@ -93,88 +93,92 @@ export default function UserPage() {
         </Title>
         <form onSubmit={onSubmit(handleSubmit)}>
           <Flex direction="column" justify="center" gap={10}>
-            <Flex direction={matches ? 'column' : 'row'} gap={20}>
-              <TextInput
-                w="100%"
-                placeholder="Vasya"
-                disabled={isReadonly}
-                rightSection={(
-                  <RightSection
-                    typeOfValue="firstName"
-                    setFieldValue={setFieldValue}
-                    formValue={formValues.firstName}
-                    customerValue={customer.firstName}
-                  />
-                )}
-                classNames={{
-                  input: classes.input,
-                }}
-                label="First name"
-                {...getInputProps('firstName')}
-              />
-              <TextInput
-                disabled={isReadonly}
-                classNames={{
-                  input: classes.input,
-                }}
-                rightSection={(
-                  <RightSection
-                    typeOfValue="lastName"
-                    setFieldValue={setFieldValue}
-                    formValue={formValues.lastName}
-                    customerValue={customer.lastName}
-                  />
-                )}
-                w="100%"
-                placeholder="Pupkin"
-                {...getInputProps('lastName')}
-                label="Last name"
-              />
-              <TextInput
-                disabled={isReadonly}
-                classNames={{
-                  input: classes.input,
-                }}
-                rightSection={(
-                  <RightSection
-                    typeOfValue="email"
-                    setFieldValue={setFieldValue}
-                    formValue={formValues.email}
-                    customerValue={customer.email}
-                  />
-                )}
-                w="100%"
-                placeholder="example@email.com"
-                {...getInputProps('email')}
-                label="Email"
-              />
-              <DateInput
-                disabled={isReadonly}
-                classNames={{
-                  input: classes.input,
-                }}
-                rightSection={(
-                  <RightSection
-                    typeOfValue="dateOfBirthday"
-                    setFieldValue={setFieldValue}
-                    formValue={formValues.dateOfBirthday}
-                    customerValue={customer.dateOfBirth}
-                  />
-                )}
-                w="100%"
-                {...getInputProps('dateOfBirthday')}
-                valueFormat="YYYY-MM-DD"
-                label="Birthday"
-                placeholder="1974-01-01"
-              />
-            </Flex>
-
+            <Grid justify="space-evenly">
+              <Grid.Col span={4}>
+                <TextInput
+                  w="100%"
+                  placeholder="Vasya"
+                  disabled={isReadonly}
+                  rightSection={(
+                    <RightSection
+                      typeOfValue="firstName"
+                      setFieldValue={setFieldValue}
+                      formValue={formValues.firstName}
+                      customerValue={customer.firstName}
+                    />
+                  )}
+                  classNames={{
+                    input: classes.input,
+                  }}
+                  label="First name"
+                  {...getInputProps('firstName')}
+                />
+                <TextInput
+                  disabled={isReadonly}
+                  classNames={{
+                    input: classes.input,
+                  }}
+                  rightSection={(
+                    <RightSection
+                      typeOfValue="lastName"
+                      setFieldValue={setFieldValue}
+                      formValue={formValues.lastName}
+                      customerValue={customer.lastName}
+                    />
+                  )}
+                  w="100%"
+                  placeholder="Pupkin"
+                  {...getInputProps('lastName')}
+                  label="Last name"
+                />
+              </Grid.Col>
+              <Grid.Col span={4}>
+                <TextInput
+                  disabled={isReadonly}
+                  classNames={{
+                    input: classes.input,
+                  }}
+                  rightSection={(
+                    <RightSection
+                      typeOfValue="email"
+                      setFieldValue={setFieldValue}
+                      formValue={formValues.email}
+                      customerValue={customer.email}
+                    />
+                  )}
+                  w="100%"
+                  placeholder="example@email.com"
+                  {...getInputProps('email')}
+                  label="Email"
+                />
+                <DateInput
+                  disabled={isReadonly}
+                  classNames={{
+                    input: classes.input,
+                  }}
+                  rightSection={(
+                    <RightSection
+                      typeOfValue="dateOfBirthday"
+                      setFieldValue={setFieldValue}
+                      formValue={formValues.dateOfBirthday}
+                      customerValue={customer.dateOfBirth}
+                    />
+                  )}
+                  w="100%"
+                  {...getInputProps('dateOfBirthday')}
+                  valueFormat="YYYY-MM-DD"
+                  label="Birthday"
+                  placeholder="1974-01-01"
+                />
+              </Grid.Col>
+            </Grid>
             <Button
               onClick={() => {
                 setIsReadonly(!isReadonly);
               }}
               type={isReadonly ? 'submit' : 'button'}
               m="auto"
+              mt={30}
               w={matches ? '100%' : '40%'}
               color="orange"
               size="md"
