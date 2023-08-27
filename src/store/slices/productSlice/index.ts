@@ -24,14 +24,18 @@ type ProductState = {
 
 const initialState: ProductState = {
   product: null,
-  loading: false,
+  loading: true,
   error: '',
 };
 
 const productSlice = createSlice({
   name: 'product',
   initialState,
-  reducers: {},
+  reducers: {
+    clearError(state) {
+      state.error = '';
+    },
+  },
   extraReducers(builder) {
     builder.addCase(fetchProductById.pending, (state) => {
       state.error = '';
@@ -54,5 +58,7 @@ const productSlice = createSlice({
     });
   },
 });
+
+export const { clearError } = productSlice.actions;
 
 export default productSlice.reducer;
