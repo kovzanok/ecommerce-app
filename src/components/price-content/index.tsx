@@ -1,5 +1,6 @@
 import { DiscountedPrice, Price } from '@commercetools/platform-sdk';
 import { Flex, Text } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 
 type DiscountedPriceBlockProps = DiscountedPrice & { isProductPage?: boolean };
 type PriceBlockProps = Price;
@@ -25,7 +26,7 @@ function PriceBlock({
   return (
     <Text
       color={discounted && 'gray'}
-      fz={discounted ? 15 : 20}
+      fz={discounted ? 18 : 20}
       style={{
         textDecoration: discounted && 'line-through',
       }}
@@ -41,8 +42,16 @@ export default function PriceContent({
   price,
   isProductPage = false,
 }: PriceContentProps) {
+  const matches = useMediaQuery('(max-width:770px)');
   return (
-    <Flex mt={5} justify="space-evenly" w="100%" align="center">
+    <Flex
+      direction={isProductPage && matches ? 'column' : 'row'}
+      mt={5}
+      columnGap={10}
+      justify="center"
+      w="100%"
+      align="center"
+    >
       {price?.discounted && (
         <DiscountedPriceBlock
           isProductPage={isProductPage}
