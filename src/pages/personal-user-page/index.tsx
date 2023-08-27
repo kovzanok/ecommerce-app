@@ -11,7 +11,7 @@ import { areNotValuesEquals, dateConverter } from '../../utils';
 import userSelector from '../../store/selectors';
 import { useAppDispatch, useAppSelector, useTitle } from '../../hooks';
 import { PersonalInfoFormValues } from '../../types';
-import { approveChanges } from '../../store/slices/userSlice';
+import { approveUserChanges } from '../../store/slices/userSlice';
 import { useDisabledStyles } from '../../utils/const';
 import {
   validateBirthday,
@@ -96,7 +96,7 @@ export default function UserPage() {
 
     setIsReadonly(!isReadonly);
     if (transformedValues.length) {
-      dispatch(approveChanges(transformedValues))
+      dispatch(approveUserChanges(transformedValues))
         .unwrap()
         .then(() => {
           const message = `${transformedValues.map((action) => action.action.slice(

@@ -1,14 +1,16 @@
 import { ActionIcon } from '@mantine/core';
 import { SetFieldValue } from '@mantine/form/lib/types';
 import { IconArrowBack } from '@tabler/icons-react';
-import { PersonalInfoFormValues } from '../../types';
+import { AddressesInfoFormValues, PersonalInfoFormValues } from '../../types';
 import { areNotValuesEquals, isInstanceOfDate } from '../../utils';
 
 type RightSectionProps = {
   typeOfValue: string;
   customerValue: string | undefined;
   formValue: string | Date | undefined;
-  setFieldValue: SetFieldValue<PersonalInfoFormValues>;
+  setFieldValue: SetFieldValue<
+  PersonalInfoFormValues | AddressesInfoFormValues
+  >;
 };
 
 export default function RightSection({
@@ -27,7 +29,7 @@ export default function RightSection({
               typeOfValue,
               isInstanceOfDate(formValue)
                 ? new Date(customerValue || '')
-                : customerValue,
+                : customerValue || '',
             );
           }}
         >

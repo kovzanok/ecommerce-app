@@ -44,12 +44,15 @@ export interface PersonalInfoFormValues {
   firstName: string;
   lastName: string;
   email: string;
-  // password: string;
   dateOfBirth: Date;
+}
 
-  // shippingAddresses: LocalAdr[];
-
-  // billingAddresses: LocalAdr[];
+export interface AddressesInfoFormValues {
+  country: string;
+  postalCode: string;
+  state: string;
+  city: string;
+  streetName: string;
 }
 
 export type LocalAdr = {

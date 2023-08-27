@@ -57,8 +57,8 @@ export const vertifyAuth = createAsyncThunk(
   },
 );
 
-export const approveChanges = createAsyncThunk(
-  'user/approveChanges',
+export const approveUserChanges = createAsyncThunk(
+  'user/approveUserChanges',
   async (
     actions: CustomerUpdateAction[],
     ThunkAPI,
@@ -159,11 +159,11 @@ const userSlice = createSlice({
         state.error = action.error.message;
       }
     });
-    builder.addCase(approveChanges.pending, (state) => {
+    builder.addCase(approveUserChanges.pending, (state) => {
       state.error = '';
       state.loading = true;
     });
-    builder.addCase(approveChanges.fulfilled, (state, action) => {
+    builder.addCase(approveUserChanges.fulfilled, (state, action) => {
       if (action.payload) {
         state.error = '';
         state.loading = false;
@@ -172,7 +172,7 @@ const userSlice = createSlice({
         }
       }
     });
-    builder.addCase(approveChanges.rejected, (state, action) => {
+    builder.addCase(approveUserChanges.rejected, (state, action) => {
       if (action.error.message) {
         state.loading = false;
         state.error = action.error.message;

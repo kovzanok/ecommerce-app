@@ -13,7 +13,6 @@ import userSelector from '../../store/selectors';
 
 export default function AddressesUserPage() {
   const matches = useMediaQuery('(max-width: 48em)');
-  const [isReadonly, setIsReadonly] = useState(true);
   const { user } = useAppSelector(userSelector);
   const [countries, setCountries] = useState<Country[]>([]);
   const dispatch = useAppDispatch();
@@ -26,6 +25,9 @@ export default function AddressesUserPage() {
   }, []);
   if (!user) return <Navigate to="/login" />;
   const { customer } = user;
+
+  const [editMode, setEditMode] = useState(false);
+
   return (
     <Flex gap={20} direction={matches ? 'column' : 'row'}>
       <Box w="100%">
@@ -49,23 +51,22 @@ export default function AddressesUserPage() {
                   customer.billingAddressIds
                   && customer.billingAddressIds.includes(adr.id || '')
                 }
+                editMode={editMode}
+                setEditMode={setEditMode}
               />
             ))}
           </Box>
         </Paper>
         <Center>
           <Button
-            mt={20}
-            onClick={() => {
-              setIsReadonly(!isReadonly);
-            }}
-            type={isReadonly ? 'submit' : 'button'}
+            type="submit"
             m="auto"
+            mt={30}
             w={matches ? '100%' : '40%'}
             color="orange"
             size="md"
           >
-            {isReadonly ? 'Edit' : 'Save'}
+            Add address
           </Button>
         </Center>
       </Box>
