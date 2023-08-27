@@ -76,7 +76,12 @@ export default function ProductPage() {
           styles={{
             viewport: {
               border: '1px solid black',
-              height: '420px',
+              display: 'flex',
+              alignItems: 'center',
+            },
+            slide: {
+              display: 'flex',
+              alignItems: 'center',
             },
             indicator: {
               background: 'white',
@@ -84,6 +89,9 @@ export default function ProductPage() {
               '&[data-active]': {
                 background: 'black',
               },
+            },
+            indicators: {
+              right: '5px',
             },
           }}
           nextControlIcon={<IconArrowBigDown fill="black" size={16} />}
