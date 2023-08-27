@@ -68,38 +68,43 @@ export default function ProductPage() {
 
   return (
     <Flex p="20px" columnGap={50}>
-      <Carousel
-        withIndicators={isOnlyOneImage}
-        withControls={isOnlyOneImage}
-        styles={{
-          viewport: {
-            border: '1px solid black',
-          },
-          indicator: {
-            background: 'white',
-            border: '1px solid black',
-            '&[data-active]': {
-              background: 'black',
+      <div>
+        {' '}
+        <Carousel
+          withIndicators={isOnlyOneImage}
+          withControls={isOnlyOneImage}
+          styles={{
+            viewport: {
+              border: '1px solid black',
+              height: '420px',
             },
-          },
-        }}
-        nextControlIcon={<IconArrowBigDown fill="black" size={16} />}
-        previousControlIcon={<IconArrowBigUp fill="black" size={16} />}
-        py={50}
-        height={500}
-        orientation="vertical"
-      >
-        {images?.map(({ url, label }) => (
-          <Carousel.Slide key={url}>
-            <Image
-              onClick={() => setCurrentImg(url)}
-              width={300}
-              alt={label}
-              src={url as string}
-            />
-          </Carousel.Slide>
-        ))}
-      </Carousel>
+            indicator: {
+              background: 'white',
+              border: '1px solid black',
+              '&[data-active]': {
+                background: 'black',
+              },
+            },
+          }}
+          nextControlIcon={<IconArrowBigDown fill="black" size={16} />}
+          previousControlIcon={<IconArrowBigUp fill="black" size={16} />}
+          py={50}
+          height={500}
+          orientation="vertical"
+        >
+          {images?.map(({ url, label }) => (
+            <Carousel.Slide key={url}>
+              <Image
+                onClick={() => setCurrentImg(url)}
+                width={300}
+                alt={label}
+                src={url as string}
+              />
+            </Carousel.Slide>
+          ))}
+        </Carousel>
+      </div>
+
       <Flex rowGap={10} direction="column">
         <div>
           <Title order={1}>{name['en-US']}</Title>
