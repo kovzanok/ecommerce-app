@@ -108,12 +108,10 @@ export default function UserPage() {
   };
 
   useEffect(() => {
-    setIsReadonly(true);
-  }, [user]);
-
-  useEffect(() => {
-    setFieldError('email', error);
-    setIsReadonly(false);
+    if (error) {
+      setFieldError('email', error);
+      setIsReadonly(false);
+    }
   }, [error, setFieldError]);
 
   const { classes } = useDisabledStyles();
