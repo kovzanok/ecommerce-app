@@ -29,7 +29,11 @@ export default function CustomHeader() {
 
   const authorizedUserLinks = (
     <Group>
-      <HeaderLink to="/user" text="Profile" icon={<IconUserCircle />} />
+      <HeaderLink
+        to="/user/personal-info"
+        text="Profile"
+        icon={<IconUserCircle />}
+      />
       <Button onClick={handleClick} variant="outline" color="orange">
         Logout
       </Button>

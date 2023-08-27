@@ -31,7 +31,7 @@ export default function MainPage() {
         'Product page contains all the detailed product information.',
     },
     {
-      to: '/user',
+      to: '/user/personal-info',
       name: 'User Profile Page',
       description:
         'User Profile page is available only for authorized users and contains all ther user information, which can be modified and saved.',
