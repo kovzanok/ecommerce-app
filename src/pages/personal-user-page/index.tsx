@@ -96,18 +96,24 @@ export default function UserPage() {
   const handleSubmit = () => {
     const transformedValues = collectChanges(formValues);
 
+    setIsReadonly(!isReadonly);
     if (transformedValues.length) {
-      setIsReadonly(true);
       dispatch(approveChanges(transformedValues))
         .unwrap()
-        .then(() => alert('Изменено'))
+        .then(() => {
+          alert('Изменено');
+        })
         .catch(console.log);
     }
   };
 
   useEffect(() => {
-    setIsReadonly(false);
+    setIsReadonly(true);
+  }, [user]);
+
+  useEffect(() => {
     setFieldError('email', error);
+    setIsReadonly(false);
   }, [error, setFieldError]);
 
   const { classes } = useDisabledStyles();
@@ -200,9 +206,6 @@ export default function UserPage() {
               </Grid.Col>
             </Grid>
             <Button
-              onClick={() => {
-                setIsReadonly(false);
-              }}
               type="submit"
               m="auto"
               mt={30}
