@@ -1,5 +1,5 @@
 import {
-  Loader, Flex, Center, Title,
+  Loader, Flex, Center, Title, MediaQuery,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useEffect, useState } from 'react';
@@ -121,7 +121,7 @@ export default function CatalogPage() {
   };
 
   return (
-    <Flex columnGap={30}>
+    <Flex pb={60} columnGap={30}>
       <Flex rowGap={10} direction="column">
         <Categories />
         <FilterForm
@@ -134,24 +134,27 @@ export default function CatalogPage() {
       </Flex>
 
       <div style={{ width: '100%' }}>
-        <Flex mb={20} align="end" columnGap={20}>
-          <SortSelect
-            handleChange={handleChange}
-            value={sort}
-            loading={loading}
-          />
-          <SearchBar
-            loading={loading}
-            value={search}
-            handleChange={(e) => {
-              setSearch(e.target.value);
-            }}
-            handleClear={() => {
-              setSearch('');
-            }}
-            handleSearch={handleSubmit}
-          />
-        </Flex>
+        <MediaQuery query="(max-width:580px)" styles={{ flexWrap: 'wrap' }}>
+          <Flex mb={20} align="end" justify="center" columnGap={20} rowGap={10}>
+            <SortSelect
+              handleChange={handleChange}
+              value={sort}
+              loading={loading}
+            />
+            <SearchBar
+              loading={loading}
+              value={search}
+              handleChange={(e) => {
+                setSearch(e.target.value);
+              }}
+              handleClear={() => {
+                setSearch('');
+              }}
+              handleSearch={handleSubmit}
+            />
+          </Flex>
+        </MediaQuery>
+
         <CustomBreadcrumbs />
         {content}
       </div>
