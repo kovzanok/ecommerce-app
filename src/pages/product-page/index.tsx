@@ -5,7 +5,13 @@ import { Carousel } from '@mantine/carousel';
 import { Navigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Price } from '@commercetools/platform-sdk';
-import { IconArrowBigUp, IconArrowBigDown } from '@tabler/icons-react';
+import {
+  IconArrowBigUp,
+  IconArrowBigDown,
+  IconArrowBigRight,
+  IconArrowBigLeft,
+} from '@tabler/icons-react';
+import { EmblaCarouselType } from 'embla-carousel';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { productSelector } from '../../store/selectors';
 import { clearError, fetchProductById } from '../../store/slices/productSlice';
@@ -19,12 +25,13 @@ import {
 import PriceContent from '../../components/price-content';
 import { getProductAttribute } from '../../utils';
 
+const TRANSIOTION_DURATION = 200;
 export default function ProductPage() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const { loading, product, error } = useAppSelector(productSelector);
   const [currentImg, setCurrentImg] = useState('');
-
+  const [embla, setEmbla] = useState<EmblaCarouselType | null>(null);
   useEffect(() => {
     if (id) {
       dispatch(fetchProductById(id));
@@ -32,8 +39,10 @@ export default function ProductPage() {
     return () => {
       dispatch(clearError());
     };
-  }, [id]);
-
+  }, [id, dispatch]);
+  useEffect(() => {
+    setTimeout(() => embla && embla.reInit(), TRANSIOTION_DURATION);
+  }, [currentImg, embla]);
   if (error) return <Navigate replace to="/not-found" />;
 
   if (loading || !product) {
@@ -150,8 +159,37 @@ export default function ProductPage() {
           </div>
         </div>
       </Flex>
-      <Modal onClose={() => setCurrentImg('')} opened={!!currentImg}>
-        <Image src={currentImg} />
+      <Modal
+        transitionProps={{ duration: TRANSIOTION_DURATION }}
+        padding={10}
+        onClose={() => setCurrentImg('')}
+        opened={!!currentImg}
+      >
+        <Carousel
+          getEmblaApi={setEmbla}
+          maw={500}
+          px={20}
+          withIndicators={isOnlyOneImage}
+          withControls={isOnlyOneImage}
+          styles={{
+            indicator: {
+              background: 'white',
+              border: '1px solid black',
+              '&[data-active]': {
+                background: 'black',
+              },
+            },
+          }}
+          nextControlIcon={<IconArrowBigRight fill="black" size={16} />}
+          previousControlIcon={<IconArrowBigLeft fill="black" size={16} />}
+          initialSlide={images?.findIndex(({ url }) => url === currentImg)}
+        >
+          {images?.map(({ url, label }) => (
+            <Carousel.Slide key={url}>
+              <img alt={label} width="100%" src={url} />
+            </Carousel.Slide>
+          ))}
+        </Carousel>
       </Modal>
     </Flex>
   );
