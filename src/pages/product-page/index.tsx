@@ -1,14 +1,14 @@
 import {
-  Flex, Title, Text, Image, Loader, Center,
+  Flex, Title, Text, Image, Loader, Center, Modal,
 } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
 import { Navigate, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Price } from '@commercetools/platform-sdk';
 import { IconArrowBigUp, IconArrowBigDown } from '@tabler/icons-react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { productSelector } from '../../store/selectors';
-import { fetchProductById } from '../../store/slices/productSlice';
+import { clearError, fetchProductById } from '../../store/slices/productSlice';
 import {
   AgeType,
   AuthorType,
@@ -23,6 +23,8 @@ export default function ProductPage() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const { loading, product, error } = useAppSelector(productSelector);
+  const [currentImg, setCurrentImg] = useState('');
+
   useEffect(() => {
     if (id) {
       dispatch(fetchProductById(id));
@@ -54,6 +56,7 @@ export default function ProductPage() {
   const publisher = getProductAttribute<PublisherType>(attributes, 'publisher');
   const price = prices?.[0] as Price;
   const isOnlyOneImage = images?.length !== 1;
+
   return (
     <Flex p="20px" columnGap={50}>
       <Carousel
@@ -79,7 +82,12 @@ export default function ProductPage() {
       >
         {images?.map(({ url, label }) => (
           <Carousel.Slide key={url}>
-            <Image width={300} alt={label} src={url as string} />
+            <Image
+              onClick={() => setCurrentImg(url)}
+              width={300}
+              alt={label}
+              src={url as string}
+            />
           </Carousel.Slide>
         ))}
       </Carousel>
@@ -142,6 +150,9 @@ export default function ProductPage() {
           </div>
         </div>
       </Flex>
+      <Modal onClose={() => setCurrentImg('')} opened={!!currentImg}>
+        <Image src={currentImg} />
+      </Modal>
     </Flex>
   );
 }
