@@ -35,8 +35,6 @@ export default function UserPage() {
   const collectChanges = (
     values: PersonalInfoFormValues,
   ): CustomerUpdateAction[] => {
-    setIsReadonly(true);
-
     const customerUpdateActionArray: CustomerUpdateAction[] = [];
 
     if (areNotValuesEquals(values.firstName, customer.firstName)) {
@@ -99,6 +97,7 @@ export default function UserPage() {
     const transformedValues = collectChanges(formValues);
 
     if (transformedValues.length) {
+      setIsReadonly(true);
       dispatch(approveChanges(transformedValues))
         .unwrap()
         .then(() => alert('Изменено'))
@@ -201,9 +200,9 @@ export default function UserPage() {
             </Grid>
             <Button
               onClick={() => {
-                setIsReadonly(!isReadonly);
+                setIsReadonly(false);
               }}
-              type={isReadonly ? 'submit' : 'button'}
+              type="submit"
               m="auto"
               mt={30}
               w={matches ? '100%' : '40%'}
