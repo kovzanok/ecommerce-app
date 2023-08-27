@@ -65,8 +65,6 @@ export default function UserPage() {
       });
     }
 
-    console.log(customerUpdateActionArray);
-
     return customerUpdateActionArray;
   };
 
@@ -101,7 +99,12 @@ export default function UserPage() {
       dispatch(approveChanges(transformedValues))
         .unwrap()
         .then(() => {
-          alert('Изменено');
+          const message = `${transformedValues.map((action) => action.action.slice(
+            action.action
+              .split('')
+              .findIndex((symbol) => symbol === symbol.toUpperCase()),
+          ))} successfully changed`;
+          alert(message);
         })
         .catch(console.log);
     }
