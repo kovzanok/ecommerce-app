@@ -72,4 +72,13 @@ export default class ProductsModule {
       .execute();
     return body;
   }
+
+  static async getProductById(id: string): Promise<ProductProjection> {
+    const { body } = await AuthModule.apiRoot
+      .productProjections()
+      .withId({ ID: id })
+      .get()
+      .execute();
+    return body;
+  }
 }

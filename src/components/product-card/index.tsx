@@ -1,8 +1,4 @@
-import {
-  DiscountedPrice,
-  Price,
-  ProductProjection,
-} from '@commercetools/platform-sdk';
+import { ProductProjection } from '@commercetools/platform-sdk';
 import {
   Flex, Text, Card, Title,
 } from '@mantine/core';
@@ -10,41 +6,9 @@ import { NavLink } from 'react-router-dom';
 import { useHover } from '@mantine/hooks';
 import { AuthorType, PublishedType } from '../../types';
 import { getProductAttribute } from '../../utils';
+import PriceContent from '../price-content';
 
 type ProductCardProps = ProductProjection;
-type DiscountedPriceBlockProps = DiscountedPrice;
-type PriceBlockProps = Price;
-
-function DiscountedPriceBlock({
-  value: { centAmount, currencyCode },
-}: DiscountedPriceBlockProps) {
-  return (
-    <Text fz={15} fw={700} color="orange">
-      {(Number(centAmount) / 100).toFixed(2)}
-      {' '}
-      {currencyCode}
-    </Text>
-  );
-}
-
-function PriceBlock({
-  discounted,
-  value: { centAmount, currencyCode },
-}: PriceBlockProps) {
-  return (
-    <Text
-      color={discounted && 'gray'}
-      fz={15}
-      style={{
-        textDecoration: discounted && 'line-through',
-      }}
-    >
-      {(centAmount / 100).toFixed(2)}
-      {' '}
-      {currencyCode}
-    </Text>
-  );
-}
 
 export default function ProductCard({
   id,
@@ -59,12 +23,7 @@ export default function ProductCard({
   const published = getProductAttribute<PublishedType>(attributes, 'Published');
   const engDescription = description && description['en-US'];
 
-  const priceContent = price ? (
-    <Flex mt={5} justify="space-evenly" w="100%">
-      {price?.discounted && <DiscountedPriceBlock {...price.discounted} />}
-      <PriceBlock {...price} />
-    </Flex>
-  ) : null;
+  const priceContent = price ? <PriceContent price={price} /> : null;
 
   return (
     <NavLink style={{ textDecoration: 'none' }} to={`/product/${id}`}>
