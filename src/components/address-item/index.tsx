@@ -150,7 +150,7 @@ export default function AddressItem({
         >
           <Checkbox
             name="defaultShippingAddress"
-            defaultChecked={defaultShipping === address.id}
+            defaultChecked={defaultShipping}
             onChange={() => {}}
             label="Default shipping address"
             disabled={isReadOnly}
@@ -162,7 +162,7 @@ export default function AddressItem({
           />
           <Checkbox
             name="defaultBillingAddress"
-            defaultChecked={defaultBilling === address.id}
+            defaultChecked={defaultBilling}
             onChange={() => {}}
             label="Default billing address"
             disabled={isReadOnly}
@@ -190,7 +190,7 @@ export default function AddressItem({
                     typeOfValue="streetName"
                     customerValue={address.streetName}
                     formValue={formValues.streetName}
-                    setFieldValue={setFieldValue}
+                    setFieldValue={() => setFieldValue}
                   />
                 )}
               />
@@ -207,7 +207,7 @@ export default function AddressItem({
                     typeOfValue="city"
                     customerValue={address.city}
                     formValue={formValues.city}
-                    setFieldValue={setFieldValue}
+                    setFieldValue={() => setFieldValue}
                   />
                 )}
                 w="100%"
@@ -225,7 +225,7 @@ export default function AddressItem({
                     typeOfValue="state"
                     customerValue={address.state}
                     formValue={formValues.state}
-                    setFieldValue={setFieldValue}
+                    setFieldValue={() => setFieldValue}
                   />
                 )}
                 w="100%"
@@ -247,7 +247,7 @@ export default function AddressItem({
                     typeOfValue="country"
                     customerValue={address.country}
                     formValue={formValues.country}
-                    setFieldValue={setFieldValue}
+                    setFieldValue={() => setFieldValue}
                   />
                 )}
                 w="100%"
@@ -265,7 +265,7 @@ export default function AddressItem({
                     typeOfValue="postalCode"
                     customerValue={address.postalCode}
                     formValue={formValues.postalCode}
-                    setFieldValue={setFieldValue}
+                    setFieldValue={() => setFieldValue}
                   />
                 )}
                 w="100%"

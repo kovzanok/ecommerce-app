@@ -136,7 +136,7 @@ export default function UserPage() {
                   rightSection={(
                     <RightSection
                       typeOfValue="firstName"
-                      setFieldValue={setFieldValue}
+                      setFieldValue={() => setFieldValue}
                       formValue={formValues.firstName}
                       customerValue={customer.firstName}
                     />
@@ -155,7 +155,7 @@ export default function UserPage() {
                   rightSection={(
                     <RightSection
                       typeOfValue="lastName"
-                      setFieldValue={setFieldValue}
+                      setFieldValue={() => setFieldValue}
                       formValue={formValues.lastName}
                       customerValue={customer.lastName}
                     />
@@ -175,7 +175,7 @@ export default function UserPage() {
                   rightSection={(
                     <RightSection
                       typeOfValue="email"
-                      setFieldValue={setFieldValue}
+                      setFieldValue={() => setFieldValue}
                       formValue={formValues.email}
                       customerValue={customer.email}
                     />
@@ -193,7 +193,7 @@ export default function UserPage() {
                   rightSection={(
                     <RightSection
                       typeOfValue="dateOfBirth"
-                      setFieldValue={setFieldValue}
+                      setFieldValue={() => setFieldValue}
                       formValue={formValues.dateOfBirth}
                       customerValue={customer.dateOfBirth}
                     />

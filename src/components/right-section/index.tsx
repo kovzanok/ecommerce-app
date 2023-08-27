@@ -4,14 +4,14 @@ import { IconArrowBack } from '@tabler/icons-react';
 import { AddressesInfoFormValues, PersonalInfoFormValues } from '../../types';
 import { areNotValuesEquals, isInstanceOfDate } from '../../utils';
 
-type RightSectionProps = {
+type SetFieldTypeValue = PersonalInfoFormValues | AddressesInfoFormValues;
+
+interface RightSectionProps {
   typeOfValue: string;
   customerValue: string | undefined;
   formValue: string | Date | undefined;
-  setFieldValue: SetFieldValue<
-  PersonalInfoFormValues | AddressesInfoFormValues
-  >;
-};
+  setFieldValue: SetFieldValue<SetFieldTypeValue>;
+}
 
 export default function RightSection({
   typeOfValue,
