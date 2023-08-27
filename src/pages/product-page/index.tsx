@@ -27,16 +27,20 @@ export default function ProductPage() {
     if (id) {
       dispatch(fetchProductById(id));
     }
+    return () => {
+      dispatch(clearError());
+    };
   }, [id]);
-  if (loading) {
+
+  if (error) return <Navigate replace to="/not-found" />;
+
+  if (loading || !product) {
     return (
       <Center h="100%">
         <Loader color="orange" />
       </Center>
     );
   }
-
-  if (!product || error) return <Navigate replace to="/not-found" />;
 
   const {
     name,
