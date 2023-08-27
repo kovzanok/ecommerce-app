@@ -185,7 +185,7 @@ export default function ProductPage() {
           initialSlide={images?.findIndex(({ url }) => url === currentImg)}
         >
           {images?.map(({ url, label }) => (
-            <Carousel.Slide onClick={() => setCurrentImg(url)} key={url}>
+            <Carousel.Slide key={url}>
               <img alt={label} width="100%" src={url} />
             </Carousel.Slide>
           ))}
