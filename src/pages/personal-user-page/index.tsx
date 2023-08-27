@@ -106,6 +106,7 @@ export default function UserPage() {
   };
 
   useEffect(() => {
+    setIsReadonly(false);
     setFieldError('email', error);
   }, [error, setFieldError]);
 
