@@ -40,10 +40,10 @@ export interface FormValues {
   };
 }
 
-export interface ProfileFormValues {
+export interface PersonalInfoFormValues {
   firstName: string;
   lastName: string;
-  // email: string;
+  email: string;
   // password: string;
   dateOfBirthday: Date;
 
