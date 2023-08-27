@@ -1,10 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
+  Customer,
   CustomerDraft,
   CustomerSignInResult,
   CustomerSignin,
+  CustomerUpdateAction,
 } from '@commercetools/platform-sdk';
 import ApiService from '../../../service/api-service';
+import AuthModule from '../../../service/modules/auth-module';
+import { RootState } from '../..';
 
 export const signIn = createAsyncThunk(
   'user/signIn',
@@ -49,6 +53,28 @@ export const vertifyAuth = createAsyncThunk(
       return null;
     } catch (err) {
       throw new Error();
+    }
+  },
+);
+
+export const approveChanges = createAsyncThunk(
+  'user/approveChanges',
+  async (
+    actions: CustomerUpdateAction[],
+    ThunkAPI,
+  ): Promise<Customer | undefined> => {
+    try {
+      const state: RootState = ThunkAPI.getState() as RootState;
+
+      if (state.user.user?.customer) {
+        const { version, id } = state.user.user.customer;
+        const res = await AuthModule.updateCustomer(id, actions, version);
+        return res;
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      }
     }
   },
 );
@@ -130,6 +156,25 @@ const userSlice = createSlice({
       if (action.error.message) {
         state.loading = false;
         state.user = null;
+        state.error = action.error.message;
+      }
+    });
+    builder.addCase(approveChanges.pending, (state) => {
+      state.error = '';
+      state.loading = true;
+    });
+    builder.addCase(approveChanges.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.error = '';
+        state.loading = false;
+        if (state.user?.customer) {
+          state.user.customer = action.payload;
+        }
+      }
+    });
+    builder.addCase(approveChanges.rejected, (state, action) => {
+      if (action.error.message) {
+        state.loading = false;
         state.error = action.error.message;
       }
     });

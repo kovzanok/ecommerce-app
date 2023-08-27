@@ -26,8 +26,8 @@ export const countryNames = [
 export const useDisabledStyles = createStyles(() => ({
   input: {
     '&:disabled': {
-      backgroundColor: '#fff',
-      color: '#000',
+      backgroundColor: '#dcdcdc99',
+      color: '#000000b3',
       opacity: '1',
       cursor: 'not-allowed',
       pointerEvents: 'none',
