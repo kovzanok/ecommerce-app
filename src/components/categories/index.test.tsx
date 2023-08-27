@@ -8,6 +8,19 @@ import ApiService from '../../service/api-service';
 vi.mock('../../service/api-service');
 
 describe('Categories', () => {
+  beforeAll(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
+  });
   const categories: Category[] = [
     {
       id: 'id1',

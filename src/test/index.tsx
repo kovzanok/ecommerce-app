@@ -17,6 +17,11 @@ const defaultState = {
     loading: false,
     error: '',
   },
+  product: {
+    product: null,
+    loading: false,
+    error: '',
+  },
 };
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {

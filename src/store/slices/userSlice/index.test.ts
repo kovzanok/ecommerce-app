@@ -157,7 +157,7 @@ describe('signUpThunk', () => {
 describe('userSlice', () => {
   const initialState = {
     user: null,
-    loading: false,
+    loading: true,
     error: '',
   };
 
@@ -167,6 +167,11 @@ describe('userSlice', () => {
   });
 
   it('should logout user', () => {
+    const logoutState = {
+      user: null,
+      loading: false,
+      error: '',
+    };
     const userState = {
       user: {
         customer: {
@@ -188,6 +193,6 @@ describe('userSlice', () => {
     };
     const action: Action = { type: logout.type };
     const result = userReducer(userState, action);
-    expect(result).toStrictEqual(initialState);
+    expect(result).toStrictEqual(logoutState);
   });
 });

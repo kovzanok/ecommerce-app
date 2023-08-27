@@ -80,7 +80,7 @@ export type PublishedType = {
   value: number;
 };
 
-type CoverType = {
+export type CoverType = {
   name: 'Cover';
   value: {
     key: string;
@@ -96,7 +96,7 @@ export type AuthorType = {
   };
 };
 
-type AgeType = {
+export type AgeType = {
   name: 'Age_restrictions';
   value: {
     key: string;
@@ -104,7 +104,7 @@ type AgeType = {
   };
 };
 
-type PublisherType = {
+export type PublisherType = {
   name: 'publisher';
   value: {
     key: string;
