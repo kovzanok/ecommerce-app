@@ -36,10 +36,14 @@ export const isInstanceOfDate = (currentValue: string | Date | undefined) => cur
 export const areNotValuesEquals = (
   currentValue: string | Date | undefined,
   defaultValue: string | undefined,
-) => (isInstanceOfDate(currentValue)
-  ? dateConverter(new Date(defaultValue || ''))
-      !== dateConverter(new Date(currentValue || ''))
-  : defaultValue !== currentValue);
+) => {
+  const changedCurrentValue = currentValue === undefined ? '' : currentValue;
+  const changedDefaultValue = defaultValue === undefined ? '' : defaultValue;
+  return isInstanceOfDate(changedCurrentValue)
+    ? dateConverter(new Date(changedDefaultValue))
+        !== dateConverter(new Date(changedCurrentValue))
+    : changedDefaultValue !== changedCurrentValue;
+};
 
 export function transformRegistrationData(
   data: FormValues,

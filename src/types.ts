@@ -44,12 +44,20 @@ export interface PersonalInfoFormValues {
   firstName: string;
   lastName: string;
   email: string;
-  // password: string;
   dateOfBirth: Date;
+}
 
-  // shippingAddresses: LocalAdr[];
+export interface AddressesInfoFormValues {
+  country: string;
+  postalCode: string;
+  state: string;
+  city: string;
+  streetName: string;
 
-  // billingAddresses: LocalAdr[];
+  isDefaultBilling: boolean;
+  isDefaultShipping: boolean;
+  isBilling: boolean;
+  isShipping: boolean;
 }
 
 export type LocalAdr = {
