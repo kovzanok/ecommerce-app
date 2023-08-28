@@ -69,7 +69,6 @@ export default function AddressItem({
       isShipping: isShipping || false,
     },
     validate: {
-      state: (val) => validateString(val),
       city: (val) => validateString(val),
       streetName: (val) => validateStreet(val),
       country: (val: string) => {
@@ -347,6 +346,7 @@ export default function AddressItem({
           <Flex direction="column" gap={10}>
             <Flex direction="row" gap={10} justify="space-between">
               <TextInput
+                withAsterisk
                 placeholder="Lenin st. 12-01"
                 label="Street"
                 disabled={isReadOnly}
@@ -365,6 +365,7 @@ export default function AddressItem({
                 )}
               />
               <TextInput
+                withAsterisk
                 placeholder="Minsk"
                 label="City"
                 disabled={isReadOnly}
@@ -383,7 +384,7 @@ export default function AddressItem({
                 w="100%"
               />
               <TextInput
-                placeholder="Myadel"
+                placeholder="Vit. obl"
                 label="State"
                 disabled={isReadOnly}
                 classNames={{
@@ -403,6 +404,7 @@ export default function AddressItem({
             </Flex>
             <Flex direction="row" gap={10} justify="space-between">
               <Select
+                withAsterisk
                 placeholder="Belarus"
                 label="Country"
                 searchable
@@ -423,6 +425,7 @@ export default function AddressItem({
                 w="100%"
               />
               <TextInput
+                withAsterisk
                 placeholder="AF-35A"
                 label="Postal code"
                 disabled={isReadOnly}

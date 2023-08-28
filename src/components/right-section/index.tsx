@@ -1,16 +1,12 @@
 import { ActionIcon } from '@mantine/core';
-import { SetFieldValue } from '@mantine/form/lib/types';
 import { IconArrowBack } from '@tabler/icons-react';
-import { AddressesInfoFormValues, PersonalInfoFormValues } from '../../types';
 import { areNotValuesEquals, isInstanceOfDate } from '../../utils';
-
-type SetFieldTypeValue = PersonalInfoFormValues | AddressesInfoFormValues;
 
 interface RightSectionProps {
   typeOfValue: string;
   customerValue: string | undefined;
   formValue: string | Date | undefined;
-  setFieldValue: SetFieldValue<SetFieldTypeValue>;
+  setFieldValue: (path: string, value: unknown) => void;
 }
 
 export default function RightSection({
