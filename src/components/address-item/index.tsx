@@ -20,15 +20,19 @@ import {
 import { useAppDispatch } from '../../hooks';
 import { approveUserChanges } from '../../store/slices/userSlice';
 import RightSection from '../right-section';
-import { areNotValuesEquals } from '../../utils';
+import {
+  addAddressHandleSubmit,
+  addAddressIdsHandleSubmit,
+  changeAddressHandle,
+} from '../../utils';
 
 type AddressProps = {
   address: Address;
   countries: Country[];
   defaultBilling: boolean;
   defaultShipping: boolean;
-  isShipping: boolean | undefined;
-  isBilling: boolean | undefined;
+  isShipping: boolean;
+  isBilling: boolean;
   editMode: boolean;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -87,12 +91,10 @@ export default function AddressItem({
   });
 
   const removeAddressHandle = () => {
-    if (isAddressAdding) {
-      if (setIsAddressAdding) {
-        setIsAddressAdding(false);
-        setEditMode(false);
-        return;
-      }
+    if (isAddressAdding && setIsAddressAdding) {
+      setIsAddressAdding(false);
+      setEditMode(false);
+      return;
     }
 
     dispatch(
@@ -105,59 +107,6 @@ export default function AddressItem({
     );
   };
 
-  const addAddressHandleSubmit = (
-    values: AddressesInfoFormValues,
-  ): CustomerUpdateAction[] => {
-    const addAddressActionsArray: CustomerUpdateAction[] = [
-      {
-        action: 'addAddress',
-        address: {
-          streetName: values.streetName,
-          state: values.state,
-          country: values.country,
-          postalCode: values.postalCode,
-          city: values.city,
-        },
-      },
-    ];
-
-    return addAddressActionsArray;
-  };
-
-  const addAddressIdsHandleSubmit = (
-    values: AddressesInfoFormValues,
-    id: string,
-  ): CustomerUpdateAction[] => {
-    const addAddressActionsArray: CustomerUpdateAction[] = [];
-
-    if (values.isDefaultBilling) {
-      addAddressActionsArray.push({
-        action: 'setDefaultBillingAddress',
-        addressId: id,
-      });
-    }
-    if (values.isDefaultShipping) {
-      addAddressActionsArray.push({
-        action: 'setDefaultShippingAddress',
-        addressId: id,
-      });
-    }
-    if (values.isBilling) {
-      addAddressActionsArray.push({
-        action: 'addBillingAddressId',
-        addressId: id,
-      });
-    }
-    if (values.isShipping) {
-      addAddressActionsArray.push({
-        action: 'addShippingAddressId',
-        addressId: id,
-      });
-    }
-
-    return addAddressActionsArray;
-  };
-
   const addAddressDispatch = async (
     transformedValues: CustomerUpdateAction[],
   ) => {
@@ -167,70 +116,11 @@ export default function AddressItem({
       ).unwrap();
       return response;
     } catch (error) {
-      return console.log;
+      if (error instanceof Error) {
+        console.log(error.message);
+      }
     }
   };
-
-  const changeAddressHandle = (
-    values: AddressesInfoFormValues,
-  ): CustomerUpdateAction[] => {
-    const changeAddressActionsArray: CustomerUpdateAction[] = [];
-
-    const isAtLeastOneDifferent = areNotValuesEquals(values.streetName, address.streetName)
-      || areNotValuesEquals(values.postalCode, address.postalCode)
-      || areNotValuesEquals(values.country, address.country)
-      || areNotValuesEquals(values.city, address.city)
-      || areNotValuesEquals(values.state, address.state);
-
-    if (isAtLeastOneDifferent) {
-      changeAddressActionsArray.push({
-        action: 'changeAddress',
-        addressId: address.id,
-        address: {
-          streetName: values.streetName,
-          state: values.state,
-          country: values.country,
-          postalCode: values.postalCode,
-          city: values.city,
-        },
-      });
-    }
-
-    if (values.isDefaultBilling !== defaultBilling) {
-      changeAddressActionsArray.push({
-        action: 'setDefaultBillingAddress',
-        addressId: values.isDefaultBilling ? address.id : undefined,
-      });
-    }
-
-    if (values.isDefaultShipping !== defaultShipping) {
-      changeAddressActionsArray.push({
-        action: 'setDefaultShippingAddress',
-        addressId: values.isDefaultShipping ? address.id : undefined,
-      });
-    }
-
-    if (values.isBilling !== isBilling) {
-      changeAddressActionsArray.push({
-        action: values.isBilling
-          ? 'addBillingAddressId'
-          : 'removeBillingAddressId',
-        addressId: address.id,
-      });
-    }
-
-    if (values.isShipping !== isShipping) {
-      changeAddressActionsArray.push({
-        action: values.isShipping
-          ? 'addShippingAddressId'
-          : 'removeShippingAddressId',
-        addressId: address.id,
-      });
-    }
-
-    return changeAddressActionsArray;
-  };
-
   const changeAddressDispatch = (transformedValues: CustomerUpdateAction[]) => {
     dispatch(approveUserChanges(transformedValues))
       .unwrap()
@@ -244,21 +134,30 @@ export default function AddressItem({
   const handleSubmit = async (values: AddressesInfoFormValues) => {
     const transformedValues = isAddressAdding
       ? addAddressHandleSubmit(values)
-      : changeAddressHandle(values);
+      : changeAddressHandle(
+        values,
+        address,
+        defaultBilling,
+        defaultShipping,
+        isShipping,
+        isBilling,
+      );
 
     setIsReadOnly(!isReadOnly);
     setEditMode(!editMode);
-    if (transformedValues.length) {
-      if (isAddressAdding) {
-        const addedCustomer = await addAddressDispatch(transformedValues);
-        if (addedCustomer && !(addedCustomer instanceof Function)) {
-          const addedId = addedCustomer.addresses[addedCustomer.addresses.length - 1].id;
-          if (addedId) {
-            changeAddressDispatch(addAddressIdsHandleSubmit(values, addedId));
-          }
-        }
-      } else {
-        changeAddressDispatch(transformedValues);
+    console.log(transformedValues);
+
+    if (!transformedValues.length) return;
+    if (!isAddressAdding) {
+      changeAddressDispatch(transformedValues);
+      return;
+    }
+
+    const addedCustomer = await addAddressDispatch(transformedValues);
+    if (addedCustomer && !(addedCustomer instanceof Function)) {
+      const addedId = addedCustomer.addresses[addedCustomer.addresses.length - 1].id;
+      if (addedId) {
+        changeAddressDispatch(addAddressIdsHandleSubmit(values, addedId));
       }
     }
   };
