@@ -24,15 +24,15 @@ import {
   addAddressHandleSubmit,
   addAddressIdsHandleSubmit,
   changeAddressHandle,
-} from '../../utils';
+} from './utils';
 
 type AddressProps = {
   address: Address;
   countries: Country[];
   defaultBilling: boolean;
   defaultShipping: boolean;
-  isShipping: boolean;
-  isBilling: boolean;
+  isShipping: boolean | undefined;
+  isBilling: boolean | undefined;
   editMode: boolean;
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 
