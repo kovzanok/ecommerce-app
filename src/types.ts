@@ -53,6 +53,11 @@ export interface AddressesInfoFormValues {
   state: string;
   city: string;
   streetName: string;
+
+  isDefaultBilling: boolean;
+  isDefaultShipping: boolean;
+  isBilling: boolean;
+  isShipping: boolean;
 }
 
 export type LocalAdr = {

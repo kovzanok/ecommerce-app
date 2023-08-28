@@ -56,6 +56,10 @@ export default function AddressItem({
       state: address.state || '',
       city: address.city || '',
       streetName: address.streetName || '',
+      isDefaultBilling: defaultBilling,
+      isDefaultShipping: defaultShipping,
+      isBilling: isBilling || false,
+      isShipping: isShipping || false,
     },
     validate: {
       state: (val) => validateString(val),
@@ -80,6 +84,17 @@ export default function AddressItem({
     const addressActions: CustomerUpdateAction[] = [];
 
     return addressActions;
+  };
+
+  const removeAddressHandle = () => {
+    dispatch(
+      approveUserChanges([
+        {
+          action: 'removeAddress',
+          addressId: address.id,
+        },
+      ]),
+    );
   };
 
   const handleSubmit = () => {
@@ -121,9 +136,7 @@ export default function AddressItem({
           {!isReadOnly && (
             <ActionIcon
               title="Remove address"
-              onClick={() => {
-                setIsReadOnly(!isReadOnly);
-              }}
+              onClick={removeAddressHandle}
               color="red"
               variant="filled"
             >
@@ -150,27 +163,23 @@ export default function AddressItem({
         >
           <Checkbox
             name="defaultShippingAddress"
-            defaultChecked={defaultShipping}
-            onChange={() => {}}
             label="Default shipping address"
             disabled={isReadOnly}
             classNames={{
               input: classes.input,
               label: classes.label,
             }}
-            value="defaultShipping"
+            {...getInputProps('isDefaultShipping', { type: 'checkbox' })}
           />
           <Checkbox
             name="defaultBillingAddress"
-            defaultChecked={defaultBilling}
-            onChange={() => {}}
             label="Default billing address"
             disabled={isReadOnly}
             classNames={{
               input: classes.input,
               label: classes.label,
             }}
-            value="defaultBilling"
+            {...getInputProps('isDefaultBilling', { type: 'checkbox' })}
           />
         </Flex>
         <Paper w="50%" mt="xs" shadow="xs" p="xs">
@@ -190,7 +199,7 @@ export default function AddressItem({
                     typeOfValue="streetName"
                     customerValue={address.streetName}
                     formValue={formValues.streetName}
-                    setFieldValue={() => setFieldValue}
+                    setFieldValue={setFieldValue}
                   />
                 )}
               />
@@ -207,7 +216,7 @@ export default function AddressItem({
                     typeOfValue="city"
                     customerValue={address.city}
                     formValue={formValues.city}
-                    setFieldValue={() => setFieldValue}
+                    setFieldValue={setFieldValue}
                   />
                 )}
                 w="100%"
@@ -225,7 +234,7 @@ export default function AddressItem({
                     typeOfValue="state"
                     customerValue={address.state}
                     formValue={formValues.state}
-                    setFieldValue={() => setFieldValue}
+                    setFieldValue={setFieldValue}
                   />
                 )}
                 w="100%"
@@ -247,7 +256,7 @@ export default function AddressItem({
                     typeOfValue="country"
                     customerValue={address.country}
                     formValue={formValues.country}
-                    setFieldValue={() => setFieldValue}
+                    setFieldValue={setFieldValue}
                   />
                 )}
                 w="100%"
@@ -265,7 +274,7 @@ export default function AddressItem({
                     typeOfValue="postalCode"
                     customerValue={address.postalCode}
                     formValue={formValues.postalCode}
-                    setFieldValue={() => setFieldValue}
+                    setFieldValue={setFieldValue}
                   />
                 )}
                 w="100%"
@@ -274,22 +283,22 @@ export default function AddressItem({
             <Flex direction="row" gap={10} justify="space-between">
               <Checkbox
                 label="Shipping address"
-                defaultChecked={isShipping}
                 disabled={isReadOnly}
                 classNames={{
                   input: classes.input,
                   label: classes.label,
                 }}
+                {...getInputProps('isShipping', { type: 'checkbox' })}
                 w="100%"
               />
               <Checkbox
                 label="Billing address"
-                defaultChecked={isBilling}
                 disabled={isReadOnly}
                 classNames={{
                   input: classes.input,
                   label: classes.label,
                 }}
+                {...getInputProps('isShipping', { type: 'checkbox' })}
                 w="100%"
               />
             </Flex>
