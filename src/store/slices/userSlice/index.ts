@@ -111,6 +111,7 @@ type UserState = {
   user: CustomerSignInResult | null;
   loading: boolean;
   error:
+  | string
   | ''
   | 'There is already an existing customer with the provided email.'
   | 'The given current password does not match.'
