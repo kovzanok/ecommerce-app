@@ -60,6 +60,11 @@ export interface AddressesInfoFormValues {
   isShipping: boolean;
 }
 
+export interface PasswordChangeFormValues {
+  currentPassword: string;
+  newPassword: string;
+}
+
 export type LocalAdr = {
   country: string;
   postalCode: string;

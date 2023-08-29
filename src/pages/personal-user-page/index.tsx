@@ -115,8 +115,13 @@ export default function UserPage() {
 
   useEffect(() => {
     if (error) {
-      setFieldError('email', error);
       setIsReadonly(false);
+      if (
+        error
+        === 'There is already an existing customer with the provided email.'
+      ) {
+        setFieldError('email', error);
+      }
     }
   }, [error, setFieldError]);
 

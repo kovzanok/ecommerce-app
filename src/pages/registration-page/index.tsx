@@ -129,7 +129,11 @@ function Registration() {
   });
 
   useEffect(() => {
-    setFieldError('email', error);
+    if (
+      error === 'There is already an existing customer with the provided email.'
+    ) {
+      setFieldError('email', error);
+    }
   }, [error, setFieldError]);
 
   const { onChange: shippingCityHandle } = getInputProps(
