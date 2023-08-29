@@ -6,7 +6,6 @@ import { useAppDispatch } from '../hooks';
 import { vertifyAuth } from '../store/slices/userSlice';
 
 export default function Layout() {
-  // const { loading } = useAppSelector(userSelector);
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(vertifyAuth());
