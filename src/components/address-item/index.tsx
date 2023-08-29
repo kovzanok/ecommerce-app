@@ -98,9 +98,11 @@ export default function AddressItem({
   const removeAddressHandle = () => {
     if (isAddressAdding && setIsAddressAdding) {
       setIsAddressAdding(false);
-      setEditMode(false);
+
       return;
     }
+
+    setEditMode(false);
 
     dispatch(
       approveUserChanges([
@@ -150,12 +152,16 @@ export default function AddressItem({
 
     setIsReadOnly(!isReadOnly);
     setEditMode(!editMode);
-    console.log(transformedValues);
 
     if (!transformedValues.length) return;
+
     if (!isAddressAdding) {
       changeAddressDispatch(transformedValues);
       return;
+    }
+
+    if (setIsAddressAdding) {
+      setIsAddressAdding(false);
     }
 
     const addedCustomer = await addAddressDispatch(transformedValues);
@@ -375,7 +381,6 @@ export default function AddressItem({
                   label: classes.label,
                 }}
                 {...getInputProps('isShipping', { type: 'checkbox' })}
-                // w="100%"
               />
               <Checkbox
                 label="Billing address"
@@ -385,7 +390,6 @@ export default function AddressItem({
                   label: classes.label,
                 }}
                 {...getInputProps('isBilling', { type: 'checkbox' })}
-                // w="100%"
               />
             </Flex>
           </Flex>
