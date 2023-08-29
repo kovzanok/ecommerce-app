@@ -15,6 +15,7 @@ export default class ProductsModule {
     filters,
     sort,
     category,
+    limit = 500,
   }: ProductsQuery): Promise<ProductProjection[] | undefined> {
     try {
       const queryString = createQueryString(filters);
@@ -29,6 +30,7 @@ export default class ProductsModule {
             'text.en-US': search,
             'filter.query': queryString,
             sort,
+            limit,
           },
         })
         .execute();

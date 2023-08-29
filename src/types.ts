@@ -125,6 +125,7 @@ export type ProductsQuery = {
   filters: Filters;
   sort: Sorting;
   category: string;
+  limit?: number;
 };
 export type FilterParam = {
   name: FilterName;
