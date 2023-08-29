@@ -3,7 +3,7 @@ import {
   Button, Flex, Grid, Paper, TextInput, Title,
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
-import { useMediaQuery } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { useForm } from '@mantine/form';
 import { CustomerUpdateAction } from '@commercetools/platform-sdk';
@@ -19,6 +19,7 @@ import {
   validateString,
 } from '../../utils/field-validation';
 import RightSection from '../../components/right-section';
+import PasswordModal from '../../components/password-modal';
 
 export default function UserPage() {
   const matches = useMediaQuery('(max-width: 48em)');
@@ -27,6 +28,8 @@ export default function UserPage() {
 
   const { user, error } = useAppSelector(userSelector);
   const [isReadonly, setIsReadonly] = useState(true);
+
+  const [opened, { close, open }] = useDisclosure(false);
 
   if (!user) return <Navigate to="/login" />;
 
@@ -112,15 +115,22 @@ export default function UserPage() {
 
   useEffect(() => {
     if (error) {
-      setFieldError('email', error);
       setIsReadonly(false);
+      if (
+        error
+        === 'There is already an existing customer with the provided email.'
+      ) {
+        setFieldError('email', error);
+      }
     }
   }, [error, setFieldError]);
 
   const { classes } = useDisabledStyles();
 
   return (
-    <div>
+    <>
+      <PasswordModal opened={opened} close={close} />
+
       <Paper>
         <Title mb={20} mt="xl" order={3} size={matches ? 'h4' : 'h3'}>
           Personal Info
@@ -169,45 +179,50 @@ export default function UserPage() {
                 </Flex>
               </Grid.Col>
               <Grid.Col span={matches ? 12 : 4}>
-                <Flex gap={15} direction="column">
-                  <TextInput
-                    disabled={isReadonly}
-                    classNames={{
-                      input: classes.input,
-                    }}
-                    rightSection={(
-                      <RightSection
-                        typeOfValue="email"
-                        setFieldValue={setFieldValue}
-                        formValue={formValues.email}
-                        customerValue={customer.email}
-                      />
-                    )}
-                    w="100%"
-                    placeholder="example@email.com"
-                    {...getInputProps('email')}
-                    label="Email"
-                  />
-                  <DateInput
-                    disabled={isReadonly}
-                    classNames={{
-                      input: classes.input,
-                    }}
-                    rightSection={(
-                      <RightSection
-                        typeOfValue="dateOfBirth"
-                        setFieldValue={setFieldValue}
-                        formValue={formValues.dateOfBirth}
-                        customerValue={customer.dateOfBirth}
-                      />
-                    )}
-                    w="100%"
-                    {...getInputProps('dateOfBirth')}
-                    valueFormat="YYYY-MM-DD"
-                    label="Birthday"
-                    placeholder="1974-01-01"
-                  />
+                <Flex justify="center" align="center" h="100%">
+                  <Button color="orange" onClick={open}>
+                    Change password
+                  </Button>
                 </Flex>
+              </Grid.Col>
+              <Grid.Col span={matches ? 12 : 4}>
+                <TextInput
+                  disabled={isReadonly}
+                  classNames={{
+                    input: classes.input,
+                  }}
+                  rightSection={(
+                    <RightSection
+                      typeOfValue="email"
+                      setFieldValue={setFieldValue}
+                      formValue={formValues.email}
+                      customerValue={customer.email}
+                    />
+                  )}
+                  w="100%"
+                  placeholder="example@email.com"
+                  {...getInputProps('email')}
+                  label="Email"
+                />
+                <DateInput
+                  disabled={isReadonly}
+                  classNames={{
+                    input: classes.input,
+                  }}
+                  rightSection={(
+                    <RightSection
+                      typeOfValue="dateOfBirth"
+                      setFieldValue={setFieldValue}
+                      formValue={formValues.dateOfBirth}
+                      customerValue={customer.dateOfBirth}
+                    />
+                  )}
+                  w="100%"
+                  {...getInputProps('dateOfBirth')}
+                  valueFormat="YYYY-MM-DD"
+                  label="Birthday"
+                  placeholder="1974-01-01"
+                />
               </Grid.Col>
             </Grid>
             <Button
@@ -223,6 +238,6 @@ export default function UserPage() {
           </Flex>
         </form>
       </Paper>
-    </div>
+    </>
   );
 }

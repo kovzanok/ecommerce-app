@@ -24,6 +24,7 @@ export default function AddressesUserPage() {
       dispatch(resetError());
     };
   }, []);
+
   if (!user) return <Navigate to="/login" />;
   const { customer } = user;
 
