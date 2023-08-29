@@ -1,12 +1,18 @@
-import { ProductProjection } from '@commercetools/platform-sdk';
 import {
-  Flex, Text, Card, Title,
+  MyCartUpdateAction,
+  ProductProjection,
+} from '@commercetools/platform-sdk';
+import {
+  Flex, Text, Card, Title, Button, Loader,
 } from '@mantine/core';
 import { NavLink } from 'react-router-dom';
 import { useHover } from '@mantine/hooks';
 import { AuthorType, PublishedType } from '../../types';
 import { getProductAttribute } from '../../utils';
 import PriceContent from '../price-content';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { updateCart } from '../../store/slices/cartSlice';
+import { cartSelector } from '../../store/selectors';
 
 type ProductCardProps = ProductProjection;
 
@@ -14,8 +20,12 @@ export default function ProductCard({
   id,
   name,
   description,
-  masterVariant: { prices, images, attributes },
+  masterVariant: {
+    id: variantId, prices, images, attributes,
+  },
 }: ProductCardProps) {
+  const { loading, cart } = useAppSelector(cartSelector);
+  const dispatch = useAppDispatch();
   const { hovered, ref } = useHover();
   const price = prices && prices[0];
   const mainImage = images && images[0].url;
@@ -24,7 +34,15 @@ export default function ProductCard({
   const engDescription = description && description['en-US'];
 
   const priceContent = price ? <PriceContent price={price} /> : null;
+  const action: MyCartUpdateAction = {
+    action: 'addLineItem',
+    productId: id,
+    variantId,
+  };
 
+  const isItemAdded = Boolean(
+    cart?.lineItems.find((item) => item.productId === id),
+  );
   return (
     <NavLink style={{ textDecoration: 'none' }} to={`/product/${id}`}>
       <Card
@@ -62,6 +80,17 @@ export default function ProductCard({
             </Text>
           </Flex>
         </Flex>
+        <Button
+          disabled={isItemAdded || loading}
+          onClick={(e) => {
+            e.preventDefault();
+            dispatch(updateCart([action]));
+          }}
+        >
+          {(loading && <Loader />) || isItemAdded
+            ? 'Added to cart'
+            : 'Add to cart'}
+        </Button>
       </Card>
     </NavLink>
   );

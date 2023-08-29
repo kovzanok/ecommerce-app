@@ -7,11 +7,12 @@ import {
   Center,
   Modal,
   MediaQuery,
+  Button,
 } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
 import { Navigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Price } from '@commercetools/platform-sdk';
+import { MyCartUpdateAction, Price } from '@commercetools/platform-sdk';
 import {
   IconArrowBigUp,
   IconArrowBigDown,
@@ -21,7 +22,7 @@ import {
 import { EmblaCarouselType } from 'embla-carousel';
 import { useMediaQuery } from '@mantine/hooks';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { productSelector } from '../../store/selectors';
+import { cartSelector, productSelector } from '../../store/selectors';
 import { clearError, fetchProductById } from '../../store/slices/productSlice';
 import {
   AgeType,
@@ -32,10 +33,12 @@ import {
 } from '../../types';
 import PriceContent from '../../components/price-content';
 import { getProductAttribute } from '../../utils';
+import { updateCart } from '../../store/slices/cartSlice';
 
 const TRANSIOTION_DURATION = 200;
 export default function ProductPage() {
   const { id } = useParams();
+  const { cart, loading: cartLoading } = useAppSelector(cartSelector);
   const matches = useMediaQuery('(max-width:770px)');
   const matchesMobile = useMediaQuery('(max-width:500px)');
   const dispatch = useAppDispatch();
@@ -66,7 +69,9 @@ export default function ProductPage() {
   const {
     name,
     description,
-    masterVariant: { attributes, prices, images },
+    masterVariant: {
+      id: variantId, attributes, prices, images,
+    },
   } = product;
   const author = getProductAttribute<AuthorType>(attributes, 'Author');
   const published = getProductAttribute<PublishedType>(attributes, 'Published');
@@ -75,6 +80,33 @@ export default function ProductPage() {
   const publisher = getProductAttribute<PublisherType>(attributes, 'publisher');
   const price = prices?.[0] as Price;
   const isOnlyOneImage = images?.length !== 1;
+  const isItemAdded = Boolean(
+    cart?.lineItems.find((item) => item.productId === id),
+  );
+
+  const addToCart = () => {
+    const action: MyCartUpdateAction = {
+      action: 'addLineItem',
+      productId: id,
+      variantId,
+    };
+    dispatch(updateCart([action]));
+  };
+  const removeFromCart = () => {
+    const lineItem = cart?.lineItems.find((item) => item.productId === id);
+    if (lineItem) {
+      const action: MyCartUpdateAction = {
+        action: 'removeLineItem',
+        lineItemId: lineItem.id,
+      };
+      dispatch(updateCart([action]));
+    }
+  };
+
+  const handleClick = () => {
+    if (isItemAdded) return removeFromCart();
+    addToCart();
+  };
 
   return (
     <MediaQuery query="(max-width:950px)" styles={{ padding: 0 }}>
@@ -155,9 +187,18 @@ export default function ProductPage() {
             </Text>
           </div>
           <div style={{ height: '2px', background: 'gray' }} />
-          <div style={{ width: matches ? '100%' : '300px', fontSize: '60px' }}>
-            <PriceContent isProductPage price={price} />
-          </div>
+          <Flex align="center">
+            <div
+              style={{ width: matches ? '100%' : '300px', fontSize: '60px' }}
+            >
+              <PriceContent isProductPage price={price} />
+            </div>
+            {' '}
+            <Button disabled={cartLoading} onClick={handleClick}>
+              {isItemAdded ? 'Remove from cart' : 'Add to cart'}
+            </Button>
+          </Flex>
+
           <div style={{ height: '2px', background: 'gray' }} />
           <Text>{description?.['en-US']}</Text>
           <div style={{ height: '2px', background: 'gray' }} />

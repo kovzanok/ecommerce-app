@@ -9,14 +9,25 @@ import {
 import ApiService from '../../../service/api-service';
 import AuthModule from '../../../service/modules/auth-module';
 import { RootState } from '../..';
+import { getCart } from '../cartSlice';
 
 export const signIn = createAsyncThunk(
   'user/signIn',
   async (
     signInData: CustomerSignin,
+    { getState, dispatch },
   ): Promise<CustomerSignInResult | undefined> => {
     try {
-      const user = await ApiService.signIn(signInData);
+      const {
+        cart: { cart },
+      } = getState() as RootState;
+      const id = cart?.id;
+      console.log(cart);
+      const user = await ApiService.signIn({
+        ...signInData,
+        anonymousCart: { typeId: 'cart', id },
+      });
+      dispatch(getCart());
       return user;
     } catch (err) {
       if (err instanceof Error) {
