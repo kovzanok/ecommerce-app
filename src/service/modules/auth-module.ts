@@ -211,4 +211,26 @@ export default class AuthModule {
 
     return res.body;
   }
+
+  static async changePassword(
+    id: string,
+    currentPassword: string,
+    newPassword: string,
+    version: number,
+  ): Promise<Customer> {
+    const res = await AuthModule.apiRoot
+      .customers()
+      .password()
+      .post({
+        body: {
+          id,
+          currentPassword,
+          newPassword,
+          version,
+        },
+      })
+      .execute();
+
+    return res.body;
+  }
 }

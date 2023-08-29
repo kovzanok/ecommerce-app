@@ -9,6 +9,7 @@ import {
 import ApiService from '../../../service/api-service';
 import AuthModule from '../../../service/modules/auth-module';
 import { RootState } from '../..';
+import { PasswordChangeFormValues } from '../../../types';
 
 export const signIn = createAsyncThunk(
   'user/signIn',
@@ -79,10 +80,42 @@ export const approveUserChanges = createAsyncThunk(
   },
 );
 
+export const changePassword = createAsyncThunk(
+  'user/changePassword',
+  async (
+    { currentPassword, newPassword }: PasswordChangeFormValues,
+    ThunkAPI,
+  ): Promise<Customer | undefined> => {
+    try {
+      const state: RootState = ThunkAPI.getState() as RootState;
+
+      if (state.user.user?.customer) {
+        const { version, id } = state.user.user.customer;
+        const res = await AuthModule.changePassword(
+          id,
+          currentPassword,
+          newPassword,
+          version,
+        );
+        return res;
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      }
+    }
+  },
+);
+
 type UserState = {
   user: CustomerSignInResult | null;
   loading: boolean;
-  error: string;
+  error:
+  | string
+  | ''
+  | 'There is already an existing customer with the provided email.'
+  | 'The given current password does not match.'
+  | 'Customer account with the given credentials not found.';
 };
 
 const initialState: UserState = {
@@ -173,6 +206,25 @@ const userSlice = createSlice({
       }
     });
     builder.addCase(approveUserChanges.rejected, (state, action) => {
+      if (action.error.message) {
+        state.loading = false;
+        state.error = action.error.message;
+      }
+    });
+    builder.addCase(changePassword.pending, (state) => {
+      state.error = '';
+      state.loading = true;
+    });
+    builder.addCase(changePassword.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.error = '';
+        state.loading = false;
+        if (state.user?.customer) {
+          state.user.customer = action.payload;
+        }
+      }
+    });
+    builder.addCase(changePassword.rejected, (state, action) => {
       if (action.error.message) {
         state.loading = false;
         state.error = action.error.message;
