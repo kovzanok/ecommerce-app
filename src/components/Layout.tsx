@@ -13,17 +13,11 @@ export default function Layout() {
   }, [dispatch]);
   return (
     <div>
-      {/* {loading ? (
-        <Center h="100vh">
-          <Loader color="orange" />
-        </Center>
-      ) : ( */}
       <AppShell header={<CustomHeader />}>
         <Container size="lg">
           <Outlet />
         </Container>
       </AppShell>
-      {/* )} */}
     </div>
   );
 }
