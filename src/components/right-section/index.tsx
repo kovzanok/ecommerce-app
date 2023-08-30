@@ -2,12 +2,12 @@ import { ActionIcon } from '@mantine/core';
 import { IconArrowBack } from '@tabler/icons-react';
 import { areNotValuesEquals, isInstanceOfDate } from '../../utils';
 
-interface RightSectionProps {
+export type RightSectionProps = {
   typeOfValue: string;
   customerValue: string | undefined;
   formValue: string | Date | undefined;
   setFieldValue: (path: string, value: unknown) => void;
-}
+};
 
 export default function RightSection({
   typeOfValue,
