@@ -310,6 +310,68 @@ describe('changeAddressHandle', () => {
       ),
     ).toHaveLength(4);
   });
+  it('should storage only shipping and billing actions, by its default values', () => {
+    const testValues: AddressesInfoFormValues = {
+      country: 'United States',
+      postalCode: '12345',
+      state: 'Florida',
+      city: 'Beach',
+      streetName: 'st. Borrow',
+
+      isDefaultBilling: true,
+      isDefaultShipping: true,
+      isBilling: true,
+      isShipping: true,
+    };
+
+    const testAddress: Address = {
+      id: 'SF2G3G4',
+      country: 'United States',
+      postalCode: '12345',
+      state: 'Florida',
+      city: 'Beach',
+      streetName: 'st. Borrow',
+    };
+
+    const testDefaultBilling = false;
+    const testDefaultShipping = false;
+
+    const expectedArray: CustomerUpdateAction[] = [
+      {
+        action: 'setDefaultBillingAddress',
+        addressId: testAddress.id,
+      },
+      {
+        action: 'setDefaultShippingAddress',
+        addressId: testAddress.id,
+      },
+      {
+        action: 'addBillingAddressId',
+        addressId: testAddress.id,
+      },
+      {
+        action: 'addShippingAddressId',
+        addressId: testAddress.id,
+      },
+    ];
+
+    expect(
+      changeAddressHandle(
+        testValues,
+        testAddress,
+        testDefaultBilling,
+        testDefaultShipping,
+      ),
+    ).toStrictEqual(expectedArray);
+    expect(
+      changeAddressHandle(
+        testValues,
+        testAddress,
+        testDefaultBilling,
+        testDefaultShipping,
+      ),
+    ).toHaveLength(4);
+  });
   it('should storage only remove shipping and billing actions', () => {
     const testValues: AddressesInfoFormValues = {
       country: 'United States',
