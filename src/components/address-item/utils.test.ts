@@ -534,7 +534,7 @@ describe('changeAddressHandle', () => {
 
 describe('addAddressHandleSubmit', () => {
   it('should storage adding address action', () => {
-    const testValues: AddressesInfoFormValues = {
+    const testValues: Address = {
       country: 'Belarus',
       postalCode: '123456',
       state: 'Minsk',
