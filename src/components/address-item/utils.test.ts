@@ -534,12 +534,17 @@ describe('changeAddressHandle', () => {
 
 describe('addAddressHandleSubmit', () => {
   it('should storage adding address action', () => {
-    const testValues: Address = {
+    const testValues: AddressesInfoFormValues = {
       country: 'Belarus',
       postalCode: '123456',
       state: 'Minsk',
       city: 'Minsk',
       streetName: 'Karbisheva',
+
+      isDefaultBilling: false,
+      isDefaultShipping: false,
+      isBilling: false,
+      isShipping: false,
     };
 
     const expectedArray: CustomerUpdateAction[] = [
