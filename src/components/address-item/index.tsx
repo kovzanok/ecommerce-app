@@ -145,7 +145,6 @@ export default function AddressItem({
 
     setIsReadOnly(!isReadOnly);
     setEditMode(!editMode);
-    console.log(transformedValues);
 
     if (!transformedValues.length) return;
     if (!isAddressAdding) {
