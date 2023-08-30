@@ -26,7 +26,7 @@ import {
   changeAddressHandle,
 } from './utils';
 
-type AddressProps = {
+export type AddressProps = {
   address: Address;
   countries: Country[];
   defaultBilling: boolean;
