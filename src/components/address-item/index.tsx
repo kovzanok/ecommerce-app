@@ -10,6 +10,7 @@ import {
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconEdit, IconEditOff, IconTrash } from '@tabler/icons-react';
+import { useMediaQuery } from '@mantine/hooks';
 import { AddressesInfoFormValues, Country } from '../../types';
 import { useDisabledStyles } from '../../utils/const';
 import {
@@ -53,6 +54,10 @@ export default function AddressItem({
   isAddressAdding,
   setIsAddressAdding,
 }: AddressProps) {
+  const matches = useMediaQuery('(max-width: 48em)');
+  const matchesMini = useMediaQuery('(max-width: 36em)');
+  const matchesSuperMini = useMediaQuery('(max-width: 24em)');
+
   const dispatch = useAppDispatch();
   const [isReadOnly, setIsReadOnly] = useState(true);
   const {
@@ -93,9 +98,11 @@ export default function AddressItem({
   const removeAddressHandle = () => {
     if (isAddressAdding && setIsAddressAdding) {
       setIsAddressAdding(false);
-      setEditMode(false);
+
       return;
     }
+
+    setEditMode(false);
 
     dispatch(
       approveUserChanges([
@@ -147,9 +154,14 @@ export default function AddressItem({
     setEditMode(!editMode);
 
     if (!transformedValues.length) return;
+
     if (!isAddressAdding) {
       changeAddressDispatch(transformedValues);
       return;
+    }
+
+    if (setIsAddressAdding) {
+      setIsAddressAdding(false);
     }
 
     const addedCustomer = await addAddressDispatch(transformedValues);
@@ -176,7 +188,12 @@ export default function AddressItem({
         <Flex
           direction="row"
           gap={10}
-          style={{ position: 'absolute', top: '10px', left: '0px' }}
+          justify={matches ? 'center' : 'normal'}
+          style={
+            matches
+              ? { marginBottom: '20px' }
+              : { position: 'absolute', top: '10px', left: '0px' }
+          }
         >
           <ActionIcon
             title={isReadOnly ? 'Edit address' : 'Save changes'}
@@ -205,7 +222,7 @@ export default function AddressItem({
       )}
 
       <Flex
-        direction="row"
+        direction={matches ? 'column' : 'row'}
         justify="space-between"
         gap={10}
         key={address.id}
@@ -213,8 +230,8 @@ export default function AddressItem({
         style={{ borderBottom: '2px solid #ced4da' }}
       >
         <Flex
-          direction="row"
-          gap={100}
+          direction={matchesSuperMini ? 'column' : 'row'}
+          gap={matches ? 25 : 100}
           align="center"
           justify="center"
           m="auto"
@@ -240,9 +257,13 @@ export default function AddressItem({
             {...getInputProps('isDefaultBilling', { type: 'checkbox' })}
           />
         </Flex>
-        <Paper w="50%" mt="xs" shadow="xs" p="xs">
-          <Flex direction="column" gap={10}>
-            <Flex direction="row" gap={10} justify="space-between">
+        <Paper w={matches ? 'auto' : '50%'} mt="xs" shadow="xs" p="xs">
+          <Flex direction="column" gap={matchesSuperMini ? 20 : 10}>
+            <Flex
+              direction={matchesMini ? 'column' : 'row'}
+              gap={10}
+              justify="space-between"
+            >
               <TextInput
                 withAsterisk
                 placeholder="Lenin st. 12-01"
@@ -300,7 +321,11 @@ export default function AddressItem({
                 w="100%"
               />
             </Flex>
-            <Flex direction="row" gap={10} justify="space-between">
+            <Flex
+              direction={matchesSuperMini ? 'column' : 'row'}
+              gap={10}
+              justify="space-between"
+            >
               <Select
                 withAsterisk
                 placeholder="Belarus"
@@ -342,7 +367,12 @@ export default function AddressItem({
                 w="100%"
               />
             </Flex>
-            <Flex direction="row" gap={10} justify="space-between">
+            <Flex
+              direction={matchesSuperMini ? 'column' : 'row'}
+              gap={matchesSuperMini ? 20 : 10}
+              justify="space-between"
+              align="center"
+            >
               <Checkbox
                 label="Shipping address"
                 disabled={isReadOnly}
@@ -351,7 +381,6 @@ export default function AddressItem({
                   label: classes.label,
                 }}
                 {...getInputProps('isShipping', { type: 'checkbox' })}
-                w="100%"
               />
               <Checkbox
                 label="Billing address"
@@ -361,7 +390,6 @@ export default function AddressItem({
                   label: classes.label,
                 }}
                 {...getInputProps('isBilling', { type: 'checkbox' })}
-                w="100%"
               />
             </Flex>
           </Flex>
