@@ -11,6 +11,7 @@
     "prettier": "prettier src --check",
     "prettier:fix": "npm run prettier -- --write",
     "test": "vitest",
+    "test-prod": "vitest run",
     "coverage": "vitest run --coverage",
     "prepare": "husky install"
   },
