@@ -1,9 +1,12 @@
 import {
   Flex, Title, Text, Badge,
 } from '@mantine/core';
+import { NavLink } from 'react-router-dom';
 import { PageLink } from '../types';
 import PageCard from '../components/page-card';
 import { useTitle } from '../hooks';
+
+type Link = { to: string; name: string };
 
 export default function MainPage() {
   useTitle('Main');
@@ -55,6 +58,25 @@ export default function MainPage() {
     'by price',
   ];
 
+  const discountedProducts: Link[] = [
+    { to: 'b7feab93-bd95-415b-9d9f-fdafdfa44fdd', name: 'Witcher' },
+    { to: 'a8436c59-b2dc-4c64-be81-772f299f68e5', name: ' Berserk. Volume 1' },
+    { to: '88af4c34-ec22-4c8b-9705-aecbd3b81d60', name: 'Berserk. Volume 2' },
+    { to: '62e02832-fbe8-4ac7-a021-98bdb2714456', name: 'Berserk. Volume 3' },
+    { to: '5babb5b6-46c9-440c-86c0-3275f60578a0', name: 'Berserk. Volume 4' },
+    { to: '8cd3fe39-b5fa-45e5-89e3-ac220b9ad8d0', name: 'Berserk. Volume 5' },
+  ];
+
+  const oneImageProducts: Link[] = [
+    {
+      to: '5c5ceda2-639d-4149-9280-908d5959142e',
+      name: 'A little prince. Planet of people',
+    },
+    {
+      to: 'eec57bd8-7307-4db1-9b34-f569a9b65cc6',
+      name: 'Write, shorten. How to create strong text',
+    },
+  ];
   return (
     <Flex direction="column" rowGap={20}>
       <div>
@@ -109,6 +131,31 @@ export default function MainPage() {
           </Text>
         </div>
       </Flex>
+      <div>
+        <Title mb={20} ta="center" size={24}>
+          Products on discount
+        </Title>
+        <Flex rowGap={10} wrap="wrap" columnGap={10} justify="center">
+          {discountedProducts.map(({ name, to }) => (
+            <Badge color="orange">
+              <NavLink to={`/product/${to}`}>{name}</NavLink>
+            </Badge>
+          ))}
+        </Flex>
+      </div>
+      <div>
+        <Title mb={20} ta="center" size={24}>
+          Products with one image
+        </Title>
+
+        <Flex rowGap={10} wrap="wrap" columnGap={10} justify="center">
+          {oneImageProducts.map(({ name, to }) => (
+            <Badge color="orange">
+              <NavLink to={`/product/${to}`}>{name}</NavLink>
+            </Badge>
+          ))}
+        </Flex>
+      </div>
     </Flex>
   );
 }
