@@ -57,7 +57,7 @@ export default function ProductPage() {
 
   if (loading || !product) {
     return (
-      <Center h="100%">
+      <Center h="100vh">
         <Loader color="orange" />
       </Center>
     );

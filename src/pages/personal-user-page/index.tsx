@@ -138,53 +138,54 @@ export default function UserPage() {
         <form onSubmit={onSubmit(handleSubmit)}>
           <Flex direction="column" justify="center" gap={10}>
             <Grid justify="space-evenly">
-              <Grid.Col span={4}>
-                <TextInput
-                  w="100%"
-                  placeholder="Vasya"
-                  disabled={isReadonly}
-                  rightSection={(
-                    <RightSection
-                      typeOfValue="firstName"
-                      setFieldValue={setFieldValue}
-                      formValue={formValues.firstName}
-                      customerValue={customer.firstName}
-                    />
-                  )}
-                  classNames={{
-                    input: classes.input,
-                  }}
-                  label="First name"
-                  {...getInputProps('firstName')}
-                />
-                <TextInput
-                  disabled={isReadonly}
-                  classNames={{
-                    input: classes.input,
-                  }}
-                  rightSection={(
-                    <RightSection
-                      typeOfValue="lastName"
-                      setFieldValue={setFieldValue}
-                      formValue={formValues.lastName}
-                      customerValue={customer.lastName}
-                    />
-                  )}
-                  w="100%"
-                  placeholder="Pupkin"
-                  {...getInputProps('lastName')}
-                  label="Last name"
-                />
+              <Grid.Col span={matches ? 12 : 4}>
+                <Flex gap={15} direction="column">
+                  <TextInput
+                    w="100%"
+                    placeholder="Vasya"
+                    disabled={isReadonly}
+                    rightSection={(
+                      <RightSection
+                        typeOfValue="firstName"
+                        setFieldValue={setFieldValue}
+                        formValue={formValues.firstName}
+                        customerValue={customer.firstName}
+                      />
+                    )}
+                    classNames={{
+                      input: classes.input,
+                    }}
+                    label="First name"
+                    {...getInputProps('firstName')}
+                  />
+                  <TextInput
+                    disabled={isReadonly}
+                    classNames={{
+                      input: classes.input,
+                    }}
+                    rightSection={(
+                      <RightSection
+                        typeOfValue="lastName"
+                        setFieldValue={setFieldValue}
+                        formValue={formValues.lastName}
+                        customerValue={customer.lastName}
+                      />
+                    )}
+                    w="100%"
+                    placeholder="Pupkin"
+                    {...getInputProps('lastName')}
+                    label="Last name"
+                  />
+                </Flex>
               </Grid.Col>
-
-              <Grid.Col span={1}>
+              <Grid.Col span={matches ? 12 : 4}>
                 <Flex justify="center" align="center" h="100%">
                   <Button color="orange" onClick={open}>
                     Change password
                   </Button>
                 </Flex>
               </Grid.Col>
-              <Grid.Col span={4}>
+              <Grid.Col span={matches ? 12 : 4}>
                 <TextInput
                   disabled={isReadonly}
                   classNames={{

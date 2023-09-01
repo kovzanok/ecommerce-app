@@ -1,12 +1,23 @@
-import { AttributeDefinition, Category } from '@commercetools/platform-sdk';
 import {
+  AttributeDefinition,
+  Category,
+  CustomerDraft,
+} from '@commercetools/platform-sdk';
+import {
+  areNotValuesEquals,
+  dateConverter,
+  isInstanceOfDate,
+  transformRegistrationData,
+
   capitalize,
   createCategoryMap,
   createQueryString,
   getFilterParams,
   getProductAttribute,
-} from '.';
-import { AuthorType, Filters, ProductAttributes } from '../types';
+} from './index';
+import {
+  AuthorType, Filters, FormValues, ProductAttributes,
+} from '../types';
 
 describe('capitalize', () => {
   it('should capitalize string', () => {
@@ -361,4 +372,290 @@ describe('createCategoryMap', () => {
     const expected = new Map([[fiction, [detective, manga]]]);
     expect(createCategoryMap(categories)).toStrictEqual(expected);
   });
+});
+
+describe('dateConverter', () => {
+  const testCases = [
+    {
+      input: new Date('Wed Aug 30 2023 12:55:35'),
+      output: '2023-08-30',
+    },
+    {
+      input: new Date('1/12/2023'),
+      output: '2023-01-12',
+    },
+    {
+      input: new Date('2023-08-30'),
+      output: '2023-08-30',
+    },
+    {
+      input: new Date('2022-01-30T10:02:08.865Z'),
+      output: '2022-01-30',
+    },
+  ];
+  it.each(testCases)(
+    'should return date with zero at the start and in right format ($input -> $output)',
+    ({ input, output }) => {
+      expect(dateConverter(input)).toBe(output);
+    },
+  );
+});
+
+describe('isInstanceOfDate', () => {
+  type TestCasesType = {
+    input: string | Date | undefined;
+    output: boolean;
+  };
+  const testCases: TestCasesType[] = [
+    {
+      input: new Date('Wed Aug 30 2023 12:55:35'),
+      output: true,
+    },
+    {
+      input: undefined,
+      output: false,
+    },
+    {
+      input: '2023-08-30',
+      output: false,
+    },
+    {
+      input: new Date('2022-01-30T10:02:08.865Z'),
+      output: true,
+    },
+  ];
+  it.each(testCases)(
+    'should return boolean value, instance of Date or not ($input === $output)',
+    ({ input, output }) => {
+      expect(isInstanceOfDate(input)).toBe(output);
+    },
+  );
+});
+
+describe('areNotValuesEquals', () => {
+  type TestCasesType = {
+    input: {
+      currentValue: string | Date | undefined;
+      defaultValue: string | undefined;
+    };
+    output: boolean;
+  };
+  const testCases: TestCasesType[] = [
+    {
+      input: {
+        currentValue: 'Minsk',
+        defaultValue: 'Minsk',
+      },
+      output: false,
+    },
+    {
+      input: {
+        currentValue: new Date('Wed Aug 30 2023 12:55:35'),
+        defaultValue: 'Wed Aug 30 2023 12:55:35',
+      },
+      output: false,
+    },
+    {
+      input: {
+        currentValue: new Date('Wed Aug 30 2023 12:55:35'),
+        defaultValue: 'Wed Aug 31 2023 12:55:35',
+      },
+      output: true,
+    },
+    {
+      input: {
+        currentValue: undefined,
+        defaultValue: undefined,
+      },
+      output: false,
+    },
+    {
+      input: {
+        currentValue: 'Minsk',
+        defaultValue: 'Hrodno',
+      },
+      output: true,
+    },
+  ];
+  it.each(testCases)(
+    'should return true, if values are not equals ($input !== $output)',
+    ({ input, output }) => {
+      expect(areNotValuesEquals(input.currentValue, input.defaultValue)).toBe(
+        output,
+      );
+    },
+  );
+});
+
+describe('transformRegistrationData', () => {
+  type TestCasesType = {
+    input: {
+      data: FormValues;
+      isSame: boolean;
+    };
+    output: CustomerDraft;
+  };
+  const testCases: TestCasesType[] = [
+    {
+      input: {
+        data: {
+          firstName: 'Fedor',
+          lastName: 'Pechkin',
+          email: 'fedorpechkin@mail.ru',
+          password: 'letter_to_dyadya',
+          dateOfBirthday: 'Wed Aug 23 2005',
+
+          shippingAddress: {
+            country: 'Belarus',
+            postalCode: '123456',
+            city: 'Minsk',
+            streetName: 'Bogushevicha st.',
+            isAddressDefault: true,
+          },
+
+          billingAddress: {
+            country: '',
+            postalCode: '',
+            city: '',
+            streetName: '',
+            isAddressDefault: true,
+          },
+        },
+        isSame: true,
+      },
+      output: {
+        firstName: 'Fedor',
+        lastName: 'Pechkin',
+        email: 'fedorpechkin@mail.ru',
+        password: 'letter_to_dyadya',
+        dateOfBirth: '2005-08-23',
+        addresses: [
+          {
+            country: 'Belarus',
+            postalCode: '123456',
+            city: 'Minsk',
+            streetName: 'Bogushevicha st.',
+          },
+        ],
+        shippingAddresses: [0],
+        billingAddresses: [0],
+        defaultShippingAddress: 0,
+        defaultBillingAddress: 0,
+      },
+    },
+    {
+      input: {
+        data: {
+          firstName: 'Fedor',
+          lastName: 'Pechkin',
+          email: 'fedorpechkin@mail.ru',
+          password: 'letter_to_dyadya',
+          dateOfBirthday: 'Wed Aug 23 2005',
+
+          shippingAddress: {
+            country: 'Belarus',
+            postalCode: '123456',
+            city: 'Minsk',
+            streetName: 'Bogushevicha st.',
+            isAddressDefault: true,
+          },
+
+          billingAddress: {
+            country: 'United states of America',
+            postalCode: '12345',
+            city: 'Minnisota',
+            streetName: 'Siett st.',
+            isAddressDefault: true,
+          },
+        },
+        isSame: false,
+      },
+      output: {
+        firstName: 'Fedor',
+        lastName: 'Pechkin',
+        email: 'fedorpechkin@mail.ru',
+        password: 'letter_to_dyadya',
+        dateOfBirth: '2005-08-23',
+        addresses: [
+          {
+            country: 'Belarus',
+            postalCode: '123456',
+            city: 'Minsk',
+            streetName: 'Bogushevicha st.',
+          },
+          {
+            country: 'United states of America',
+            postalCode: '12345',
+            city: 'Minnisota',
+            streetName: 'Siett st.',
+          },
+        ],
+        shippingAddresses: [0],
+        billingAddresses: [1],
+        defaultShippingAddress: 0,
+        defaultBillingAddress: 1,
+      },
+    },
+    {
+      input: {
+        data: {
+          firstName: 'Fedor',
+          lastName: 'Pechkin',
+          email: 'fedorpechkin@mail.ru',
+          password: 'letter_to_dyadya',
+          dateOfBirthday: 'Wed Aug 23 2005',
+
+          shippingAddress: {
+            country: 'Belarus',
+            postalCode: '123456',
+            city: 'Minsk',
+            streetName: 'Bogushevicha st.',
+            isAddressDefault: false,
+          },
+
+          billingAddress: {
+            country: 'United states of America',
+            postalCode: '12345',
+            city: 'Minnisota',
+            streetName: 'Siett st.',
+            isAddressDefault: false,
+          },
+        },
+        isSame: false,
+      },
+      output: {
+        firstName: 'Fedor',
+        lastName: 'Pechkin',
+        email: 'fedorpechkin@mail.ru',
+        password: 'letter_to_dyadya',
+        dateOfBirth: '2005-08-23',
+        addresses: [
+          {
+            country: 'Belarus',
+            postalCode: '123456',
+            city: 'Minsk',
+            streetName: 'Bogushevicha st.',
+          },
+          {
+            country: 'United states of America',
+            postalCode: '12345',
+            city: 'Minnisota',
+            streetName: 'Siett st.',
+          },
+        ],
+        shippingAddresses: [0],
+        billingAddresses: [1],
+        defaultShippingAddress: undefined,
+        defaultBillingAddress: undefined,
+      },
+    },
+  ];
+  it.each(testCases)(
+    'should return Customer draft object',
+    ({ input, output }) => {
+      expect(transformRegistrationData(input.data, input.isSame)).toStrictEqual(
+        output,
+      );
+    },
+  );
 });
