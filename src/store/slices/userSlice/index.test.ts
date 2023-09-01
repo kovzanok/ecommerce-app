@@ -298,25 +298,29 @@ describe('approveUserChangesThunk', () => {
 });
 
 describe('changePasswordThunk', () => {
+  const customer: Customer = {
+    addresses: [],
+    email: 'johndoe@example.com',
+    firstName: 'John',
+    id: 'some_123_id',
+    isEmailVerified: false,
+    lastName: 'Doe',
+    password: '****aGg=',
+    version: 1,
+    createdAt: '2015-07-06T13:22:33.339Z',
+    lastModifiedAt: '2015-07-06T13:22:33.339Z',
+    authenticationMode: 'Password',
+  };
+  const mockState = {
+    getState: () => ({
+      user: { user: { customer } },
+    }),
+  };
   afterEach(() => {
     vi.clearAllMocks();
   });
 
   it('should return changed customer info, if credentials are valid', async () => {
-    const customer: Customer = {
-      addresses: [],
-      email: 'johndoe@example.com',
-      firstName: 'John',
-      id: 'some_123_id',
-      isEmailVerified: false,
-      lastName: 'Doe',
-      password: '****aGg=',
-      version: 1,
-      createdAt: '2015-07-06T13:22:33.339Z',
-      lastModifiedAt: '2015-07-06T13:22:33.339Z',
-      authenticationMode: 'Password',
-    };
-
     const expectedCustomer: Customer = {
       addresses: [],
       email: 'johndoe@example.com',
@@ -333,7 +337,7 @@ describe('changePasswordThunk', () => {
 
     AuthModule.changePassword = vi
       .mocked(AuthModule.changePassword)
-      .mockResolvedValueOnce(customer);
+      .mockResolvedValue(expectedCustomer);
 
     const mockCredentials: PasswordChangeFormValues = {
       currentPassword: '****aGg=',
@@ -342,7 +346,7 @@ describe('changePasswordThunk', () => {
 
     const dispatch = vi.fn();
     const thunk = changePassword(mockCredentials);
-    await thunk(dispatch, () => {}, {});
+    await thunk(dispatch, mockState.getState, {});
     const { calls } = dispatch.mock;
     expect(calls).toHaveLength(2);
 
@@ -354,19 +358,6 @@ describe('changePasswordThunk', () => {
   });
 
   it('should throw an error, if current password does not match', async () => {
-    const customer: Customer = {
-      addresses: [],
-      email: 'johndoe@example.com',
-      firstName: 'John',
-      id: 'some_123_id',
-      isEmailVerified: false,
-      lastName: 'Doe',
-      password: '****aGg=',
-      version: 1,
-      createdAt: '2015-07-06T13:22:33.339Z',
-      lastModifiedAt: '2015-07-06T13:22:33.339Z',
-      authenticationMode: 'Password',
-    };
     const errorMessage = 'The given current password does not match.';
 
     const mockCredentials: PasswordChangeFormValues = {
@@ -376,12 +367,11 @@ describe('changePasswordThunk', () => {
 
     AuthModule.changePassword = vi
       .mocked(AuthModule.changePassword)
-      .mockResolvedValueOnce(customer)
       .mockRejectedValue(new Error(errorMessage));
 
     const dispatch = vi.fn();
     const thunk = changePassword(mockCredentials);
-    await thunk(dispatch, () => {}, {});
+    await thunk(dispatch, mockState.getState, {});
     const { calls } = dispatch.mock;
     expect(calls).toHaveLength(2);
 
