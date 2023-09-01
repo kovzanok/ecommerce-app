@@ -212,22 +212,26 @@ describe('approveUserChangesThunk', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
+  const customer: Customer = {
+    addresses: [],
+    email: 'johndoe@example.com',
+    firstName: 'John',
+    id: 'some_123_id',
+    isEmailVerified: false,
+    lastName: 'Doe',
+    password: '****aGg=',
+    version: 1,
+    createdAt: '2015-07-06T13:22:33.339Z',
+    lastModifiedAt: '2015-07-06T13:22:33.339Z',
+    authenticationMode: 'Password',
+  };
+  const mockState = {
+    getState: () => ({
+      user: { user: { customer } },
+    }),
+  };
 
   it('should return changed customer info, if credentials are valid', async () => {
-    const customer: Customer = {
-      addresses: [],
-      email: 'johndoe@example.com',
-      firstName: 'John',
-      id: 'some_123_id',
-      isEmailVerified: false,
-      lastName: 'Doe',
-      password: '****aGg=',
-      version: 1,
-      createdAt: '2015-07-06T13:22:33.339Z',
-      lastModifiedAt: '2015-07-06T13:22:33.339Z',
-      authenticationMode: 'Password',
-    };
-
     const expectedCustomer: Customer = {
       addresses: [],
       email: 'johndoe1@example.com',
@@ -244,7 +248,7 @@ describe('approveUserChangesThunk', () => {
 
     AuthModule.updateCustomer = vi
       .mocked(AuthModule.updateCustomer)
-      .mockResolvedValueOnce(customer);
+      .mockResolvedValueOnce(expectedCustomer);
     const mockActions: CustomerUpdateAction[] = [
       {
         action: 'changeEmail',
@@ -254,7 +258,7 @@ describe('approveUserChangesThunk', () => {
 
     const dispatch = vi.fn();
     const thunk = approveUserChanges(mockActions);
-    await thunk(dispatch, () => {}, {});
+    await thunk(dispatch, mockState.getState, {});
     const { calls } = dispatch.mock;
     expect(calls).toHaveLength(2);
 
@@ -266,19 +270,6 @@ describe('approveUserChangesThunk', () => {
   });
 
   it('should throw an error, if email is already used', async () => {
-    const customer: Customer = {
-      addresses: [],
-      email: 'johndoe@example.com',
-      firstName: 'John',
-      id: 'some_123_id',
-      isEmailVerified: false,
-      lastName: 'Doe',
-      password: '****aGg=',
-      version: 1,
-      createdAt: '2015-07-06T13:22:33.339Z',
-      lastModifiedAt: '2015-07-06T13:22:33.339Z',
-      authenticationMode: 'Password',
-    };
     const errorMessage = 'There is already an existing customer with the provided email.';
 
     const mockActions: CustomerUpdateAction[] = [
@@ -290,12 +281,11 @@ describe('approveUserChangesThunk', () => {
 
     AuthModule.updateCustomer = vi
       .mocked(AuthModule.updateCustomer)
-      .mockResolvedValueOnce(customer)
       .mockRejectedValue(new Error(errorMessage));
 
     const dispatch = vi.fn();
     const thunk = approveUserChanges(mockActions);
-    await thunk(dispatch, () => {}, {});
+    await thunk(dispatch, mockState.getState, {});
     const { calls } = dispatch.mock;
     expect(calls).toHaveLength(2);
 
