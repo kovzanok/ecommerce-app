@@ -20,7 +20,7 @@ import {
 } from '@tabler/icons-react';
 import { EmblaCarouselType } from 'embla-carousel';
 import { useMediaQuery } from '@mantine/hooks';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector, useTitle } from '../../hooks';
 import { productSelector } from '../../store/selectors';
 import { clearError, fetchProductById } from '../../store/slices/productSlice';
 import {
@@ -38,6 +38,7 @@ export default function ProductPage() {
   const { id } = useParams();
   const matches = useMediaQuery('(max-width:770px)');
   const matchesMobile = useMediaQuery('(max-width:500px)');
+  useTitle('Product');
   const dispatch = useAppDispatch();
   const { loading, product, error } = useAppSelector(productSelector);
   const [currentImg, setCurrentImg] = useState('');

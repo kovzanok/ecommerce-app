@@ -4,7 +4,7 @@ import {
 import { useForm } from '@mantine/form';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useAppDispatch, useAppSelector, useTitle } from '../../hooks';
 import { productsSelector } from '../../store/selectors';
 import { fetchProducts } from '../../store/slices/productsSlice';
 import ProductCard from '../../components/product-card';
@@ -34,6 +34,7 @@ export default function CatalogPage() {
   const [sort, setSort] = useState<Sorting>('name.en-US asc');
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState<FilterParam[]>([]);
+  useTitle('Catalog');
   const {
     getInputProps, onSubmit, reset, values,
   } = useForm({ initialValues });
