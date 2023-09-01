@@ -17,35 +17,35 @@ describe('AddressesUserPage', () => {
       })),
     });
   });
-
-  it('should render page with submit button', async () => {
-    const user = {
-      user: {
-        customer: {
-          addresses: [],
-          email: 'johndoe@example.com',
-          firstName: 'John',
-          id: 'some_123_id',
-          isEmailVerified: false,
-          lastName: 'Doe',
-          password: '****aGg=',
-          version: 1,
-          createdAt: '2015-07-06T13:22:33.339Z',
-          lastModifiedAt: '2015-07-06T13:22:33.339Z',
-          authenticationMode: 'Password',
-        },
+  const user = {
+    user: {
+      customer: {
+        addresses: [],
+        email: 'johndoe@example.com',
+        firstName: 'John',
+        id: 'some_123_id',
+        isEmailVerified: false,
+        lastName: 'Doe',
+        password: '****aGg=',
+        version: 1,
+        createdAt: '2015-07-06T13:22:33.339Z',
+        lastModifiedAt: '2015-07-06T13:22:33.339Z',
+        authenticationMode: 'Password',
       },
-      loading: false,
-      error: '',
-    };
-    const products = {
-      products: [],
-      loading: false,
-      error: '',
-    };
-    const product = { product: null, loading: false, error: '' };
+    },
+    loading: false,
+    error: '',
+  };
+  const products = {
+    products: [],
+    loading: false,
+    error: '',
+  };
+  const product = { product: null, loading: false, error: '' };
+  const preloadedState = { user, product, products };
+  it('should render page with submit button', async () => {
     renderWithProviders(<AddressesUserPage />, {
-      preloadedState: { user, product, products },
+      preloadedState,
     });
     const button: HTMLElement = await screen.findByRole('button');
     expect(button).toBeInTheDocument();
