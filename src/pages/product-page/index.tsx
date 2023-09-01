@@ -237,7 +237,7 @@ export default function ProductPage() {
           >
             {images?.map(({ url, label }) => (
               <Carousel.Slide key={url}>
-                <img alt={label} width="100%" src={url} />
+                <img alt={label} width="90%" src={url} />
               </Carousel.Slide>
             ))}
           </Carousel>
