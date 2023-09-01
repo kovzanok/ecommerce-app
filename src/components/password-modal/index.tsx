@@ -15,7 +15,7 @@ import { validatePassword } from '../../utils/field-validation';
 import { changePassword, signIn } from '../../store/slices/userSlice';
 import { PasswordChangeFormValues } from '../../types';
 
-type PasswordModalProps = {
+export type PasswordModalProps = {
   opened: boolean;
   close: () => void;
 };
