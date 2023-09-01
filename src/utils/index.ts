@@ -141,8 +141,9 @@ export const createQueryString = (filters: Filters): string[] => Object.entries(
   switch (true) {
     case value && typeof value === 'object':
       const { min, max } = value as PriceObj['price'];
-      queryParam = `variants.price.centAmount:range (${min * 100} to ${
-        max * 100
+
+      queryParam = `variants.price.centAmount:range (${(min || 0) * 100} to ${
+        (max || 100) * 100
       })`;
       break;
     case Boolean(value):
