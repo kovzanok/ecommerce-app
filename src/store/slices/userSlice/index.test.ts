@@ -56,10 +56,9 @@ describe('signInThunk', () => {
     const thunk = signIn(mockCredentials);
     await thunk(dispatch, () => {}, {});
     const { calls } = dispatch.mock;
-    expect(calls).toHaveLength(2);
+    expect(calls).toHaveLength(3);
 
-    const [start, end] = calls;
-
+    const [start, , end] = calls;
     expect(start[0].type).toBe(signIn.pending.type);
     expect(end[0].type).toBe(signIn.fulfilled.type);
     expect(end[0].payload).toBe(customer);
