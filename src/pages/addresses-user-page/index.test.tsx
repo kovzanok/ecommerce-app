@@ -42,7 +42,10 @@ describe('AddressesUserPage', () => {
     error: '',
   };
   const product = { product: null, loading: false, error: '' };
-  const preloadedState = { user, product, products };
+  const cart = { cart: null, loading: false, error: '' };
+  const preloadedState = {
+    user, product, products, cart,
+  };
   it('should render page with submit button', async () => {
     renderWithProviders(<AddressesUserPage />, {
       preloadedState,
