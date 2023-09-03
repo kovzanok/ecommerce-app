@@ -10,14 +10,17 @@ import ApiService from '../../../service/api-service';
 import AuthModule from '../../../service/modules/auth-module';
 import { RootState } from '../..';
 import { PasswordChangeFormValues } from '../../../types';
+import { getCart } from '../cartSlice';
 
 export const signIn = createAsyncThunk(
   'user/signIn',
   async (
     signInData: CustomerSignin,
+    { dispatch },
   ): Promise<CustomerSignInResult | undefined> => {
     try {
       const user = await ApiService.signIn(signInData);
+      dispatch(getCart());
       return user;
     } catch (err) {
       if (err instanceof Error) {
