@@ -48,10 +48,11 @@ export const signUp = createAsyncThunk(
 
 export const vertifyAuth = createAsyncThunk(
   'user/verify',
-  async (): Promise<CustomerSignInResult | null> => {
+  async (_, { dispatch }): Promise<CustomerSignInResult | null> => {
     try {
       const res = await ApiService.verifyToken();
       if (res) {
+        dispatch(getCart());
         return res;
       }
       return null;
