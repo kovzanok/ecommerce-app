@@ -4,7 +4,8 @@ import {
   CustomerSignin,
 } from '@commercetools/platform-sdk';
 import AuthModule from './modules/auth-module';
-import { CreateApiData } from '../types';
+import { CreateApiData, ProductsQuery } from '../types';
+import ProductsModule from './modules/products-module';
 
 export default class ApiService {
   static async signIn(
@@ -27,5 +28,34 @@ export default class ApiService {
       password,
     } as CustomerSignin);
     return customer;
+  }
+
+  static async verifyToken(): Promise<CustomerSignInResult | undefined> {
+    const tokenState = await AuthModule.introspectToken();
+    if (tokenState.active) {
+      AuthModule.createApiRootWithToken();
+      const customerId = tokenState.scope.split('customer_id:')[1];
+      const customer = await AuthModule.getClientById(customerId);
+      // const cart = await AuthModule.getCartById(customerId);
+      return { customer };
+    }
+    AuthModule.creatAnonymousApiRoot();
+    throw new Error('Invalid token');
+  }
+
+  static async getProducts(query: ProductsQuery) {
+    return ProductsModule.getProducts(query);
+  }
+
+  static async getCategories() {
+    return ProductsModule.getCategories();
+  }
+
+  static async getCategoryChain(categoryId: string) {
+    const category = await ProductsModule.getCategoryById(categoryId);
+    const ancestors = await Promise.all(
+      category.ancestors.map(async ({ id }) => ProductsModule.getCategoryById(id)),
+    );
+    return [...ancestors, category];
   }
 }

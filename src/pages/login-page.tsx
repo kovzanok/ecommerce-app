@@ -32,13 +32,17 @@ export default function LoginPage() {
     validateInputOnChange: true,
   });
 
+
   useEffect(() => () => {
     dispatch(resetError());
   }, []);
 
+
   useEffect(() => {
-    setFieldError('email', error);
-    setFieldError('password', error);
+    if (error === 'Customer account with the given credentials not found.') {
+      setFieldError('email', error);
+      setFieldError('password', error);
+    }
   }, [error, setFieldError]);
 
   const handleSubmit = (values: CustomerSignin) => {

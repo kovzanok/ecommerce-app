@@ -18,7 +18,7 @@ export default function PageCard({ description, name, to }: PageLink) {
         }}
         withBorder
         ta="center"
-        h={150}
+        h={180}
         w={200}
       >
         <Flex h="100%" direction="column" justify="center">

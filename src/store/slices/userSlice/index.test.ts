@@ -1,14 +1,25 @@
 import {
+  Customer,
   CustomerDraft,
   CustomerSignInResult,
   CustomerSignin,
+  CustomerUpdateAction,
 } from '@commercetools/platform-sdk';
 import { vi } from 'vitest';
 import { Action } from '@reduxjs/toolkit';
-import userReducer, { logout, signIn, signUp } from '.';
+import userReducer, {
+  approveUserChanges,
+  changePassword,
+  logout,
+  signIn,
+  signUp,
+} from '.';
 import ApiService from '../../../service/api-service';
+import AuthModule from '../../../service/modules/auth-module';
+import { PasswordChangeFormValues } from '../../../types';
 
 vi.mock('../../../service/api-service');
+vi.mock('../../../service/modules/auth-module');
 
 describe('signInThunk', () => {
   afterEach(() => {
@@ -157,7 +168,7 @@ describe('signUpThunk', () => {
 describe('userSlice', () => {
   const initialState = {
     user: null,
-    loading: false,
+    loading: true,
     error: '',
   };
 
@@ -167,6 +178,11 @@ describe('userSlice', () => {
   });
 
   it('should logout user', () => {
+    const logoutState = {
+      user: null,
+      loading: false,
+      error: '',
+    };
     const userState = {
       user: {
         customer: {
@@ -188,6 +204,181 @@ describe('userSlice', () => {
     };
     const action: Action = { type: logout.type };
     const result = userReducer(userState, action);
-    expect(result).toStrictEqual(initialState);
+    expect(result).toStrictEqual(logoutState);
+  });
+});
+
+describe('approveUserChangesThunk', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+  const customer: Customer = {
+    addresses: [],
+    email: 'johndoe@example.com',
+    firstName: 'John',
+    id: 'some_123_id',
+    isEmailVerified: false,
+    lastName: 'Doe',
+    password: '****aGg=',
+    version: 1,
+    createdAt: '2015-07-06T13:22:33.339Z',
+    lastModifiedAt: '2015-07-06T13:22:33.339Z',
+    authenticationMode: 'Password',
+  };
+  const mockState = {
+    getState: () => ({
+      user: { user: { customer } },
+    }),
+  };
+
+  it('should return changed customer info, if credentials are valid', async () => {
+    const expectedCustomer: Customer = {
+      addresses: [],
+      email: 'johndoe1@example.com',
+      firstName: 'John',
+      id: 'some_123_id',
+      isEmailVerified: false,
+      lastName: 'Doe',
+      password: '****aGg=',
+      version: 1,
+      createdAt: '2015-07-06T13:22:33.339Z',
+      lastModifiedAt: '2015-07-06T13:22:33.339Z',
+      authenticationMode: 'Password',
+    };
+
+    AuthModule.updateCustomer = vi
+      .mocked(AuthModule.updateCustomer)
+      .mockResolvedValueOnce(expectedCustomer);
+    const mockActions: CustomerUpdateAction[] = [
+      {
+        action: 'changeEmail',
+        email: 'changed_email@mail.ru',
+      },
+    ];
+
+    const dispatch = vi.fn();
+    const thunk = approveUserChanges(mockActions);
+    await thunk(dispatch, mockState.getState, {});
+    const { calls } = dispatch.mock;
+    expect(calls).toHaveLength(2);
+
+    const [start, end] = calls;
+
+    expect(start[0].type).toBe(approveUserChanges.pending.type);
+    expect(end[0].type).toBe(approveUserChanges.fulfilled.type);
+    expect(end[0].payload).toStrictEqual(expectedCustomer);
+  });
+
+  it('should throw an error, if email is already used', async () => {
+    const errorMessage = 'There is already an existing customer with the provided email.';
+
+    const mockActions: CustomerUpdateAction[] = [
+      {
+        action: 'changeEmail',
+        email: 'changed_email@mail.ru',
+      },
+    ];
+
+    AuthModule.updateCustomer = vi
+      .mocked(AuthModule.updateCustomer)
+      .mockRejectedValue(new Error(errorMessage));
+
+    const dispatch = vi.fn();
+    const thunk = approveUserChanges(mockActions);
+    await thunk(dispatch, mockState.getState, {});
+    const { calls } = dispatch.mock;
+    expect(calls).toHaveLength(2);
+
+    const [start, end] = calls;
+
+    expect(start[0].type).toBe(approveUserChanges.pending.type);
+    expect(end[0].type).toBe(approveUserChanges.rejected.type);
+    expect(end[0].error.message).toBe(errorMessage);
+  });
+});
+
+describe('changePasswordThunk', () => {
+  const customer: Customer = {
+    addresses: [],
+    email: 'johndoe@example.com',
+    firstName: 'John',
+    id: 'some_123_id',
+    isEmailVerified: false,
+    lastName: 'Doe',
+    password: '****aGg=',
+    version: 1,
+    createdAt: '2015-07-06T13:22:33.339Z',
+    lastModifiedAt: '2015-07-06T13:22:33.339Z',
+    authenticationMode: 'Password',
+  };
+  const mockState = {
+    getState: () => ({
+      user: { user: { customer } },
+    }),
+  };
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should return changed customer info, if credentials are valid', async () => {
+    const expectedCustomer: Customer = {
+      addresses: [],
+      email: 'johndoe@example.com',
+      firstName: 'John',
+      id: 'some_123_id',
+      isEmailVerified: false,
+      lastName: 'Doe',
+      password: '****aGg=1',
+      version: 1,
+      createdAt: '2015-07-06T13:22:33.339Z',
+      lastModifiedAt: '2015-07-06T13:22:33.339Z',
+      authenticationMode: 'Password',
+    };
+
+    AuthModule.changePassword = vi
+      .mocked(AuthModule.changePassword)
+      .mockResolvedValue(expectedCustomer);
+
+    const mockCredentials: PasswordChangeFormValues = {
+      currentPassword: '****aGg=',
+      newPassword: '****aGg=1',
+    };
+
+    const dispatch = vi.fn();
+    const thunk = changePassword(mockCredentials);
+    await thunk(dispatch, mockState.getState, {});
+    const { calls } = dispatch.mock;
+    expect(calls).toHaveLength(2);
+
+    const [start, end] = calls;
+
+    expect(start[0].type).toBe(changePassword.pending.type);
+    expect(end[0].type).toBe(changePassword.fulfilled.type);
+    expect(end[0].payload).toStrictEqual(expectedCustomer);
+  });
+
+  it('should throw an error, if current password does not match', async () => {
+    const errorMessage = 'The given current password does not match.';
+
+    const mockCredentials: PasswordChangeFormValues = {
+      currentPassword: '****aGg=wrong',
+      newPassword: '****aGg=1',
+    };
+
+    AuthModule.changePassword = vi
+      .mocked(AuthModule.changePassword)
+      .mockRejectedValue(new Error(errorMessage));
+
+    const dispatch = vi.fn();
+    const thunk = changePassword(mockCredentials);
+    await thunk(dispatch, mockState.getState, {});
+    const { calls } = dispatch.mock;
+    expect(calls).toHaveLength(2);
+
+    const [start, end] = calls;
+
+    expect(start[0].type).toBe(changePassword.pending.type);
+    expect(end[0].type).toBe(changePassword.rejected.type);
+    expect(end[0].error.message).toBe(errorMessage);
   });
 });

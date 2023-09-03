@@ -6,20 +6,33 @@ import { BrowserRouter } from 'react-router-dom';
 import { setupStore } from '../store';
 import type { RootState, AppStore } from '../store';
 
+const defaultState = {
+  user: {
+    user: null,
+    loading: false,
+    error: '',
+  },
+  products: {
+    products: [],
+    loading: false,
+    error: '',
+  },
+  product: {
+    product: null,
+    loading: false,
+    error: '',
+  },
+};
+
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
   preloadedState?: PreloadedState<RootState>;
   store?: AppStore;
 }
+
 export function renderWithProviders(
   ui: React.ReactElement,
   {
-    preloadedState = {
-      user: {
-        user: null,
-        loading: false,
-        error: '',
-      },
-    },
+    preloadedState = defaultState,
     store = setupStore(preloadedState),
     ...renderOptions
   }: ExtendedRenderOptions = {},
@@ -38,13 +51,7 @@ export function renderWithProviders(
 export function renderHookWithProviders<Result, Props = undefined>(
   callback: (initialProps: Props) => Result,
   {
-    preloadedState = {
-      user: {
-        user: null,
-        loading: false,
-        error: '',
-      },
-    },
+    preloadedState = defaultState,
     store = setupStore(preloadedState),
     ...renderOptions
   }: ExtendedRenderOptions = {},

@@ -2,7 +2,12 @@ import {
   Header, Image, Flex, Container, Button, Group,
 } from '@mantine/core';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { IconKey, IconUserPlus } from '@tabler/icons-react';
+import {
+  IconKey,
+  IconUserPlus,
+  IconBuildingStore,
+  IconUserCircle,
+} from '@tabler/icons-react';
 import logo from '../../assets/logo.png';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import userSelector from '../../store/selectors';
@@ -17,9 +22,31 @@ export default function CustomHeader() {
 
   const handleClick = () => {
     dispatch(logout());
+    localStorage.removeItem('qwe_access-token');
     AuthModule.creatAnonymousApiRoot();
     navigate('/login');
   };
+
+  const authorizedUserLinks = (
+    <Group>
+      <HeaderLink
+        to="/user/personal-info"
+        text="Profile"
+        icon={<IconUserCircle />}
+      />
+      <Button onClick={handleClick} variant="outline" color="orange">
+        Logout
+      </Button>
+    </Group>
+  );
+
+  const authLinks = (
+    <Group spacing="30px">
+      <HeaderLink icon={<IconKey />} to="/login" text="Sign in" />
+      <HeaderLink icon={<IconUserPlus />} to="/register" text="Sign up" />
+    </Group>
+  );
+
   return (
     <Header height={60}>
       <Container h="100%" size="xl">
@@ -27,21 +54,14 @@ export default function CustomHeader() {
           <NavLink to="/">
             <Image width={50} height={50} src={logo} />
           </NavLink>
-
-          {user ? (
-            <Button onClick={handleClick} variant="outline" color="orange">
-              Logout
-            </Button>
-          ) : (
-            <Group spacing="30px">
-              <HeaderLink icon={<IconKey />} to="/login" text="Sign in" />
-              <HeaderLink
-                icon={<IconUserPlus />}
-                to="/register"
-                text="Sign up"
-              />
-            </Group>
-          )}
+          <Group>
+            <HeaderLink
+              icon={<IconBuildingStore />}
+              to="/catalog"
+              text="Catalog"
+            />
+            {user ? authorizedUserLinks : authLinks}
+          </Group>
         </Flex>
       </Container>
     </Header>
