@@ -41,6 +41,7 @@ describe('useAppSelector', () => {
       loading: false,
       error: '',
     };
+    const cart = { cart: null, loading: false, error: '' };
     const {
       result: { current },
     } = renderHookWithProviders<RootState['user']>(
@@ -50,6 +51,7 @@ describe('useAppSelector', () => {
           user,
           products,
           product: { product: null, loading: false, error: '' },
+          cart,
         },
       },
     );
@@ -84,11 +86,13 @@ describe('useTitle', () => {
       loading: false,
       error: '',
     };
+    const cart = { cart: null, loading: false, error: '' };
     renderHookWithProviders(() => useTitle('New title'), {
       preloadedState: {
         user,
         products,
         product: { product: null, loading: false, error: '' },
+        cart,
       },
     });
     expect(document.title).toBe('New title');

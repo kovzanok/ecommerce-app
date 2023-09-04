@@ -13,10 +13,12 @@ describe('userSelector', () => {
       loading: false,
       error: '',
     };
+    const cart = { cart: null, loading: false, error: '' };
     const store: RootState = {
       user,
       products,
       product: { product: null, loading: false, error: '' },
+      cart,
     };
 
     const result = userSelector(store);
@@ -36,10 +38,13 @@ describe('productsSelector', () => {
       loading: false,
       error: '',
     };
+    const product = { product: null, loading: false, error: '' };
+    const cart = { cart: null, loading: false, error: '' };
     const store: RootState = {
       user,
       products,
-      product: { product: null, loading: false, error: '' },
+      product,
+      cart,
     };
 
     const result = productsSelector(store);
@@ -60,10 +65,12 @@ describe('productSelector', () => {
       error: '',
     };
     const product = { product: null, loading: false, error: '' };
+    const cart = { cart: null, loading: false, error: '' };
     const store: RootState = {
       user,
       products,
       product,
+      cart,
     };
 
     const result = productSelector(store);

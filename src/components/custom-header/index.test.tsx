@@ -38,6 +38,7 @@ describe('CustomHeader', () => {
         error: '',
       },
       product: { product: null, loading: false, error: '' },
+      cart: { cart: null, loading: false, error: '' },
     };
     renderWithProviders(<CustomHeader />, { preloadedState });
     expect(await screen.findByRole('button')).toHaveTextContent('Logout');
@@ -73,6 +74,7 @@ describe('CustomHeader', () => {
         error: '',
       },
       product: { product: null, loading: false, error: '' },
+      cart: { cart: null, loading: false, error: '' },
     };
     renderWithProviders(<CustomHeader />, { preloadedState });
     expect(await screen.findByText('Profile')).toHaveTextContent('Profile');
