@@ -16,6 +16,8 @@ export default function ProductCard({
   description,
   masterVariant: { prices, images, attributes },
 }: ProductCardProps) {
+  console.log(id);
+
   const { hovered, ref } = useHover();
   const price = prices && prices[0];
   const mainImage = images && images[0].url;
