@@ -1,12 +1,15 @@
 import { ProductProjection } from '@commercetools/platform-sdk';
 import {
-  Flex, Text, Card, Title,
+  Flex, Text, Card, Title, Button, Loader,
 } from '@mantine/core';
 import { NavLink } from 'react-router-dom';
 import { useHover } from '@mantine/hooks';
 import { AuthorType, PublishedType } from '../../types';
 import { getProductAttribute } from '../../utils';
 import PriceContent from '../price-content';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { cartSelector } from '../../store/selectors';
+import { updateCart } from '../../store/slices/cartSlice';
 
 type ProductCardProps = ProductProjection;
 
@@ -17,6 +20,8 @@ export default function ProductCard({
   masterVariant: { prices, images, attributes },
 }: ProductCardProps) {
   const { hovered, ref } = useHover();
+  const dispatch = useAppDispatch();
+  const { cart, loading } = useAppSelector(cartSelector);
   const price = prices && prices[0];
   const mainImage = images && images[0].url;
   const author = getProductAttribute<AuthorType>(attributes, 'Author');
@@ -25,6 +30,23 @@ export default function ProductCard({
 
   const priceContent = price ? <PriceContent price={price} /> : null;
 
+  const addToCart: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    dispatch(updateCart([{ action: 'addLineItem', productId: id }]));
+  };
+  const isProductAdded = cart?.lineItems.some(
+    ({ productId }) => productId === id,
+  );
+  const buttonContent = () => {
+    switch (true) {
+      case loading:
+        return <Loader size="xs" color="orange" />;
+      case isProductAdded:
+        return 'Already in cart';
+      default:
+        return 'Add to cart';
+    }
+  };
   return (
     <NavLink style={{ textDecoration: 'none' }} to={`/product/${id}`}>
       <Card
@@ -62,6 +84,15 @@ export default function ProductCard({
             </Text>
           </Flex>
         </Flex>
+        <Button
+          disabled={isProductAdded || loading}
+          onClick={addToCart}
+          mt={10}
+          size="xs"
+          color="orange"
+        >
+          {buttonContent()}
+        </Button>
       </Card>
     </NavLink>
   );
