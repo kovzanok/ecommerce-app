@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
-  Box, Center, Flex, Loader, Paper, Text, Title,
+  Center, Flex, Loader, Paper, Text, Title,
 } from '@mantine/core';
 import { cartSelector } from '../../store/selectors';
 import CartItem from '../cart-item';
@@ -36,19 +37,13 @@ function CartList() {
       break;
     case cart === null || cart?.lineItems.length === 0:
       content = (
-        <Box>
-          <img
-            style={{
-              minWidth: '300px',
-            }}
-            width="55%"
-            height="100%"
-            src={emptyCart}
-            alt="No items"
-          />
-
-          <Text>Basket is empty</Text>
-        </Box>
+        <Flex direction="column" align="center">
+          <img src={emptyCart} alt="No items" style={{ height: '100%' }} />
+          <Text size="2rem">Cart is empty</Text>
+          <NavLink to="/catalog" style={{ textDecoration: 'underline' }}>
+            Let&apos;s do some shopping ?
+          </NavLink>
+        </Flex>
       );
       break;
     default:
@@ -65,7 +60,7 @@ function CartList() {
     <Paper style={{ flex: '1' }}>
       {content}
 
-      {cart?.lineItems.length && (
+      {cart && cart?.lineItems.length !== 0 && (
         <Flex direction="row" justify="center" style={{ marginTop: '10px' }}>
           <CartPagination
             pagination={pagination}
