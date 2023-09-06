@@ -1,6 +1,7 @@
 import { Pagination } from '@mantine/core';
 import React from 'react';
 import { PaginationType } from '../../types';
+import { calculateTotal } from '../../utils';
 
 type CartPaginationProps = {
   pagination: PaginationType;
@@ -13,11 +14,9 @@ function CartPagination({
   setPagination,
   totalPages,
 }: CartPaginationProps) {
-  const calculateTotal = () => Math.ceil(totalPages / pagination.limit);
-
   return (
     <Pagination
-      total={calculateTotal()}
+      total={calculateTotal(totalPages, pagination.limit)}
       value={pagination.current}
       onChange={(current: number) => setPagination({ ...pagination, current })}
       position="center"

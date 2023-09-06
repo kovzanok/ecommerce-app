@@ -175,3 +175,5 @@ export const calculatePagination = (pagination: PaginationType) => {
   const start = pagination.limit * (pagination.current - 1);
   return [start, start + pagination.limit];
 };
+
+export const calculateTotal = (total: number, limit: number) => Math.ceil(total / limit);

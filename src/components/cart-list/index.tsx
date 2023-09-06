@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
@@ -9,7 +9,7 @@ import CartItem from '../cart-item';
 import CartPagination from '../cart-pagination';
 import emptyCart from '../../assets/empty-cart.jpg';
 import { PaginationType } from '../../types';
-import { calculatePagination } from '../../utils';
+import { calculatePagination, calculateTotal } from '../../utils';
 
 function CartList() {
   const { loading, error, cart } = useSelector(cartSelector);
@@ -18,6 +18,16 @@ function CartList() {
     limit: 4,
     current: 1,
   });
+
+  useEffect(() => {
+    if (cart && cart.lineItems.length % pagination.limit === 0) {
+      setPagination({
+        ...pagination,
+        current: calculateTotal(cart.lineItems.length, pagination.limit),
+      });
+    }
+  }, [cart]);
+
   let content: JSX.Element;
 
   switch (true) {
