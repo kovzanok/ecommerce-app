@@ -1,5 +1,4 @@
 import { Box, Flex } from '@mantine/core';
-import React from 'react';
 import CartList from '../../components/cart-list';
 import { useTitle } from '../../hooks';
 

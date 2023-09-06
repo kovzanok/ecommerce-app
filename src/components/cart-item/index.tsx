@@ -1,4 +1,3 @@
-import React from 'react';
 import { LineItem } from '@commercetools/platform-sdk';
 import {
   ActionIcon, Box, Flex, Grid, Paper,
@@ -58,7 +57,7 @@ function CartItem({ item }: CartItemProps) {
                     height: '75px',
                   }}
                   src={images[0].url}
-                  alt={name}
+                  alt={name['en-US']}
                 />
               )}
             </Box>
