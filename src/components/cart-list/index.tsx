@@ -11,6 +11,7 @@ import {
   Title,
 } from '@mantine/core';
 import { IconClearAll } from '@tabler/icons-react';
+import { useDisclosure } from '@mantine/hooks';
 import { cartSelector } from '../../store/selectors';
 import CartItem from '../cart-item';
 import CartPagination from '../cart-pagination';
@@ -19,6 +20,7 @@ import { PaginationType } from '../../types';
 import { calculatePagination, calculateTotal } from '../../utils';
 import { updateCart } from '../../store/slices/cartSlice';
 import { useAppDispatch } from '../../hooks';
+import ConfirmationModal from '../confirmation-modal';
 
 function CartList() {
   const { loading, error, cart } = useSelector(cartSelector);
@@ -76,6 +78,8 @@ function CartList() {
   }
   const dispatch = useAppDispatch();
 
+  const [opened, { open, close }] = useDisclosure(false);
+
   const removeAllFromCart = () => {
     if (cart) {
       dispatch(
@@ -90,26 +94,33 @@ function CartList() {
   };
 
   return (
-    <Paper style={{ flex: '1' }}>
-      {content}
+    <>
+      <ConfirmationModal
+        opened={opened}
+        close={close}
+        removeAllFromCart={removeAllFromCart}
+      />
+      <Paper style={{ flex: '1' }}>
+        {content}
 
-      {cart && cart?.lineItems.length !== 0 && (
-        <Flex direction="row" justify="center" style={{ marginTop: '10px' }}>
-          <Button
-            color="red"
-            leftIcon={<IconClearAll size="1rem" />}
-            onClick={removeAllFromCart}
-          >
-            Clear cart items
-          </Button>
-          <CartPagination
-            pagination={pagination}
-            setPagination={setPagination}
-            totalPages={cart.lineItems.length}
-          />
-        </Flex>
-      )}
-    </Paper>
+        {cart && cart?.lineItems.length !== 0 && (
+          <Flex direction="row" justify="center" style={{ marginTop: '10px' }}>
+            <Button
+              color="red"
+              leftIcon={<IconClearAll size="1rem" />}
+              onClick={open}
+            >
+              Clear cart items
+            </Button>
+            <CartPagination
+              pagination={pagination}
+              setPagination={setPagination}
+              totalPages={cart.lineItems.length}
+            />
+          </Flex>
+        )}
+      </Paper>
+    </>
   );
 }
 
