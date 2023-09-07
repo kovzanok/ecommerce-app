@@ -167,3 +167,8 @@ export type ActiveToken = {
 export type NonActiveToken = {
   active: false;
 };
+
+export type PaginationType = {
+  current: number;
+  limit: number;
+};

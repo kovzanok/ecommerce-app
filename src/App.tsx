@@ -10,6 +10,7 @@ import ProductPage from './pages/product-page';
 import UserRoute from './components/user-route';
 import UserPage from './pages/personal-user-page';
 import AddressesUserPage from './pages/addresses-user-page';
+import CartPage from './pages/cart-page';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="personal-info" element={<UserPage />} />
             <Route path="addresses" element={<AddressesUserPage />} />
           </Route>
+          <Route path="/cart" element={<CartPage />} />
           <Route path="/*" element={<NotFoundPage />} />
         </Route>
       </Routes>
