@@ -59,6 +59,7 @@ function CartList() {
     default:
       content = (
         <Flex direction="column">
+          <Title>Cart</Title>
           {cart?.lineItems
             .slice(...calculatePagination(pagination))
             .map((cartItem) => <CartItem key={cartItem.id} item={cartItem} />)}
@@ -67,7 +68,7 @@ function CartList() {
   }
 
   return (
-    <Paper style={{ flex: '1' }}>
+    <Paper style={{ flex: '0 1 70%' }} mt="xs" shadow="xs" p="xs">
       {content}
 
       {cart && cart?.lineItems.length !== 0 && (
