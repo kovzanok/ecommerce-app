@@ -1,11 +1,12 @@
 import { LineItem } from '@commercetools/platform-sdk';
 import {
-  ActionIcon, Box, Flex, Grid, Paper,
+  ActionIcon, Box, Flex, Grid, Paper, Text,
 } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
 import PriceContent, { TotalPriceBlock } from '../price-content';
 import { updateCart } from '../../store/slices/cartSlice';
 import { useAppDispatch } from '../../hooks';
+import Counter from '../counter';
 
 type CartItemProps = {
   item: LineItem;
@@ -71,7 +72,10 @@ function CartItem({ item }: CartItemProps) {
         </Grid.Col>
 
         <Grid.Col span={4}>
-          <Flex align="center">{`Quantity: ${quantity}`}</Flex>
+          <Flex align="center" direction="column">
+            <Text>Quantity:</Text>
+            <Counter id={id} initialValue={quantity} />
+          </Flex>
         </Grid.Col>
         <Grid.Col span={2}>
           <Box ta="center">

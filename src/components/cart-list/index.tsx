@@ -21,6 +21,7 @@ import { calculatePagination, calculateTotal } from '../../utils';
 import { updateCart } from '../../store/slices/cartSlice';
 import { useAppDispatch } from '../../hooks';
 import ConfirmationModal from '../confirmation-modal';
+import { TotalPriceBlock } from '../price-content';
 
 function CartList() {
   const { loading, error, cart } = useSelector(cartSelector);
@@ -112,11 +113,17 @@ function CartList() {
             >
               Clear cart items
             </Button>
+
             <CartPagination
               pagination={pagination}
               setPagination={setPagination}
               totalPages={cart.lineItems.length}
             />
+
+            <Flex direction="row" align="center" gap={10}>
+              <Text>Total cart price: </Text>
+              <TotalPriceBlock {...cart.totalPrice} />
+            </Flex>
           </Flex>
         )}
       </Paper>
