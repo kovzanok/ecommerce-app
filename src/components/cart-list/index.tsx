@@ -84,7 +84,7 @@ function CartList() {
           />
 
           <Flex direction="row" align="center" gap={10}>
-            <Text>Cart price: </Text>
+            <Text>Total cart price: </Text>
             <TotalPriceBlock {...cart.totalPrice} />
           </Flex>
         </Flex>

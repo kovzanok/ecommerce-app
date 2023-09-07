@@ -19,17 +19,22 @@ function Counter({ id, initialValue }: CounterProps) {
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState<number>(initialValue);
+  const previousValue = useRef<number>(initialValue);
 
   const updateLineItemQuantity = () => {
-    dispatch(
-      updateCart([
-        {
-          action: 'changeLineItemQuantity',
-          lineItemId: id,
-          quantity: value,
-        },
-      ]),
-    );
+    if (previousValue.current !== value) {
+      dispatch(
+        updateCart([
+          {
+            action: 'changeLineItemQuantity',
+            lineItemId: id,
+            quantity: value,
+          },
+        ]),
+      );
+
+      previousValue.current = value;
+    }
   };
 
   const { start, clear } = useTimeout(updateLineItemQuantity, 1000);
