@@ -10,6 +10,7 @@ import CartPagination from '../cart-pagination';
 import emptyCart from '../../assets/empty-cart.jpg';
 import { PaginationType } from '../../types';
 import { calculatePagination, calculateTotal } from '../../utils';
+import { TotalPriceBlock } from '../price-content';
 
 function CartList() {
   const { loading, error, cart } = useSelector(cartSelector);
@@ -71,12 +72,21 @@ function CartList() {
       {content}
 
       {cart && cart?.lineItems.length !== 0 && (
-        <Flex direction="row" justify="center" style={{ marginTop: '10px' }}>
+        <Flex
+          direction="row"
+          justify="space-between"
+          style={{ marginTop: '10px' }}
+        >
           <CartPagination
             pagination={pagination}
             setPagination={setPagination}
             totalPages={cart.lineItems.length}
           />
+
+          <Flex direction="row" align="center" gap={10}>
+            <Text>Total cart price: </Text>
+            <TotalPriceBlock {...cart.totalPrice} />
+          </Flex>
         </Flex>
       )}
     </Paper>
