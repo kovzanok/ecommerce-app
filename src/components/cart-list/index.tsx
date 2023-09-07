@@ -2,14 +2,23 @@ import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
-  Center, Flex, Loader, Paper, Text, Title,
+  Button,
+  Center,
+  Flex,
+  Loader,
+  Paper,
+  Text,
+  Title,
 } from '@mantine/core';
+import { IconClearAll } from '@tabler/icons-react';
 import { cartSelector } from '../../store/selectors';
 import CartItem from '../cart-item';
 import CartPagination from '../cart-pagination';
 import emptyCart from '../../assets/empty-cart.jpg';
 import { PaginationType } from '../../types';
 import { calculatePagination, calculateTotal } from '../../utils';
+import { updateCart } from '../../store/slices/cartSlice';
+import { useAppDispatch } from '../../hooks';
 
 function CartList() {
   const { loading, error, cart } = useSelector(cartSelector);
@@ -65,6 +74,20 @@ function CartList() {
         </Flex>
       );
   }
+  const dispatch = useAppDispatch();
+
+  const removeAllFromCart = () => {
+    if (cart) {
+      dispatch(
+        updateCart(
+          cart.lineItems.map((item) => ({
+            action: 'removeLineItem',
+            lineItemId: item.id,
+          })),
+        ),
+      );
+    }
+  };
 
   return (
     <Paper style={{ flex: '1' }}>
@@ -72,6 +95,13 @@ function CartList() {
 
       {cart && cart?.lineItems.length !== 0 && (
         <Flex direction="row" justify="center" style={{ marginTop: '10px' }}>
+          <Button
+            color="red"
+            leftIcon={<IconClearAll size="1rem" />}
+            onClick={removeAllFromCart}
+          >
+            Clear cart items
+          </Button>
           <CartPagination
             pagination={pagination}
             setPagination={setPagination}

@@ -4,16 +4,14 @@ import {
 } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
 import PriceContent, { TotalPriceBlock } from '../price-content';
-import { useAppDispatch } from '../../hooks';
 import { updateCart } from '../../store/slices/cartSlice';
+import { useAppDispatch } from '../../hooks';
 
 type CartItemProps = {
   item: LineItem;
 };
 
 function CartItem({ item }: CartItemProps) {
-  const dispatch = useAppDispatch();
-
   const {
     id,
     name,
@@ -23,9 +21,7 @@ function CartItem({ item }: CartItemProps) {
     variant: { images },
   } = item;
 
-  const removeFromCart = (): void => {
-    dispatch(updateCart([{ action: 'removeLineItem', lineItemId: id }]));
-  };
+  const dispatch = useAppDispatch();
 
   return (
     <Paper
@@ -36,7 +32,13 @@ function CartItem({ item }: CartItemProps) {
     >
       <Grid>
         <Grid.Col span={1}>
-          <ActionIcon variant="filled" color="red" onClick={removeFromCart}>
+          <ActionIcon
+            variant="filled"
+            color="red"
+            onClick={() => dispatch(
+              updateCart([{ action: 'removeLineItem', lineItemId: id }]),
+            )}
+          >
             <IconTrash size="1rem" />
           </ActionIcon>
         </Grid.Col>
