@@ -16,6 +16,7 @@ function CartPagination({
 }: CartPaginationProps) {
   return (
     <Pagination
+      siblings={1}
       total={calculateTotal(totalPages, pagination.limit)}
       value={pagination.current}
       onChange={(current: number) => setPagination({ ...pagination, current })}

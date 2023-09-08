@@ -24,7 +24,7 @@ import ConfirmationModal from '../confirmation-modal';
 import { TotalPriceBlock } from '../price-content';
 
 function CartList() {
-  const { loading, error, cart } = useSelector(cartSelector);
+  const { loading, cart } = useSelector(cartSelector);
 
   const [pagination, setPagination] = useState<PaginationType>({
     limit: 4,
@@ -50,13 +50,6 @@ function CartList() {
         </Center>
       );
       break;
-    case error.length !== 0:
-      content = (
-        <Center h="100%">
-          <Title ta="center">{error}</Title>
-        </Center>
-      );
-      break;
     case cart === null || cart?.lineItems.length === 0:
       content = (
         <Flex direction="column" align="center">
@@ -71,6 +64,7 @@ function CartList() {
     default:
       content = (
         <Flex direction="column">
+          <Title>Cart</Title>
           {cart?.lineItems
             .slice(...calculatePagination(pagination))
             .map((cartItem) => <CartItem key={cartItem.id} item={cartItem} />)}
@@ -94,6 +88,22 @@ function CartList() {
     }
   };
 
+  const OldValueConverter = (
+    <Text style={{ textDecoration: 'line-through' }}>
+      {cart?.lineItems
+        .reduce(
+          (acc, curr) => acc
+            + (curr.price.value.centAmount
+              / 10 ** curr.price.value.fractionDigits)
+              * curr.quantity,
+          0,
+        )
+        .toFixed(2)}
+      {' '}
+      {cart?.totalPrice.currencyCode}
+    </Text>
+  );
+
   return (
     <>
       <ConfirmationModal
@@ -101,11 +111,17 @@ function CartList() {
         close={close}
         removeAllFromCart={removeAllFromCart}
       />
-      <Paper style={{ flex: '1' }}>
+      <Paper style={{ flex: '1 1 50%' }}>
         {content}
 
         {cart && cart?.lineItems.length !== 0 && (
-          <Flex direction="row" justify="center" style={{ marginTop: '10px' }}>
+          <Flex
+            direction="row"
+            align="flex-start"
+            gap={10}
+            justify="space-between"
+            style={{ marginTop: '10px' }}
+          >
             <Button
               color="red"
               leftIcon={<IconClearAll size="1rem" />}
@@ -122,7 +138,11 @@ function CartList() {
 
             <Flex direction="row" align="center" gap={10}>
               <Text>Total cart price: </Text>
-              <TotalPriceBlock {...cart.totalPrice} />
+
+              <Flex direction="column" align="flex-start">
+                {cart.discountCodes.length !== 0 && OldValueConverter}
+                <TotalPriceBlock {...cart.totalPrice} />
+              </Flex>
             </Flex>
           </Flex>
         )}

@@ -1,4 +1,4 @@
-import { MyCartUpdateAction } from '@commercetools/platform-sdk';
+import { DiscountCode, MyCartUpdateAction } from '@commercetools/platform-sdk';
 import AuthModule from './auth-module';
 
 export default class CartModule {
@@ -53,5 +53,15 @@ export default class CartModule {
         queryArgs: { version },
       })
       .execute();
+  }
+
+  static async getPromocode({ id }: { id: string }): Promise<DiscountCode> {
+    const { body } = await AuthModule.apiRoot
+      .discountCodes()
+      .withId({ ID: id })
+      .get()
+      .execute();
+
+    return body;
   }
 }

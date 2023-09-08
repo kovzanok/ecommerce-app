@@ -77,6 +77,15 @@ export default function MainPage() {
       name: 'Write, shorten. How to create strong text',
     },
   ];
+
+  const cartPromocodes: string[] = [
+    'GIGACHAD1',
+    'azino777',
+    'BIG_SALE_90',
+    'qwerty',
+    'BLACKFRIDAY',
+  ];
+
   return (
     <Flex direction="column" rowGap={20}>
       <div>
@@ -153,6 +162,17 @@ export default function MainPage() {
             <Badge color="orange">
               <NavLink to={`/product/${to}`}>{name}</NavLink>
             </Badge>
+          ))}
+        </Flex>
+      </div>
+      <div>
+        <Title mb={20} ta="center" size={24}>
+          Cart promocodes
+        </Title>
+
+        <Flex rowGap={10} wrap="wrap" columnGap={10} justify="center">
+          {cartPromocodes.map((promocode) => (
+            <Badge color="orange">{promocode}</Badge>
           ))}
         </Flex>
       </div>
