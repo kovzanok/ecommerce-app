@@ -71,9 +71,15 @@ export default class ApiService {
       }
     } catch (err) {
       if (err instanceof Error) {
-        const { id, version } = await CartModule.createCart();
-        const cart = await CartModule.modifyCart({ id, version, actions });
-        return cart;
+        try {
+          const { id, version } = await CartModule.createCart();
+          const cart = await CartModule.modifyCart({ id, version, actions });
+          return cart;
+        } catch (subError) {
+          if (subError instanceof Error) {
+            throw new Error(subError.message);
+          }
+        }
       }
     }
   }

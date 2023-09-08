@@ -11,7 +11,7 @@ export const updateCart = createAsyncThunk(
       if (cart) return cart;
     } catch (err) {
       if (err instanceof Error) {
-        console.log(err);
+        throw new Error(err.message);
       }
     }
   },

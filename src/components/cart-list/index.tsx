@@ -24,7 +24,7 @@ import ConfirmationModal from '../confirmation-modal';
 import { TotalPriceBlock } from '../price-content';
 
 function CartList() {
-  const { loading, error, cart } = useSelector(cartSelector);
+  const { loading, cart } = useSelector(cartSelector);
 
   const [pagination, setPagination] = useState<PaginationType>({
     limit: 4,
@@ -47,13 +47,6 @@ function CartList() {
       content = (
         <Center h="100%">
           <Loader mt={100} size={100} color="orange" />
-        </Center>
-      );
-      break;
-    case error.length !== 0:
-      content = (
-        <Center h="100%">
-          <Title ta="center">{error}</Title>
         </Center>
       );
       break;
@@ -124,6 +117,7 @@ function CartList() {
         {cart && cart?.lineItems.length !== 0 && (
           <Flex
             direction="row"
+            align="flex-start"
             gap={10}
             justify="space-between"
             style={{ marginTop: '10px' }}

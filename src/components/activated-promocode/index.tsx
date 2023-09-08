@@ -18,7 +18,7 @@ function ActivatedPromocode({
   const removePromocodeButton = (
     <ActionIcon
       size="xs"
-      color="blue"
+      color="orange"
       radius="xl"
       variant="transparent"
       onClick={() => {
@@ -36,7 +36,11 @@ function ActivatedPromocode({
     </ActionIcon>
   );
 
-  return <Badge rightSection={removePromocodeButton}>{promoName}</Badge>;
+  return (
+    <Badge color="orange" rightSection={removePromocodeButton}>
+      {promoName}
+    </Badge>
+  );
 }
 
 export default ActivatedPromocode;

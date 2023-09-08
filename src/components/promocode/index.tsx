@@ -14,7 +14,7 @@ function Promocode() {
 
   const dispatch = useAppDispatch();
 
-  const { error, cart } = useAppSelector(cartSelector);
+  const { cart } = useAppSelector(cartSelector);
 
   const isPromocodesNotEmpty = cart?.discountCodes.length !== 0;
 
@@ -42,7 +42,6 @@ function Promocode() {
 
         <TextInput
           disabled={isPromocodesNotEmpty}
-          style={{ border: `1px solid ${error ? 'red' : 'none'}` }}
           placeholder="Write promocode here..."
           value={promocode}
           onChange={(e) => setPromocode(e.target.value)}
@@ -53,7 +52,12 @@ function Promocode() {
           onClick={() => {
             dispatch(
               updateCart([{ action: 'addDiscountCode', code: promocode }]),
-            );
+            )
+              .unwrap()
+              .catch((err) => {
+                alert(err.message);
+                setPromocode('');
+              });
           }}
         >
           Apply
