@@ -86,6 +86,10 @@ function CartList() {
 
           <Flex direction="row" align="center" gap={10}>
             <Text>Total cart price: </Text>
+
+            {cart.shippingInfo && (
+              <TotalPriceBlock {...cart.shippingInfo?.price} />
+            )}
             <TotalPriceBlock {...cart.totalPrice} />
           </Flex>
         </Flex>

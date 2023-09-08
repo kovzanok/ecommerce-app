@@ -77,4 +77,8 @@ export default class ApiService {
       }
     }
   }
+
+  static async getPromocodeById(id: string) {
+    return CartModule.getPromocode({ id });
+  }
 }

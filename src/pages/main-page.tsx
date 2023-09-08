@@ -81,7 +81,7 @@ export default function MainPage() {
   const cartPromocodes: string[] = [
     'GIGACHAD1',
     'azino777',
-    'BIG_SALE_99',
+    'BIG_SALE_90',
     'qwerty',
     'BLACKFRIDAY',
   ];
@@ -167,7 +167,7 @@ export default function MainPage() {
       </div>
       <div>
         <Title mb={20} ta="center" size={24}>
-          Cart promocodes are here
+          Cart promocodes
         </Title>
 
         <Flex rowGap={10} wrap="wrap" columnGap={10} justify="center">

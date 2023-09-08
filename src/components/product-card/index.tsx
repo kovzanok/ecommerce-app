@@ -19,8 +19,6 @@ export default function ProductCard({
   description,
   masterVariant: { prices, images, attributes },
 }: ProductCardProps) {
-  console.log(id);
-
   const { hovered, ref } = useHover();
   const dispatch = useAppDispatch();
   const { cart, loading } = useAppSelector(cartSelector);
