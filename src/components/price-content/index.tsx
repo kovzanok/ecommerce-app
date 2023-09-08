@@ -29,7 +29,7 @@ export function TotalPriceBlock({
   currencyCode,
 }: TotalPriceBlockProps) {
   return (
-    <Text size={rem(23)}>
+    <Text size={rem(23)} color="orange">
       {(centAmount / 100).toFixed(2)}
       {' '}
       {currencyCode}

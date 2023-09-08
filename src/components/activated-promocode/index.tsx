@@ -1,4 +1,3 @@
-import React from 'react';
 import { DiscountCodeReference } from '@commercetools/platform-sdk';
 import { ActionIcon, Badge, rem } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';

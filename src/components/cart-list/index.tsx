@@ -68,6 +68,22 @@ function CartList() {
       );
   }
 
+  const OldValueConverter = (
+    <Text style={{ textDecoration: 'line-through' }}>
+      {cart?.lineItems
+        .reduce(
+          (acc, curr) => acc
+            + (curr.price.value.centAmount
+              / 10 ** curr.price.value.fractionDigits)
+              * curr.quantity,
+          0,
+        )
+        .toFixed(2)}
+      {' '}
+      {cart?.totalPrice.currencyCode}
+    </Text>
+  );
+
   return (
     <Paper style={{ flex: '0 1 70%' }} mt="xs" shadow="xs" p="xs">
       {content}
@@ -87,10 +103,10 @@ function CartList() {
           <Flex direction="row" align="center" gap={10}>
             <Text>Total cart price: </Text>
 
-            {cart.shippingInfo && (
-              <TotalPriceBlock {...cart.shippingInfo?.price} />
-            )}
-            <TotalPriceBlock {...cart.totalPrice} />
+            <Flex direction="column" align="flex-start">
+              {OldValueConverter}
+              <TotalPriceBlock {...cart.totalPrice} />
+            </Flex>
           </Flex>
         </Flex>
       )}
