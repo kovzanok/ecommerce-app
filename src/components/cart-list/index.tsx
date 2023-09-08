@@ -104,7 +104,7 @@ function CartList() {
             <Text>Total cart price: </Text>
 
             <Flex direction="column" align="flex-start">
-              {OldValueConverter}
+              {cart.discountCodes.length !== 0 && OldValueConverter}
               <TotalPriceBlock {...cart.totalPrice} />
             </Flex>
           </Flex>
