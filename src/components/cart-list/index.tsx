@@ -2,14 +2,25 @@ import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
-  Center, Flex, Loader, Paper, Text, Title,
+  Button,
+  Center,
+  Flex,
+  Loader,
+  Paper,
+  Text,
+  Title,
 } from '@mantine/core';
+import { IconClearAll } from '@tabler/icons-react';
+import { useDisclosure } from '@mantine/hooks';
 import { cartSelector } from '../../store/selectors';
 import CartItem from '../cart-item';
 import CartPagination from '../cart-pagination';
 import emptyCart from '../../assets/empty-cart.jpg';
 import { PaginationType } from '../../types';
 import { calculatePagination, calculateTotal } from '../../utils';
+import { updateCart } from '../../store/slices/cartSlice';
+import { useAppDispatch } from '../../hooks';
+import ConfirmationModal from '../confirmation-modal';
 import { TotalPriceBlock } from '../price-content';
 
 function CartList() {
@@ -67,6 +78,22 @@ function CartList() {
         </Flex>
       );
   }
+  const dispatch = useAppDispatch();
+
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const removeAllFromCart = () => {
+    if (cart) {
+      dispatch(
+        updateCart(
+          cart.lineItems.map((item) => ({
+            action: 'removeLineItem',
+            lineItemId: item.id,
+          })),
+        ),
+      );
+    }
+  };
 
   const OldValueConverter = (
     <Text style={{ textDecoration: 'line-through' }}>
@@ -85,32 +112,48 @@ function CartList() {
   );
 
   return (
-    <Paper style={{ flex: '0 1 70%' }} mt="xs" shadow="xs" p="xs">
-      {content}
+    <>
+      <ConfirmationModal
+        opened={opened}
+        close={close}
+        removeAllFromCart={removeAllFromCart}
+      />
+      <Paper style={{ flex: '1 1 50%' }}>
+        {content}
 
-      {cart && cart?.lineItems.length !== 0 && (
-        <Flex
-          direction="row"
-          justify="space-between"
-          style={{ marginTop: '10px' }}
-        >
-          <CartPagination
-            pagination={pagination}
-            setPagination={setPagination}
-            totalPages={cart.lineItems.length}
-          />
+        {cart && cart?.lineItems.length !== 0 && (
+          <Flex
+            direction="row"
+            gap={10}
+            justify="space-between"
+            style={{ marginTop: '10px' }}
+          >
+            <Button
+              color="red"
+              leftIcon={<IconClearAll size="1rem" />}
+              onClick={open}
+            >
+              Clear cart items
+            </Button>
 
-          <Flex direction="row" align="center" gap={10}>
-            <Text>Total cart price: </Text>
+            <CartPagination
+              pagination={pagination}
+              setPagination={setPagination}
+              totalPages={cart.lineItems.length}
+            />
 
-            <Flex direction="column" align="flex-start">
-              {cart.discountCodes.length !== 0 && OldValueConverter}
-              <TotalPriceBlock {...cart.totalPrice} />
+            <Flex direction="row" align="center" gap={10}>
+              <Text>Total cart price: </Text>
+
+              <Flex direction="column" align="flex-start">
+                {cart.discountCodes.length !== 0 && OldValueConverter}
+                <TotalPriceBlock {...cart.totalPrice} />
+              </Flex>
             </Flex>
           </Flex>
-        </Flex>
-      )}
-    </Paper>
+        )}
+      </Paper>
+    </>
   );
 }
 
