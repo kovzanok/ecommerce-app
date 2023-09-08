@@ -1,3 +1,4 @@
+import { useMediaQuery } from '@mantine/hooks';
 import { LineItem } from '@commercetools/platform-sdk';
 import {
   ActionIcon, Box, Flex, Grid, Paper, Text,
@@ -13,6 +14,8 @@ type CartItemProps = {
 };
 
 function CartItem({ item }: CartItemProps) {
+  const matchesMini = useMediaQuery('(max-width: 48em)');
+
   const {
     id,
     name,
@@ -32,7 +35,7 @@ function CartItem({ item }: CartItemProps) {
       p="xs"
     >
       <Grid>
-        <Grid.Col span={1}>
+        <Grid.Col span={matchesMini ? 3 : 1}>
           <ActionIcon
             variant="filled"
             color="red"
@@ -43,7 +46,7 @@ function CartItem({ item }: CartItemProps) {
             <IconTrash size="1rem" />
           </ActionIcon>
         </Grid.Col>
-        <Grid.Col span={5}>
+        <Grid.Col span={matchesMini ? 9 : 5}>
           <Flex direction="row" align="flex-start" gap={10}>
             <Box
               style={{
@@ -71,13 +74,13 @@ function CartItem({ item }: CartItemProps) {
           </Flex>
         </Grid.Col>
 
-        <Grid.Col span={4}>
+        <Grid.Col span={matchesMini ? 12 : 4}>
           <Flex align="center" direction="column">
             <Text>Quantity:</Text>
             <Counter id={id} initialValue={quantity} />
           </Flex>
         </Grid.Col>
-        <Grid.Col span={2}>
+        <Grid.Col span={matchesMini ? 12 : 2}>
           <Box ta="center">
             Total
             <TotalPriceBlock {...totalPrice} />
