@@ -4,7 +4,7 @@ import { IconX } from '@tabler/icons-react';
 import { updateCart } from '../../store/slices/cartSlice';
 import { useAppDispatch } from '../../hooks';
 
-type ActivatedPromocodeProps = {
+export type ActivatedPromocodeProps = {
   promoName: string;
   discountCode: DiscountCodeReference;
 };

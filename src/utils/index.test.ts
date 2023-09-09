@@ -8,12 +8,13 @@ import {
   dateConverter,
   isInstanceOfDate,
   transformRegistrationData,
-
   capitalize,
   createCategoryMap,
   createQueryString,
   getFilterParams,
   getProductAttribute,
+  calculatePagination,
+  calculateTotal,
 } from './index';
 import {
   AuthorType, Filters, FormValues, ProductAttributes,
@@ -656,6 +657,91 @@ describe('transformRegistrationData', () => {
       expect(transformRegistrationData(input.data, input.isSame)).toStrictEqual(
         output,
       );
+    },
+  );
+});
+
+describe('calculatePagination', () => {
+  type TestCasesType = {
+    input: {
+      current: number;
+      limit: number;
+    };
+    output: [number, number];
+  };
+  const testCases: TestCasesType[] = [
+    {
+      input: {
+        current: 2,
+        limit: 5,
+      },
+      output: [5, 10],
+    },
+    {
+      input: {
+        current: 1,
+        limit: 10,
+      },
+      output: [0, 10],
+    },
+    {
+      input: {
+        current: 10,
+        limit: 2,
+      },
+      output: [18, 20],
+    },
+  ];
+  it.each(testCases)(
+    'should return array of correct current and limit values',
+    ({ input, output }) => {
+      expect(calculatePagination(input)).toStrictEqual(output);
+    },
+  );
+});
+
+describe('calculateTotal', () => {
+  type TestCasesType = {
+    input: {
+      total: number;
+      limit: number;
+    };
+    output: number;
+  };
+  const testCases: TestCasesType[] = [
+    {
+      input: {
+        total: 2,
+        limit: 5,
+      },
+      output: 1,
+    },
+    {
+      input: {
+        total: 1,
+        limit: 1,
+      },
+      output: 1,
+    },
+    {
+      input: {
+        total: 10,
+        limit: 2,
+      },
+      output: 5,
+    },
+    {
+      input: {
+        total: 7,
+        limit: 2,
+      },
+      output: 4,
+    },
+  ];
+  it.each(testCases)(
+    'should return number of total pages ($output)',
+    ({ input, output }) => {
+      expect(calculateTotal(input.total, input.limit)).toBe(output);
     },
   );
 });

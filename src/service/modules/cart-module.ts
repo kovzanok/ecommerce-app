@@ -55,13 +55,23 @@ export default class CartModule {
       .execute();
   }
 
-  static async getPromocode({ id }: { id: string }): Promise<DiscountCode> {
-    const { body } = await AuthModule.apiRoot
-      .discountCodes()
-      .withId({ ID: id })
-      .get()
-      .execute();
+  static async getPromocode({
+    id,
+  }: {
+    id: string;
+  }): Promise<DiscountCode | undefined> {
+    try {
+      const { body } = await AuthModule.apiRoot
+        .discountCodes()
+        .withId({ ID: id })
+        .get()
+        .execute();
 
-    return body;
+      return body;
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      }
+    }
   }
 }

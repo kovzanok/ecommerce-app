@@ -8,7 +8,7 @@ import { updateCart } from '../../store/slices/cartSlice';
 import { useAppDispatch } from '../../hooks';
 import Counter from '../counter';
 
-type CartItemProps = {
+export type CartItemProps = {
   item: LineItem;
 };
 
@@ -34,6 +34,7 @@ function CartItem({ item }: CartItemProps) {
       <Grid>
         <Grid.Col span={1}>
           <ActionIcon
+            title="Remove"
             variant="filled"
             color="red"
             onClick={() => dispatch(

@@ -1,18 +1,35 @@
 import {
   Modal, Flex, Button, Text,
 } from '@mantine/core';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { updateCart } from '../../store/slices/cartSlice';
+import { cartSelector } from '../../store/selectors';
 
-type ConfirmationModalProps = {
+export type ConfirmationModalProps = {
   opened: boolean;
   close: () => void;
-  removeAllFromCart: () => void;
 };
 
 export default function ConfirmationModal({
   opened,
   close,
-  removeAllFromCart,
 }: ConfirmationModalProps) {
+  const { cart } = useAppSelector(cartSelector);
+  const dispatch = useAppDispatch();
+
+  const removeAllFromCart = () => {
+    if (cart) {
+      dispatch(
+        updateCart(
+          cart.lineItems.map((item) => ({
+            action: 'removeLineItem',
+            lineItemId: item.id,
+          })),
+        ),
+      );
+    }
+  };
+
   return (
     <Modal centered opened={opened} onClose={close} title="Confirmation">
       <Text>Do you really want to delete your basket ?</Text>

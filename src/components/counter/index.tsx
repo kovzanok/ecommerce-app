@@ -10,7 +10,7 @@ import { useTimeout } from '@mantine/hooks';
 import { useAppDispatch } from '../../hooks';
 import { updateCart } from '../../store/slices/cartSlice';
 
-type CounterProps = {
+export type CounterProps = {
   id: string;
   initialValue: number;
 };
