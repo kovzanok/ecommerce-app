@@ -5,7 +5,7 @@ import { renderWithProviders } from '../../test';
 import Promocode from '.';
 import ApiService from '../../service/api-service';
 
-vi.mock('../../../service/api-service');
+vi.mock('../../service/api-service');
 
 describe('Promocode', () => {
   afterEach(() => {
@@ -27,6 +27,34 @@ describe('Promocode', () => {
   });
 
   it('should render promocode component', async () => {
+    const mockedPromo: DiscountCode = {
+      id: 'e0defc59-895c-4c93-9df5-9176d9bf4a65',
+      version: 3,
+      createdAt: '2023-09-07T14:28:22.763Z',
+      lastModifiedAt: '2023-09-08T06:22:51.342Z',
+      code: 'QWERTY',
+      name: {
+        'en-US': 'QWERTY',
+      },
+      description: {
+        'en-US': 'QWERTY',
+      },
+      cartDiscounts: [
+        {
+          typeId: 'cart-discount',
+          id: '77974359-75d9-44e1-ae90-2da8e72c7deb',
+        },
+      ],
+      isActive: true,
+      cartPredicate: '1 = 1',
+      references: [],
+      groups: [],
+    };
+
+    ApiService.getPromocodeById = vi
+      .mocked(ApiService.getPromocodeById)
+      .mockResolvedValueOnce(mockedPromo);
+
     renderWithProviders(<Promocode />, {
       preloadedState: {
         cart: {
@@ -137,34 +165,6 @@ describe('Promocode', () => {
         },
       },
     });
-
-    const mockedPromo: DiscountCode = {
-      id: 'e0defc59-895c-4c93-9df5-9176d9bf4a65',
-      version: 3,
-      createdAt: '2023-09-07T14:28:22.763Z',
-      lastModifiedAt: '2023-09-08T06:22:51.342Z',
-      code: 'QWERTY',
-      name: {
-        'en-US': 'QWERTY',
-      },
-      description: {
-        'en-US': 'QWERTY',
-      },
-      cartDiscounts: [
-        {
-          typeId: 'cart-discount',
-          id: '77974359-75d9-44e1-ae90-2da8e72c7deb',
-        },
-      ],
-      isActive: true,
-      cartPredicate: '1 = 1',
-      references: [],
-      groups: [],
-    };
-
-    ApiService.getPromocodeById = vi
-      .mocked(ApiService.getPromocodeById)
-      .mockResolvedValueOnce(mockedPromo);
 
     const titlePromocode: HTMLElement = await screen.findByText('Promocode');
     expect(titlePromocode).toBeInTheDocument();
@@ -179,6 +179,34 @@ describe('Promocode', () => {
   });
 
   it('should change input and click button', async () => {
+    const mockedPromo: DiscountCode = {
+      id: 'e0defc59-895c-4c93-9df5-9176d9bf4a65',
+      version: 3,
+      createdAt: '2023-09-07T14:28:22.763Z',
+      lastModifiedAt: '2023-09-08T06:22:51.342Z',
+      code: 'QWERTY',
+      name: {
+        'en-US': 'QWERTY',
+      },
+      description: {
+        'en-US': 'QWERTY',
+      },
+      cartDiscounts: [
+        {
+          typeId: 'cart-discount',
+          id: '77974359-75d9-44e1-ae90-2da8e72c7deb',
+        },
+      ],
+      isActive: true,
+      cartPredicate: '1 = 1',
+      references: [],
+      groups: [],
+    };
+
+    ApiService.getPromocodeById = vi
+      .mocked(ApiService.getPromocodeById)
+      .mockResolvedValueOnce(mockedPromo);
+
     renderWithProviders(<Promocode />, {
       preloadedState: {
         cart: {
@@ -289,34 +317,6 @@ describe('Promocode', () => {
         },
       },
     });
-
-    const mockedPromo: DiscountCode = {
-      id: 'e0defc59-895c-4c93-9df5-9176d9bf4a65',
-      version: 3,
-      createdAt: '2023-09-07T14:28:22.763Z',
-      lastModifiedAt: '2023-09-08T06:22:51.342Z',
-      code: 'QWERTY',
-      name: {
-        'en-US': 'QWERTY',
-      },
-      description: {
-        'en-US': 'QWERTY',
-      },
-      cartDiscounts: [
-        {
-          typeId: 'cart-discount',
-          id: '77974359-75d9-44e1-ae90-2da8e72c7deb',
-        },
-      ],
-      isActive: true,
-      cartPredicate: '1 = 1',
-      references: [],
-      groups: [],
-    };
-
-    ApiService.getPromocodeById = vi
-      .mocked(ApiService.getPromocodeById)
-      .mockResolvedValueOnce(mockedPromo);
 
     const inputPromocode: HTMLElement = await screen.findByPlaceholderText(
       'Write promocode here...',
