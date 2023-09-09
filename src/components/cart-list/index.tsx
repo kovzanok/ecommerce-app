@@ -2,16 +2,10 @@ import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import {
-  Button,
-  Center,
-  Flex,
-  Loader,
-  Paper,
-  Text,
-  Title,
+  Button, Center, Flex, Loader, Text, Title,
 } from '@mantine/core';
 import { IconClearAll } from '@tabler/icons-react';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { cartSelector } from '../../store/selectors';
 import CartItem from '../cart-item';
 import CartPagination from '../cart-pagination';
@@ -22,6 +16,9 @@ import ConfirmationModal from '../confirmation-modal';
 import { TotalPriceBlock } from '../price-content';
 
 function CartList() {
+  const matches = useMediaQuery('(max-width: 62em)');
+  const matchesMini = useMediaQuery('(max-width: 48em)');
+
   const { loading, cart } = useSelector(cartSelector);
 
   const [pagination, setPagination] = useState<PaginationType>({
@@ -91,15 +88,21 @@ function CartList() {
   return (
     <>
       <ConfirmationModal opened={opened} close={close} />
-      <Paper style={{ flex: '1 1 50%' }}>
+      <Flex
+        direction={matches ? 'column-reverse' : 'column'}
+        style={{
+          flex: `1 1 ${matches ? '100%' : '50%'}`,
+          width: matches ? '100%' : 'auto',
+        }}
+      >
         {content}
 
         {cart && cart?.lineItems.length !== 0 && (
           <Flex
             direction="row"
-            align="flex-start"
-            gap={10}
-            justify="space-between"
+            wrap="wrap"
+            gap={matchesMini ? 30 : 10}
+            justify={matchesMini ? 'center' : 'space-between'}
             style={{ marginTop: '10px' }}
           >
             <Button
@@ -127,7 +130,7 @@ function CartList() {
             </Flex>
           </Flex>
         )}
-      </Paper>
+      </Flex>
     </>
   );
 }

@@ -1,3 +1,4 @@
+import { useMediaQuery } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import {
   Button, Flex, Paper, TextInput, Title,
@@ -10,6 +11,7 @@ import ActivatedPromocode from '../activated-promocode';
 import ApiService from '../../service/api-service';
 
 function Promocode() {
+  const matches = useMediaQuery('(max-width: 62em)');
   const [promocode, setPromocode] = useState<string>('');
 
   const dispatch = useAppDispatch();
@@ -33,7 +35,14 @@ function Promocode() {
   }, [cart]);
 
   return (
-    <Paper h="auto" style={{ flex: '1' }} mt="xs" shadow="xs" p="xs">
+    <Paper
+      h="auto"
+      w={matches ? '100%' : 'auto'}
+      style={{ flex: '1' }}
+      mt="xs"
+      shadow="xs"
+      p="xs"
+    >
       <Flex direction="column" gap={20}>
         <Title>Promocode</Title>
 
@@ -52,7 +61,7 @@ function Promocode() {
         />
         <Button
           color="orange"
-          disabled={isPromocodesNotEmpty}
+          disabled={isPromocodesNotEmpty || promocode === ''}
           onClick={() => {
             dispatch(
               updateCart([{ action: 'addDiscountCode', code: promocode }]),
