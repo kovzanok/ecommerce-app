@@ -40,6 +40,7 @@ describe('useAppSelector', () => {
       products: [],
       loading: false,
       error: '',
+      total: 0,
     };
     const cart = { cart: null, loading: false, error: '' };
     const {
@@ -85,6 +86,7 @@ describe('useTitle', () => {
       products: [],
       loading: false,
       error: '',
+      total: 0,
     };
     const cart = { cart: null, loading: false, error: '' };
     renderHookWithProviders(() => useTitle('New title'), {

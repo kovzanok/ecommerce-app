@@ -79,13 +79,14 @@ describe('ApiService', () => {
       },
       search: '',
       sort: 'name.en-US asc',
+      page: 0,
     };
     const products: ProductProjection[] = [];
     ProductsModule.getProducts = vi
       .mocked(ProductsModule.getProducts)
-      .mockResolvedValue(products);
+      .mockResolvedValue([products, 0]);
 
-    expect(await ApiService.getProducts(query)).toStrictEqual(products);
+    expect(await ApiService.getProducts(query)).toStrictEqual([products, 0]);
   });
 
   it('should return categories', async () => {

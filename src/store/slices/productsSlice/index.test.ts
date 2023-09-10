@@ -28,11 +28,12 @@ describe('fetchProductsThunk', () => {
       filters,
       search: '',
       sort: 'name.en-US asc',
+      page: 0,
     };
 
     ApiService.getProducts = vi
       .mocked(ApiService.getProducts)
-      .mockResolvedValueOnce(products);
+      .mockResolvedValueOnce([products, 0]);
 
     const dispatch = vi.fn();
     const thunk = fetchProducts(query);
@@ -44,7 +45,7 @@ describe('fetchProductsThunk', () => {
 
     expect(start[0].type).toBe(fetchProducts.pending.type);
     expect(end[0].type).toBe(fetchProducts.fulfilled.type);
-    expect(end[0].payload).toBe(products);
+    expect(end[0].payload).toStrictEqual([products, 0]);
   });
 });
 
@@ -53,6 +54,7 @@ describe('productsSlice', () => {
     products: [],
     loading: true,
     error: '',
+    total: 0,
   };
 
   it('should return initial state', () => {

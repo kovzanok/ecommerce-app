@@ -1,5 +1,10 @@
 import {
-  Loader, Flex, Center, Title, MediaQuery,
+  Loader,
+  Flex,
+  Center,
+  Title,
+  MediaQuery,
+  Pagination,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useEffect, useState } from 'react';
@@ -32,15 +37,19 @@ const initialValues: Filters = {
 export default function CatalogPage() {
   const { category = booksCategoryId } = useParams();
   const [sort, setSort] = useState<Sorting>('name.en-US asc');
+  const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [filters, setFilters] = useState<FilterParam[]>([]);
   useTitle('Catalog');
   const {
     getInputProps, onSubmit, reset, values,
   } = useForm({ initialValues });
-  const { products, loading } = useAppSelector(productsSelector);
+  const { products, loading, total } = useAppSelector(productsSelector);
   const dispatch = useAppDispatch();
   /* eslint-disable react-hooks/exhaustive-deps */
+  useEffect(() => {
+    setPage(1);
+  }, [category]);
   useEffect(() => {
     dispatch(
       fetchProducts({
@@ -48,13 +57,14 @@ export default function CatalogPage() {
         filters: values,
         sort,
         category,
+        page,
       }),
     );
     ProductsModule.getProductAttributes()
       .catch(console.log)
       .then((res) => res && setFilters(getFilterParams(res)))
       .catch();
-  }, [category]);
+  }, [category, page]);
 
   let content: JSX.Element;
 
@@ -97,6 +107,7 @@ export default function CatalogPage() {
         filters: values,
         sort,
         category,
+        page,
       }),
     );
   };
@@ -107,6 +118,7 @@ export default function CatalogPage() {
       filters: appliedFilters,
       sort,
       category,
+      page,
     }),
   ));
   const handleChange = (value: string | null) => {
@@ -117,12 +129,13 @@ export default function CatalogPage() {
         filters: values,
         sort: value as Sorting,
         category,
+        page,
       }),
     );
   };
 
   return (
-    <Flex pb={60} columnGap={30}>
+    <Flex pb={90} columnGap={30}>
       <Flex rowGap={10} direction="column">
         <Categories />
         <FilterForm
@@ -134,7 +147,7 @@ export default function CatalogPage() {
         />
       </Flex>
 
-      <div style={{ width: '100%' }}>
+      <Flex w="100%" direction="column" align="center">
         <MediaQuery query="(max-width:580px)" styles={{ flexWrap: 'wrap' }}>
           <Flex mb={20} align="end" justify="center" columnGap={20} rowGap={10}>
             <SortSelect
@@ -158,7 +171,14 @@ export default function CatalogPage() {
 
         <CustomBreadcrumbs />
         {content}
-      </div>
+        <Pagination
+          total={Math.ceil(total / 6)}
+          color="orange"
+          onChange={setPage}
+          mt={20}
+          value={page}
+        />
+      </Flex>
     </Flex>
   );
 }
