@@ -1,9 +1,23 @@
 import { screen } from '@testing-library/react';
+import { vi } from 'vitest';
 import { renderWithProviders } from '../../test';
 import CustomHeader from '.';
 import { RootState } from '../../store';
 
 describe('CustomHeader', () => {
+  beforeAll(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
+  });
   it('should render header with logo', async () => {
     renderWithProviders(<CustomHeader />);
     expect(await screen.findByRole('img')).toHaveAttribute(

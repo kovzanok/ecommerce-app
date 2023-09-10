@@ -143,7 +143,7 @@ export default function CustomHeader() {
           </Flex>
         </Container>
       </Header>
-      {mobileMenu}
+      {matches && mobileMenu}
       <MediaQuery styles={{ display: 'block' }} query="(max-width: 600px)">
         <Burger
           pos="fixed"
