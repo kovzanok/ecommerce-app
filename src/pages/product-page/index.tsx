@@ -7,6 +7,7 @@ import {
   Center,
   Modal,
   MediaQuery,
+  Button,
 } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
 import { Navigate, useParams } from 'react-router-dom';
@@ -21,7 +22,7 @@ import {
 import { EmblaCarouselType } from 'embla-carousel';
 import { useMediaQuery } from '@mantine/hooks';
 import { useAppDispatch, useAppSelector, useTitle } from '../../hooks';
-import { productSelector } from '../../store/selectors';
+import { cartSelector, productSelector } from '../../store/selectors';
 import { clearError, fetchProductById } from '../../store/slices/productSlice';
 import {
   AgeType,
@@ -32,9 +33,11 @@ import {
 } from '../../types';
 import PriceContent from '../../components/price-content';
 import { getProductAttribute } from '../../utils';
+import { updateCart } from '../../store/slices/cartSlice';
 
 const TRANSIOTION_DURATION = 200;
 export default function ProductPage() {
+  const { cart, loading: cartLoading } = useAppSelector(cartSelector);
   const { id } = useParams();
   const matches = useMediaQuery('(max-width:770px)');
   const matchesMobile = useMediaQuery('(max-width:500px)');
@@ -76,6 +79,42 @@ export default function ProductPage() {
   const publisher = getProductAttribute<PublisherType>(attributes, 'publisher');
   const price = prices?.[0] as Price;
   const isOnlyOneImage = images?.length !== 1;
+
+  const lineItem = cart?.lineItems.find(({ productId }) => productId === id);
+
+  const addToCart = (): void => {
+    dispatch(updateCart([{ action: 'addLineItem', productId: id }]))
+      .unwrap()
+      .then(() => alert('Product was successfully added to cart!'))
+      .catch(console.log);
+  };
+
+  const removeFromCart = (): void => {
+    if (lineItem) {
+      dispatch(
+        updateCart([{ action: 'removeLineItem', lineItemId: lineItem.id }]),
+      )
+        .unwrap()
+        .then(() => alert('Product was successfully removed from the cart!'))
+        .catch(console.log);
+    }
+  };
+
+  const handleClick = () => {
+    if (lineItem) return removeFromCart();
+    addToCart();
+  };
+
+  const buttonContent = () => {
+    switch (true) {
+      case cartLoading:
+        return <Loader size="xs" color="orange" />;
+      case !!lineItem:
+        return 'Remove from cart';
+      default:
+        return 'Add to cart';
+    }
+  };
 
   return (
     <MediaQuery query="(max-width:950px)" styles={{ padding: 0 }}>
@@ -148,7 +187,19 @@ export default function ProductPage() {
               marginTop: matches ? 30 : 0,
             }}
           >
-            <Title order={1}>{name['en-US']}</Title>
+            <Flex align="center" columnGap={20}>
+              <Title order={1}>{name['en-US']}</Title>
+              <Button
+                disabled={cartLoading}
+                onClick={handleClick}
+                mt={10}
+                size="md"
+                color="orange"
+              >
+                {buttonContent()}
+              </Button>
+            </Flex>
+
             <Text color="gray">
               {author.value.label}
               ,
