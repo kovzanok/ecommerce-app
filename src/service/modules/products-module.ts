@@ -15,13 +15,16 @@ export default class ProductsModule {
     filters,
     sort,
     category,
-    limit = 500,
-  }: ProductsQuery): Promise<ProductProjection[] | undefined> {
+    limit = 6,
+    page,
+  }: ProductsQuery): Promise<
+    [ProductProjection[] | undefined, number | undefined] | undefined
+    > {
     try {
       const queryString = createQueryString(filters);
       queryString.push(`categories.id: subtree("${category}")`);
       const {
-        body: { results },
+        body: { results, total },
       } = await AuthModule.apiRoot
         .productProjections()
         .search()
@@ -31,10 +34,11 @@ export default class ProductsModule {
             'filter.query': queryString,
             sort,
             limit,
+            offset: (page - 1) * limit,
           },
         })
         .execute();
-      return results;
+      return [results, total];
     } catch (err) {
       if (err instanceof Error) {
         throw new Error(err.message);
