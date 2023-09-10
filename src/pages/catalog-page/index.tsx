@@ -135,7 +135,7 @@ export default function CatalogPage() {
   };
 
   return (
-    <Flex pb={60} columnGap={30}>
+    <Flex pb={90} columnGap={30}>
       <Flex rowGap={10} direction="column">
         <Categories />
         <FilterForm
