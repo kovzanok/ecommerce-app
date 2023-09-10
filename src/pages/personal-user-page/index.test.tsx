@@ -42,11 +42,15 @@ describe('UserPage', () => {
     products: [],
     loading: false,
     error: '',
+    total: 0,
   };
   const product = { product: null, loading: false, error: '' };
   const cart = { cart: null, loading: false, error: '' };
   const preloadedState = {
-    user, product, products, cart,
+    user,
+    product,
+    products,
+    cart,
   };
 
   it('should render all fields', async () => {

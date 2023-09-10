@@ -16,6 +16,7 @@ const defaultState = {
     products: [],
     loading: false,
     error: '',
+    total: 0,
   },
   product: {
     product: null,

@@ -12,6 +12,7 @@ describe('userSelector', () => {
       products: [],
       loading: false,
       error: '',
+      total: 0,
     };
     const cart = { cart: null, loading: false, error: '' };
     const store: RootState = {
@@ -37,6 +38,7 @@ describe('productsSelector', () => {
       products: [],
       loading: false,
       error: '',
+      total: 0,
     };
     const product = { product: null, loading: false, error: '' };
     const cart = { cart: null, loading: false, error: '' };
@@ -63,6 +65,7 @@ describe('productSelector', () => {
       products: [],
       loading: false,
       error: '',
+      total: 0,
     };
     const product = { product: null, loading: false, error: '' };
     const cart = { cart: null, loading: false, error: '' };
