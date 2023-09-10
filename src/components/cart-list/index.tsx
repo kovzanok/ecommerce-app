@@ -12,8 +12,6 @@ import CartPagination from '../cart-pagination';
 import emptyCart from '../../assets/empty-cart.jpg';
 import { PaginationType } from '../../types';
 import { calculatePagination, calculateTotal } from '../../utils';
-import { updateCart } from '../../store/slices/cartSlice';
-import { useAppDispatch } from '../../hooks';
 import ConfirmationModal from '../confirmation-modal';
 import { TotalPriceBlock } from '../price-content';
 
@@ -68,22 +66,8 @@ function CartList() {
         </Flex>
       );
   }
-  const dispatch = useAppDispatch();
 
   const [opened, { open, close }] = useDisclosure(false);
-
-  const removeAllFromCart = () => {
-    if (cart) {
-      dispatch(
-        updateCart(
-          cart.lineItems.map((item) => ({
-            action: 'removeLineItem',
-            lineItemId: item.id,
-          })),
-        ),
-      );
-    }
-  };
 
   const OldValueConverter = (
     <Text style={{ textDecoration: 'line-through' }}>
@@ -103,11 +87,7 @@ function CartList() {
 
   return (
     <>
-      <ConfirmationModal
-        opened={opened}
-        close={close}
-        removeAllFromCart={removeAllFromCart}
-      />
+      <ConfirmationModal opened={opened} close={close} />
       <Flex
         direction={matches ? 'column-reverse' : 'column'}
         style={{
@@ -126,6 +106,7 @@ function CartList() {
             style={{ marginTop: '10px' }}
           >
             <Button
+              title="Clear cart items"
               color="red"
               leftIcon={<IconClearAll size="1rem" />}
               onClick={open}

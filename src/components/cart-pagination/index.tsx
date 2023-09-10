@@ -4,7 +4,7 @@ import { useMediaQuery } from '@mantine/hooks';
 import { PaginationType } from '../../types';
 import { calculateTotal } from '../../utils';
 
-type CartPaginationProps = {
+export type CartPaginationProps = {
   pagination: PaginationType;
   setPagination: React.Dispatch<React.SetStateAction<PaginationType>>;
   totalPages: number;
@@ -19,6 +19,7 @@ function CartPagination({
 
   return (
     <Pagination
+      title="paginate"
       siblings={1}
       total={calculateTotal(totalPages, pagination.limit)}
       value={pagination.current}

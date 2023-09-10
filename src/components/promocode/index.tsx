@@ -22,9 +22,11 @@ function Promocode() {
 
   useEffect(() => {
     if (cart && isPromocodesNotEmpty) {
-      ApiService.getPromocodeById(cart?.discountCodes[0].discountCode.id).then(
-        (promocodeResponse: DiscountCode) => {
-          setPromocode(promocodeResponse.code);
+      ApiService.getPromocodeById(cart.discountCodes[0].discountCode.id).then(
+        (promocodeResponse: DiscountCode | undefined) => {
+          if (promocodeResponse !== undefined) {
+            setPromocode(promocodeResponse.code || '');
+          }
         },
       );
     }

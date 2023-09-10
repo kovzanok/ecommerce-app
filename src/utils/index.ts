@@ -171,9 +171,11 @@ export const createCategoryMap = (
   return map;
 };
 
-export const calculatePagination = (pagination: PaginationType) => {
+export const calculatePagination = (
+  pagination: PaginationType,
+): [number, number] => {
   const start = pagination.limit * (pagination.current - 1);
   return [start, start + pagination.limit];
 };
 
-export const calculateTotal = (total: number, limit: number) => Math.ceil(total / limit);
+export const calculateTotal = (total: number, limit: number): number => Math.ceil(total / limit);

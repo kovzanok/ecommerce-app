@@ -2,6 +2,7 @@ import {
   CustomerDraft,
   CustomerSignInResult,
   CustomerSignin,
+  DiscountCode,
   MyCartUpdateAction,
 } from '@commercetools/platform-sdk';
 import AuthModule from './modules/auth-module';
@@ -82,7 +83,17 @@ export default class ApiService {
     }
   }
 
-  static async getPromocodeById(id: string) {
-    return CartModule.getPromocode({ id });
+  static async getPromocodeById(id: string): Promise<DiscountCode | undefined> {
+    try {
+      const promo = await CartModule.getPromocode({ id });
+
+      if (promo) {
+        return promo;
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      }
+    }
   }
 }
