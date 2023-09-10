@@ -8,6 +8,7 @@ import {
   IconBuildingStore,
   IconUserCircle,
   IconShoppingCart,
+  IconUsers,
 } from '@tabler/icons-react';
 import logo from '../../assets/logo.png';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -56,6 +57,7 @@ export default function CustomHeader() {
             <Image width={50} height={50} src={logo} />
           </NavLink>
           <Group>
+            <HeaderLink icon={<IconUsers />} to="/about-us" text="About Us" />
             <HeaderLink
               icon={<IconBuildingStore />}
               to="/catalog"
