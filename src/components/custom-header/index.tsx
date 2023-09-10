@@ -7,6 +7,7 @@ import {
   IconUserPlus,
   IconBuildingStore,
   IconUserCircle,
+  IconShoppingCart,
 } from '@tabler/icons-react';
 import logo from '../../assets/logo.png';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -60,6 +61,7 @@ export default function CustomHeader() {
               to="/catalog"
               text="Catalog"
             />
+            <HeaderLink icon={<IconShoppingCart />} to="/cart" text="Cart" />
             {user ? authorizedUserLinks : authLinks}
           </Group>
         </Flex>
