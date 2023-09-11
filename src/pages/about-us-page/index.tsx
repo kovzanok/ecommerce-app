@@ -12,7 +12,7 @@ export default function AboutUsPage() {
       <Text size={16}>
         Each members significant contributions to the project are highlighted in
         the introduction. The description demonstrates how the teams effective
-        collaboration led to the projects successful completion
+        collaboration led to the projects successful completion.
       </Text>
       <Card
         shadow="lg"
