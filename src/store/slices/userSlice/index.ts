@@ -24,6 +24,7 @@ export const signIn = createAsyncThunk(
       return user;
     } catch (err) {
       if (err instanceof Error) {
+        AuthModule.resetApiRoot();
         throw new Error(err.message);
       }
     }
@@ -40,6 +41,7 @@ export const signUp = createAsyncThunk(
       return user;
     } catch (err) {
       if (err instanceof Error) {
+        AuthModule.resetApiRoot();
         throw new Error(err.message);
       }
     }
