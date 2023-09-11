@@ -173,3 +173,11 @@ export type PaginationType = {
   current: number;
   limit: number;
 };
+
+export type PersonData = {
+  name: string;
+  role: string;
+  description: string;
+  photoLink: string;
+  gitLink: string;
+};

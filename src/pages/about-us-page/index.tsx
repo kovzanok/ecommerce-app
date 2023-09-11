@@ -1,9 +1,38 @@
-import {
-  Card, Flex, Image, Text, Title,
-} from '@mantine/core';
-import { NavLink } from 'react-router-dom';
+import { Flex, Text, Title } from '@mantine/core';
+import PersonCard from '../../components/person-card';
+import { PersonData } from '../../types';
 
 export default function AboutUsPage() {
+  const descrNikolai = `I am 32 years old.
+  In 2013, I graduated from the Belarusian State Pedagogical University
+  with a degree in Mathematics, Informatics. I worked as a teacher at the Pinsk College
+  of Engineering and Technology, and have also been deputy director since 2020.
+  Now I work in the trade sector. The basis of my motivation to engage in programming is
+  the desire to connect my professional activities with this area.`;
+
+  const persons: PersonData[] = [
+    {
+      name: 'Alexander',
+      role: 'Team Lead',
+      photoLink: 'https://avatars.githubusercontent.com/u/119339747?v=4',
+      description: '...',
+      gitLink: 'https://github.com/kovzanok',
+    },
+    {
+      name: 'Alexei',
+      role: 'Programmer',
+      photoLink: '...',
+      description: '...',
+      gitLink: 'https://github.com/alexeiisprogrammer',
+    },
+    {
+      name: 'Nikolai',
+      role: 'Programmer',
+      photoLink: 'http://surl.li/kzokt',
+      description: descrNikolai,
+      gitLink: 'https://github.com/theNickola',
+    },
+  ];
   return (
     <Flex direction="column">
       <Title ta="center" mb={20} size={24}>
@@ -14,41 +43,9 @@ export default function AboutUsPage() {
         the introduction. The description demonstrates how the teams effective
         collaboration led to the projects successful completion.
       </Text>
-      <Card
-        shadow="lg"
-        style={{
-          border: '1px solid orange',
-          backgroundColor: '#00000009',
-        }}
-        withBorder
-      >
-        <Flex direction="row" justify="flex-start">
-          <Image
-            maw={240}
-            radius="md"
-            src="https://s.pfst.net/2011.10/8315372465ce9fb53266667730f2a506ea71b27432_b.jpg"
-            alt="Photo"
-          />
-          <Flex
-            direction="column"
-            style={{
-              padding: '7px',
-            }}
-          >
-            <Title color="orange" size={18}>
-              Name (role)
-            </Title>
-            <Text size={16}>Description</Text>
-            <NavLink
-              target="new"
-              style={{ color: 'blue' }}
-              to="https://github.com/theNickola"
-            >
-              gitHub
-            </NavLink>
-          </Flex>
-        </Flex>
-      </Card>
+      {persons.map((person) => (
+        <PersonCard {...person} />
+      ))}
     </Flex>
   );
 }
