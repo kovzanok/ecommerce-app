@@ -159,6 +159,7 @@ describe('Promocode', () => {
           error: '',
         },
         products: {
+          total: 0,
           products: [],
           loading: false,
           error: '',
@@ -311,6 +312,7 @@ describe('Promocode', () => {
           error: '',
         },
         products: {
+          total: 0,
           products: [],
           loading: false,
           error: '',
