@@ -41,6 +41,12 @@ export default function MainPage() {
       description:
         'User Profile page is available only for authorized users and contains all ther user information, which can be modified and saved.',
     },
+    {
+      to: '/cart',
+      name: 'Cart Page',
+      description:
+        'Cart page contains all the goods added to user personal cart.',
+    },
   ];
 
   const sortingOptions: string[] = [
