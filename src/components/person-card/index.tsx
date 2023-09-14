@@ -10,6 +10,7 @@ export default function PersonCard({
   description,
   photoLink,
   gitLink,
+  contributions,
 }: PersonData) {
   return (
     <Card
@@ -19,6 +20,7 @@ export default function PersonCard({
         backgroundColor: '#00000009',
       }}
       withBorder
+      mb={10}
     >
       <Flex direction="row" justify="flex-start">
         <Image maw={240} radius="md" src={photoLink} alt="Photo" />
@@ -36,6 +38,13 @@ export default function PersonCard({
             {role}
           </Title>
           <Text size={16}>{description}</Text>
+          <Text weight={600} mt={10} mb={10}>
+            Contributions:
+            <Text span weight={400}>
+              &nbsp;
+              {contributions}
+            </Text>
+          </Text>
           <NavLink target="new" style={{ color: 'blue' }} to={gitLink}>
             gitHub
           </NavLink>

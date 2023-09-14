@@ -180,4 +180,5 @@ export type PersonData = {
   description: string;
   photoLink: string;
   gitLink: string;
+  contributions: string;
 };
