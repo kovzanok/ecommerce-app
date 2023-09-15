@@ -156,6 +156,7 @@ describe('Cart page', () => {
             error: '',
           },
           products: {
+            total: 0,
             products: [],
             loading: false,
             error: '',

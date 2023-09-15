@@ -24,6 +24,7 @@ import userSelector from '../../store/selectors';
 import { logout } from '../../store/slices/userSlice';
 import AuthModule from '../../service/modules/auth-module';
 import HeaderLink from '../header-link';
+import { resetCart } from '../../store/slices/cartSlice';
 
 export default function CustomHeader() {
   const { user } = useAppSelector(userSelector);
@@ -33,6 +34,7 @@ export default function CustomHeader() {
   const matches = useMediaQuery('(max-width: 600px)');
   const handleClick = () => {
     dispatch(logout());
+    dispatch(resetCart());
     localStorage.removeItem('qwe_access-token');
     close();
     AuthModule.creatAnonymousApiRoot();

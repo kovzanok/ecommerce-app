@@ -71,6 +71,7 @@ describe('Cart list', () => {
           error: '',
         },
         products: {
+          total: 0,
           products: [],
           loading: false,
           error: '',
@@ -132,6 +133,7 @@ describe('Cart list', () => {
           error: '',
         },
         products: {
+          total: 0,
           products: [],
           loading: false,
           error: '',
@@ -237,6 +239,7 @@ describe('Cart list', () => {
           error: '',
         },
         products: {
+          total: 0,
           products: [],
           loading: false,
           error: '',
@@ -356,6 +359,7 @@ describe('Cart list', () => {
           error: '',
         },
         products: {
+          total: 0,
           products: [],
           loading: false,
           error: '',
