@@ -1,4 +1,7 @@
-import { Flex, Text, Title } from '@mantine/core';
+import {
+  Flex, Image, Text, Title,
+} from '@mantine/core';
+import { NavLink } from 'react-router-dom';
 import PersonCard from '../../components/person-card';
 import { PersonData } from '../../types';
 
@@ -55,19 +58,31 @@ export default function AboutUsPage() {
     },
   ];
   return (
-    <Flex direction="column">
-      <Title ta="center" mb={20} size={28}>
-        About us
-      </Title>
-      <Text size={16} align="justify">
-        {TEXT_INTRO_TEAM}
-      </Text>
-      <Title mt={20} size={20}>
-        Our team:
-      </Title>
-      {persons.map((person) => (
-        <PersonCard {...person} />
-      ))}
-    </Flex>
+    <div>
+      <NavLink target="_blank" to="https://rs.school/">
+        <Image
+          src="https://rs.school/images/rs_school_js.svg"
+          alt="RSSchol"
+          style={{
+            maxWidth: '100px',
+            minWidth: '100px',
+          }}
+        />
+      </NavLink>
+      <Flex direction="column">
+        <Title ta="center" mb={20} size={28}>
+          About us
+        </Title>
+        <Text size={16} align="justify">
+          {TEXT_INTRO_TEAM}
+        </Text>
+        <Title mt={20} size={20}>
+          Our team:
+        </Title>
+        {persons.map((person) => (
+          <PersonCard {...person} />
+        ))}
+      </Flex>
+    </div>
   );
 }
