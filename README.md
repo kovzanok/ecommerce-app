@@ -24,15 +24,18 @@ An important aspect of our application is that it's responsive, ensuring it look
 The application is powered by CommerceTools, a leading provider of commerce solutions for B2C and B2B enterprises. CommerceTools offers a cloud-native, microservices-based commerce platform that enables brands to create unique and engaging digital commerce experiences.
 
 # Technology stack
-- eCommerceTools
-- Vite
+- CommerceTools API
+- CommerceTools SDK
 - React
 - TypeScript
+- Redux Toolkit
 - ESLint
 - Prettier
 - Husky
-- Jest
+- Vitest
+- React testing library
 - Lint-staged
+- Vite
 
 # Scripts available in the project:
 - ## "dev": "vite"
