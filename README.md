@@ -27,6 +27,7 @@ The application is powered by CommerceTools, a leading provider of commerce solu
 - CommerceTools API
 - CommerceTools SDK
 - React
+- Mantine UI
 - TypeScript
 - Redux Toolkit
 - ESLint
