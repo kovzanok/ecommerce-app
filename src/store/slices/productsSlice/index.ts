@@ -35,7 +35,11 @@ const productsSlice = createSlice({
       state.error = '';
     });
     builder.addCase(fetchProducts.fulfilled, (state, action) => {
-      if (action.payload && action.payload[0] && action.payload[1]) {
+      if (
+        action.payload
+        && action.payload[0]
+        && typeof action.payload[1] === 'number'
+      ) {
         [state.products, state.total] = action.payload;
         state.error = '';
         state.loading = false;

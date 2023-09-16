@@ -101,6 +101,7 @@ export default function CatalogPage() {
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
+    setPage(1);
     dispatch(
       fetchProducts({
         search,
@@ -112,15 +113,18 @@ export default function CatalogPage() {
     );
   };
 
-  const applyFilters = onSubmit((appliedFilters) => dispatch(
-    fetchProducts({
-      search,
-      filters: appliedFilters,
-      sort,
-      category,
-      page,
-    }),
-  ));
+  const applyFilters = onSubmit((appliedFilters) => {
+    setPage(1);
+    dispatch(
+      fetchProducts({
+        search,
+        filters: appliedFilters,
+        sort,
+        category,
+        page,
+      }),
+    );
+  });
   const handleChange = (value: string | null) => {
     setSort(value as Sorting);
     dispatch(
