@@ -47,6 +47,12 @@ export default function MainPage() {
       description:
         'Cart page contains all the goods added to user personal cart.',
     },
+    {
+      to: '/about-us',
+      name: 'About Us Page',
+      description:
+        'About Us page contains information about our team and each member contribution.',
+    },
   ];
 
   const sortingOptions: string[] = [
