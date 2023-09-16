@@ -4,8 +4,10 @@ import {
 import { NavLink } from 'react-router-dom';
 import PersonCard from '../../components/person-card';
 import { PersonData } from '../../types';
+import { useTitle } from '../../hooks';
 
 export default function AboutUsPage() {
+  useTitle('About us');
   const TEXT_INTRO_TEAM = `Despite the lack of time and personal issues each member of our team has 
   made tremendous contribution in our project. All the tasks which were spitted between team members 
   always were made on time. Of course, we’ve faced many bugs during team project, but with the help 
