@@ -20,7 +20,7 @@ import {
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import logo from '../../assets/logo.png';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import userSelector from '../../store/selectors';
+import userSelector, { cartSelector } from '../../store/selectors';
 import { logout } from '../../store/slices/userSlice';
 import AuthModule from '../../service/modules/auth-module';
 import HeaderLink from '../header-link';
@@ -28,6 +28,7 @@ import { resetCart } from '../../store/slices/cartSlice';
 
 export default function CustomHeader() {
   const { user } = useAppSelector(userSelector);
+  const { cart } = useAppSelector(cartSelector);
   const [opened, { toggle, close }] = useDisclosure(false);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -97,6 +98,10 @@ export default function CustomHeader() {
         icon={<IconShoppingCart />}
         to="/cart"
         text="Cart"
+        cartCount={cart?.lineItems.reduce(
+          (acc, curr) => acc + curr.quantity,
+          0,
+        )}
       />
       {user ? authorizedUserLinks : authLinks}
     </>
