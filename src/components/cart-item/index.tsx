@@ -22,9 +22,10 @@ function CartItem({ item }: CartItemProps) {
     price,
     quantity,
     totalPrice,
+    discountedPricePerQuantity,
     variant: { images },
   } = item;
-
+  const isDiscounted = discountedPricePerQuantity.length !== 0;
   const dispatch = useAppDispatch();
 
   return (
@@ -84,6 +85,13 @@ function CartItem({ item }: CartItemProps) {
         <Grid.Col span={matchesMini ? 12 : 2}>
           <Box ta="center">
             Total
+            {isDiscounted && (
+              <div style={{ textDecoration: 'line-through' }}>
+                {quantity * (price.value.centAmount / 100)}
+                {' '}
+                USD
+              </div>
+            )}
             <TotalPriceBlock {...totalPrice} />
           </Box>
         </Grid.Col>

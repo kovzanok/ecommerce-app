@@ -22,8 +22,8 @@ function App() {
           <Route element={<AuthRoute />}>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<Registration />} />
-            <Route path="/about-us" element={<AboutUsPage />} />
           </Route>
+          <Route path="/about-us" element={<AboutUsPage />} />
           <Route path="/catalog" element={<CatalogPage />} />
           <Route path="/catalog/:category" element={<CatalogPage />} />
           <Route path="/product/:id" element={<ProductPage />} />
