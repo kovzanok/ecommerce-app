@@ -98,7 +98,10 @@ export default function CustomHeader() {
         icon={<IconShoppingCart />}
         to="/cart"
         text="Cart"
-        cartCount={cart?.lineItems.length}
+        cartCount={cart?.lineItems.reduce(
+          (acc, curr) => acc + curr.quantity,
+          0,
+        )}
       />
       {user ? authorizedUserLinks : authLinks}
     </>
