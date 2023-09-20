@@ -131,6 +131,7 @@ export type ProductsQuery = {
   sort: Sorting;
   category: string;
   limit?: number;
+  page: number;
 };
 export type FilterParam = {
   name: FilterName;
@@ -166,4 +167,18 @@ export type ActiveToken = {
 
 export type NonActiveToken = {
   active: false;
+};
+
+export type PaginationType = {
+  current: number;
+  limit: number;
+};
+
+export type PersonData = {
+  name: string;
+  role: string;
+  description: string;
+  photoLink: string;
+  gitLink: string;
+  contributions: string;
 };

@@ -16,12 +16,14 @@ const defaultState = {
     products: [],
     loading: false,
     error: '',
+    total: 0,
   },
   product: {
     product: null,
     loading: false,
     error: '',
   },
+  cart: { cart: null, loading: false, error: '' },
 };
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {

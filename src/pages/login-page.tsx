@@ -32,11 +32,12 @@ export default function LoginPage() {
     validateInputOnChange: true,
   });
 
-
-  useEffect(() => () => {
-    dispatch(resetError());
-  }, []);
-
+  useEffect(
+    () => () => {
+      dispatch(resetError());
+    },
+    [],
+  );
 
   useEffect(() => {
     if (error === 'Customer account with the given credentials not found.') {

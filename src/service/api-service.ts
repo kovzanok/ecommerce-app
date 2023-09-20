@@ -2,10 +2,13 @@ import {
   CustomerDraft,
   CustomerSignInResult,
   CustomerSignin,
+  DiscountCode,
+  MyCartUpdateAction,
 } from '@commercetools/platform-sdk';
 import AuthModule from './modules/auth-module';
 import { CreateApiData, ProductsQuery } from '../types';
 import ProductsModule from './modules/products-module';
+import CartModule from './modules/cart-module';
 
 export default class ApiService {
   static async signIn(
@@ -57,5 +60,40 @@ export default class ApiService {
       category.ancestors.map(async ({ id }) => ProductsModule.getCategoryById(id)),
     );
     return [...ancestors, category];
+  }
+
+  static async updateCart(actions: MyCartUpdateAction[]) {
+    try {
+      const cart = await CartModule.checkCart();
+      if (cart) {
+        const { id, version } = cart;
+        const newCart = await CartModule.modifyCart({ id, version, actions });
+        return newCart;
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        if (err.message.startsWith('The discount code')) {
+          throw new Error(err.message);
+        }
+
+        const { id, version } = await CartModule.createCart();
+        const cart = await CartModule.modifyCart({ id, version, actions });
+        return cart;
+      }
+    }
+  }
+
+  static async getPromocodeById(id: string): Promise<DiscountCode | undefined> {
+    try {
+      const promo = await CartModule.getPromocode({ id });
+
+      if (promo) {
+        return promo;
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      }
+    }
   }
 }

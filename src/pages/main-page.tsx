@@ -41,6 +41,18 @@ export default function MainPage() {
       description:
         'User Profile page is available only for authorized users and contains all ther user information, which can be modified and saved.',
     },
+    {
+      to: '/cart',
+      name: 'Cart Page',
+      description:
+        'Cart page contains all the goods added to user personal cart.',
+    },
+    {
+      to: '/about-us',
+      name: 'About Us Page',
+      description:
+        'About Us page contains information about our team and each member contribution.',
+    },
   ];
 
   const sortingOptions: string[] = [
@@ -77,6 +89,15 @@ export default function MainPage() {
       name: 'Write, shorten. How to create strong text',
     },
   ];
+
+  const cartPromocodes: string[] = [
+    'GIGACHAD1',
+    'azino777',
+    'BIG_SALE_90',
+    'qwerty',
+    'BLACKFRIDAY',
+  ];
+
   return (
     <Flex direction="column" rowGap={20}>
       <div>
@@ -153,6 +174,17 @@ export default function MainPage() {
             <Badge color="orange">
               <NavLink to={`/product/${to}`}>{name}</NavLink>
             </Badge>
+          ))}
+        </Flex>
+      </div>
+      <div>
+        <Title mb={20} ta="center" size={24}>
+          Cart promocodes
+        </Title>
+
+        <Flex rowGap={10} wrap="wrap" columnGap={10} justify="center">
+          {cartPromocodes.map((promocode) => (
+            <Badge color="orange">{promocode}</Badge>
           ))}
         </Flex>
       </div>

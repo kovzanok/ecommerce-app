@@ -1,9 +1,14 @@
-import { DiscountedPrice, Price } from '@commercetools/platform-sdk';
-import { Flex, Text } from '@mantine/core';
+import {
+  CentPrecisionMoney,
+  DiscountedPrice,
+  Price,
+} from '@commercetools/platform-sdk';
+import { Flex, Text, rem } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 
 type DiscountedPriceBlockProps = DiscountedPrice & { isProductPage?: boolean };
 type PriceBlockProps = Price;
+type TotalPriceBlockProps = CentPrecisionMoney;
 type PriceContentProps = { price: Price; isProductPage?: boolean };
 
 function DiscountedPriceBlock({
@@ -13,6 +18,19 @@ function DiscountedPriceBlock({
   return (
     <Text fz={isProductPage ? 30 : 20} fw={700} color="orange">
       {(Number(centAmount) / 100).toFixed(2)}
+      {' '}
+      {currencyCode}
+    </Text>
+  );
+}
+
+export function TotalPriceBlock({
+  centAmount,
+  currencyCode,
+}: TotalPriceBlockProps) {
+  return (
+    <Text size={rem(23)} color="orange">
+      {(centAmount / 100).toFixed(2)}
       {' '}
       {currencyCode}
     </Text>
