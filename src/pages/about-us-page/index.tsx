@@ -47,7 +47,7 @@ export default function AboutUsPage() {
     {
       name: 'Nikolai',
       role: 'Developer',
-      photoLink: 'http://surl.li/kzokt',
+      photoLink: 'https://avatars.githubusercontent.com/u/110473056?v=4',
       description: `I am 32 years old.
       In 2013, I graduated from the Belarusian State Pedagogical University
       with a degree in Mathematics, Informatics. I worked as a teacher at the Pinsk College
